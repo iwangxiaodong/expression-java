@@ -4,7 +4,7 @@
 <br />
 <br />
 
-**Test**: expression/src/test/java/com/openle/source/expression/LambdaParserTest.java
+**Test**: lambda-parser/src/test/java/com/openle/source/expression/LambdaParserTest.java
 ```java
 PredicateSerializable<EntityDemo> whereLambda = null;
 

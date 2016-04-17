@@ -1,0 +1,49 @@
+defaultTasks  'clean','build','uploadArchives'
+
+apply plugin: 'java'
+apply plugin: 'com.jfrog.bintray'
+
+version '1.0'
+group 'com.openle.source.expression'
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    //for lambda to sql
+    compile 'org.jinq:jinq-jooq:1.8.4'
+    compile 'org.jooq:jooq:3.7.0'
+
+    testCompile 'junit:junit:4.+'
+}
+
+apply plugin: 'maven'
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.artifactId =project.archivesBaseName.toLowerCase()
+            repository(url: "http://192.168.1.200:8081/nexus/content/repositories/releases/") {
+                authentication(userName: "deployment", password: "deployment")
+            }
+            repository(url: project.repositories["MavenLocal"].url)
+        }
+    }
+}
+
+// ./gradlew build bintrayUpload -PbintrayApiKey=myKey  //or 设定环境变量: export BINTRAY_API_KEY=myKey
+// compile 'com.openle.source.expression:lambda-parser:1.0'
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    configurations = ['archives']
+    pkg {
+        repo = 'maven'
+        name = 'lambda-parser'
+        userOrg = user
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/iwangxiaodong/expression-java.git'
+        version {
+            name = '1.0'
+            desc = 'Lambda Parser 1.0 final'
+        }
+    }
+}

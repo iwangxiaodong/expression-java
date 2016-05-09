@@ -35,6 +35,8 @@ public class LambdaParser {
 
         */
 
+    public static boolean isCamelToUnderline=false;
+
     private static Condition parseWhere(PredicateSerializable<?> lambda) {
 
         LambdaInfo where = LambdaInfo.analyze(null, lambda);

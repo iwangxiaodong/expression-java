@@ -11,17 +11,35 @@
 ```java
 PredicateSerializable<EntityDemo> whereLambda = null;
 
-whereLambda = t -> t.getAge() < (t.getAge() + 1) && t.getName().equals("myName") && true;
+whereLambda = t -> t.getAge() < (t.getAge() + 1) && t.getFullName().equals("myName") && true;
 
 String sql = LambdaParser.toSQL("SELECT * FROM myTable",whereLambda);
 
 System.out.println(sql);
+
+
+//for Camel To Underline
+LambdaParser.isCamelToUnderline=true;
+
+sql = LambdaParser.toSQL("SELECT * FROM myTable",whereLambda);
+
+System.out.println();
+
+System.out.println("Camel To Underline:\r\n"+sql);
+
 ```
 
 **Output**:
 ```sql
 SELECT * FROM myTable where (
     Age < (Age + 1)
-    and Name = 'myName'
+    and FullName = 'myName'
+)
+```
+```sql
+Camel To Underline:
+SELECT * FROM myTable where (
+  age < (age + 1)
+  and full_name = 'myName'
 )
 ```

@@ -1,5 +1,8 @@
 package org.jinq.jooq.transform;
 
+import com.openle.source.expression.LambdaParser;
+import com.openle.source.expression.Utils;
+
 import org.jinq.jooq.querygen.ColumnExpressions;
 import org.jinq.jooq.querygen.RowReader;
 import org.jinq.jooq.querygen.SimpleRowReader;
@@ -169,7 +172,11 @@ public class SymbExToColumns extends TypedValueVisitor<Void, ColumnExpressions<?
         //todo 仅修改了这一分支: 原文已注释
         else if (sig.name.startsWith("get")) {
             ColumnExpressions<?> newColumns = new ColumnExpressions<>(null);
-            newColumns.columns.add(DSL.field(sig.name.replace("get", "")));
+            String rName=sig.name.replace("get", "");
+            if(LambdaParser.isCamelToUnderline){
+                rName= Utils.camelToUnderline(rName);
+            }
+            newColumns.columns.add(DSL.field(rName));
             // newColumns.columns.add(new
             // TableFieldImpl<Record,Integer>(sig.name.replace("get",
             // ""),SQLDataType.INTEGER,DSL.table("tname"),null,SQLDataType.INTEGER.getBinding()));

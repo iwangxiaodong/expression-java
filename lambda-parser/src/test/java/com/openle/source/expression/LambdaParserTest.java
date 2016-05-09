@@ -12,27 +12,36 @@ public class LambdaParserTest {
         List<EntityDemo> list = new ArrayList<EntityDemo>();
 
         EntityDemo edemo = new EntityDemo();
-        edemo.setName("abc");
+        edemo.setFullName("abc");
         edemo.setAge(13);
         list.add(edemo);
 
         EntityDemo b = new EntityDemo();
-        b.setName("xyz");
+        b.setFullName("xyz");
         b.setAge(12);
         list.add(b);
 
         EntityDemo c = new EntityDemo();
-        c.setName("myName");
+        c.setFullName("myName");
         c.setAge(40);
         list.add(c);
 
         PredicateSerializable<EntityDemo> whereLambda = null;
 
-        whereLambda = t -> t.getAge() < (t.getAge() + 1) && t.getName().equals("myName") && true;
+        whereLambda = t -> t.getAge() < (t.getAge() + 1) && t.getFullName().equals("myName") && true;
 
         String sql = LambdaParser.toSQL("SELECT * FROM myTable",whereLambda);
 
         System.out.println(sql);
+
+        //for Camel To Underline
+        LambdaParser.isCamelToUnderline=true;
+
+        sql = LambdaParser.toSQL("SELECT * FROM myTable",whereLambda);
+
+        System.out.println();
+
+        System.out.println("Camel To Underline:\r\n"+sql);
 
 
 

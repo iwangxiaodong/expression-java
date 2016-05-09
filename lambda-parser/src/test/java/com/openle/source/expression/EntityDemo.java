@@ -3,6 +3,7 @@ package com.openle.source.expression;
 public class EntityDemo {
 
     private String name;
+    private String fullName;
     private Integer age;
 
     public Integer getAge() {
@@ -20,4 +21,13 @@ public class EntityDemo {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
 }

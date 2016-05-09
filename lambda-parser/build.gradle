@@ -3,15 +3,20 @@ defaultTasks  'clean','build','uploadArchives'
 apply plugin: 'java'
 apply plugin: 'com.jfrog.bintray'
 
-version '1.0'
+//compileJava {
+//    sourceCompatibility = 1.8
+//    targetCompatibility = 1.8
+//}
+
+version '1.0.1'
 group 'com.openle.source.expression'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
     //for lambda to sql
-    compile 'org.jinq:jinq-jooq:1.8.4'
-    compile 'org.jooq:jooq:3.7.0'
+    compile 'org.jinq:jinq-jooq:1.8.11'
+    compile 'org.jooq:jooq:3.8.0'
 
     testCompile 'junit:junit:4.+'
 }
@@ -59,8 +64,8 @@ bintray {
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/iwangxiaodong/expression-java.git'
         version {
-            name = '1.0'
-            desc = 'Lambda Parser 1.0 final'
+            name = version
+            desc = 'Lambda Parser'
         }
     }
 }

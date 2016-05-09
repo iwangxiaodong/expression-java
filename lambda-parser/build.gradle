@@ -64,7 +64,7 @@ bintray {
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/iwangxiaodong/expression-java.git'
         version {
-            name = version
+            name = project.version.toString()
             desc = 'Lambda Parser'
         }
     }

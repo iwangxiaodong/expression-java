@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 public class LambdaParserTest {
 
     @Test
@@ -43,8 +45,6 @@ public class LambdaParserTest {
 
         System.out.println("Camel To Underline:\r\n"+sql);
 
-
-
 //        whereLambdaExpression = t -> t.getName().equals(name);
 //        long i = list.stream().filter(whereLambdaExpression).count();
 //        System.out.println(i);
@@ -59,5 +59,10 @@ public class LambdaParserTest {
 //        System.out.print(o);
 
 
+    }
+
+    @Test
+    public void testCamelToUnderline() {
+        assertEquals(Utils.camelToUnderline("FullName"),"full_name");
     }
 }

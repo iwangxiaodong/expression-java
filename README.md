@@ -2,8 +2,13 @@
 
 ***lambda-parser*** is a expression parser of lambda to sql.
 <br />
+Gradle:
 <br />
-> compile 'com.openle.source.expression:lambda-parser:1.0'
+> dependencies {
+>
+> compile 'com.openle.source.expression:lambda-parser:1.0.1'
+>
+> }
 <br />
 <br />
 

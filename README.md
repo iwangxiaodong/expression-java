@@ -11,6 +11,8 @@ Gradle:
 > }
 <br />
 <br />
+Note：Java web use lambda-parser delete org.jinq.jooq.transform.MethodChecker.class and SymbExToColumns.class、SymbExToColumns$1.class in jinq-jooq-x.x.x.jar
+<br />
 
 **Test**: lambda-parser/src/test/java/com/openle/source/expression/LambdaParserTest.java
 ```java

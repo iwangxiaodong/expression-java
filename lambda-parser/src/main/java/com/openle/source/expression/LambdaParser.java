@@ -1,7 +1,7 @@
 package com.openle.source.expression;
 
+import org.jinq.jooq.transform.MySchema;
 import org.jinq.jooq.transform.LambdaInfo;
-import org.jinq.jooq.transform.WhereTransform;
 import org.jooq.Condition;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -11,38 +11,23 @@ import org.jooq.impl.DSL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import org.jinq.jooq.transform.MetamodelUtil;
+import org.jinq.jooq.transform.MyLambdaInfo;
+import org.jinq.jooq.transform.MyWhereTransform;
 
 public class LambdaParser {
 
-        /* Test - expression/src/test/java/com/openle/source/expression/LambdaParserTest.java
+    public static boolean isCamelToUnderline = false;
 
-        PredicateSerializable<EntityDemo> whereLambda = null;
+    protected static Condition parseWhere(PredicateSerializable<?> lambda) {
 
-        whereLambda = t -> t.getAge() < (t.getAge() + 1) && t.getName().equals("myName") && true;
-
-        String sql = LambdaParser.toSQL("SELECT * FROM myTable",whereLambda);
-
-        System.out.println(sql);
-
-        */
-
-        /* Output:
-
-        SELECT * FROM myTable where (
-            Age < (Age + 1)
-            and Name = 'myName'
-        )
-
-        */
-
-    public static boolean isCamelToUnderline=false;
-
-    private static Condition parseWhere(PredicateSerializable<?> lambda) {
-
-        LambdaInfo where = LambdaInfo.analyze(null, lambda);
-        if (where == null)
+        LambdaInfo where = MyLambdaInfo.analyze(null, lambda);
+        if (where == null) {
             throw new IllegalArgumentException("Could not create convert Lambda into a query");
-        WhereTransform whereTransform = new WhereTransform(null, where);
+        }
+
+        MetamodelUtil m = new MetamodelUtil(MySchema.APP);
+        MyWhereTransform whereTransform = new MyWhereTransform(m, where);
         List<Table<?>> from = new ArrayList<>();
         Condition cond = whereTransform.apply(from);
         //System.out.println(cond);

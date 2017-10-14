@@ -1,24 +1,39 @@
 defaultTasks  'clean','build','uploadArchives'
 
 apply plugin: 'java'
+apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: 'com.jfrog.bintray'
 
-//compileJava {
-//    sourceCompatibility = 1.8
-//    targetCompatibility = 1.8
-//}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
-version '1.0.1'
+version '1.0.2'
 group 'com.openle.source.expression'
 
+// 解决中文注释导致的Javadoc generation failed
+tasks.withType(Javadoc) {
+    options.addStringOption('encoding', 'UTF-8')
+}
+
+configurations {
+    deployerJars
+}
+
 dependencies {
+    
+    deployerJars "org.apache.maven.wagon:wagon-webdav:1.0-beta-2"
+        
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
     //for lambda to sql
-    compile 'org.jinq:jinq-jooq:1.8.11'
-    compile 'org.jooq:jooq:3.8.0'
+    compile group: 'org.jinq', name: 'jinq-jooq', version: '1.8.22'
+    compile group: 'org.jooq', name: 'jooq', version: '3.10.1'
+    
+    //for method ref
+    compile "org.mockito:mockito-core:+"
 
-    testCompile 'junit:junit:4.+'
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.0.1")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.1")
 }
 
 apply plugin: 'maven'
@@ -26,10 +41,14 @@ uploadArchives {
     repositories {
         mavenDeployer {
             pom.artifactId =project.archivesBaseName.toLowerCase()
-            repository(url: "http://192.168.1.200:8081/nexus/content/repositories/releases/") {
-                authentication(userName: "deployment", password: "deployment")
+            configuration = configurations.deployerJars
+            
+            // Win10似乎重启后环境变量方有效 echo %WEBDAV_PASSWORD%
+            ext.pwd = project.hasProperty('WEBDAV_PASSWORD') ? project.property('WEBDAV_PASSWORD') : System.getenv('WEBDAV_PASSWORD')
+            println ext.pwd
+            repository(url: "dav:http://all.openle.com:58888/repository/") {
+                authentication(userName: "webdav", password: ext.pwd)
             }
-            repository(url: project.repositories["MavenLocal"].url)
         }
     }
 }
@@ -50,11 +69,12 @@ artifacts {
     archives sourcesJar, javadocJar
 }
 
-// ./gradlew build bintrayUpload -PbintrayApiKey=myKey  //or 设定环境变量: export BINTRAY_API_KEY=myKey
+// ./gradlew build bintrayUpload -PBINTRAY_API_KEY=myKey  //or 设定环境变量: export BINTRAY_API_KEY=myKey
 // compile 'com.openle.source.expression:lambda-parser:1.0'
 bintray {
-    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    user = project.hasProperty('BINTRAY_USER') ? project.property('BINTRAY_USER') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('BINTRAY_API_KEY') ? project.property('BINTRAY_API_KEY') : System.getenv('BINTRAY_API_KEY')
+    println key
     configurations = ['archives']
     publish = true
     pkg {

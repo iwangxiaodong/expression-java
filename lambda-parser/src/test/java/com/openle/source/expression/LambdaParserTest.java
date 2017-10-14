@@ -1,17 +1,37 @@
 package com.openle.source.expression;
 
-import org.junit.Test;
-
+import com.openle.source.expression.example.EntityDemo;
+import static com.openle.source.expression.sql.delete;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import static com.openle.source.expression.sql.select;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeAll;
 
 public class LambdaParserTest {
 
+    @BeforeAll
+    public static void init() {
+        System.out.println("Start testing");
+    }
+
+    @Test
+    public void testMain() {
+        Execute e = select(EntityDemo::getName, EntityDemo::getAge)
+                .from(EntityDemo.class)
+                .where((EntityDemo t) -> t.getAge() > 0);
+        System.out.println(e);
+        assertEquals(e.toString(), "select Name,Age from EntityDemo where Age > 0");
+
+        Execute e1 = delete().from(EntityDemo.class).where((EntityDemo t) -> t.getName().equals("abc"));
+        System.out.println(e1);
+        assertEquals(e1.toString(), "delete from EntityDemo where Name = 'abc'");
+    }
+
     @Test
     public void testLambdaParser() {
-        List<EntityDemo> list = new ArrayList<EntityDemo>();
+        List<EntityDemo> list = new ArrayList<>();
 
         EntityDemo edemo = new EntityDemo();
         edemo.setFullName("abc");
@@ -28,41 +48,25 @@ public class LambdaParserTest {
         c.setAge(40);
         list.add(c);
 
-        PredicateSerializable<EntityDemo> whereLambda = null;
-
-        whereLambda = t -> t.getAge() < (t.getAge() + 1) && t.getFullName().equals("myName") && true;
-
-        String sql = LambdaParser.toSQL("SELECT * FROM myTable",whereLambda);
+        String sql = LambdaParser.toSQL("SELECT * FROM myTable", (EntityDemo t) -> t.getAge() < (t.getAge() + 1) && t.getFullName().equals("myName") && true);
 
         System.out.println(sql);
 
         //for Camel To Underline
-        LambdaParser.isCamelToUnderline=true;
+        LambdaParser.isCamelToUnderline = true;
 
-        sql = LambdaParser.toSQL("SELECT * FROM myTable",whereLambda);
+        sql = LambdaParser.toSQL("SELECT * FROM myTable", (EntityDemo t) -> t.getFullName().equals("xyz"));
 
         System.out.println();
 
-        System.out.println("Camel To Underline:\r\n"+sql);
+        System.out.println("Camel To Underline:\r\n" + sql);
 
-//        whereLambdaExpression = t -> t.getName().equals(name);
-//        long i = list.stream().filter(whereLambdaExpression).count();
-//        System.out.println(i);
-//        toSQL("select name,age from tableName", whereLambdaExpression);
-
-//        String sql = new From<EntityDemo>() {
-//        }.where(whereLambdaExpression).select("name,age");
-//        System.out.print(sql);
-
-//        Supplier<EntityDemo> obj=EntityDemo::new;
-//        Object o=obj.get();
-//        System.out.print(o);
-
-
+        long i = list.stream().filter(t -> t.getAge() == 40).count();
+        System.out.println(i);
     }
 
     @Test
     public void testCamelToUnderline() {
-        assertEquals(Utils.camelToUnderline("FullName"),"full_name");
+        assertEquals(Utils.camelToUnderline("FullName"), "full_name");
     }
 }

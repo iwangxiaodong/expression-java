@@ -1,5 +1,7 @@
 Jinq功能精简修改：
 
+首先jar包内这两个文件需要删除掉！
+
 org.jinq.jooq.transform.MethodChecker.isMethodSafe(...)中metamodel为null直接return：
 
         //todo - direct return.

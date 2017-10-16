@@ -1,6 +1,6 @@
 package com.openle.source.expression;
 
-public class EntityDemo {
+public class User {
 
     private String name;
     private String fullName;

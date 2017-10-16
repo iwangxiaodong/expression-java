@@ -36,6 +36,10 @@ dependencies {
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.1")
 }
 
+junitPlatform {
+	//reportsDir file('build/test-results/test')
+}
+
 apply plugin: 'maven'
 uploadArchives {
     repositories {

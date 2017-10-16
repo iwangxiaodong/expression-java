@@ -25,12 +25,12 @@ public class Values {
                 }
                 list.add(name);
             }
-            sName = sName + "(" + String.join(",", list) + ")";
+            sName = sName + "(" + String.join(",", list) + ") ";
         }
 
     }
 
-    public Values(Class c) {
+    protected Values(Class c) {
         sName = "insert " + Utils.getTableName(c) + " ";
 
     }
@@ -49,9 +49,10 @@ public class Values {
 
         List<String> list = new ArrayList<>();
         for (Object obj : objArray) {
-            String s = Objects.isNull(obj) ? "null" : String.valueOf(obj);
-            if (Objects.nonNull(obj) && obj.getClass().equals(String.class)) {
-                s = "'" + obj + "'";
+            Object value = obj;
+            String s = Objects.isNull(value) ? "null" : String.valueOf(value);
+            if (Objects.nonNull(value) && value.getClass().equals(String.class)) {
+                s = "'" + value + "'";
                 System.out.println("is String.class");
             }
 
@@ -62,7 +63,7 @@ public class Values {
             list.add(s);
         }
         String values = String.join(",", list);
-        sName = sName + "values(" + values + ")";
+        sName = sName + "values (" + values + ")";
 
         return new Execute(sName);
     }

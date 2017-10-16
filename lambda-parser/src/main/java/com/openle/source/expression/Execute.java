@@ -8,27 +8,34 @@ import java.sql.Statement;
 
 public class Execute {
 
-    String sql;
+    protected String sqlString;
+
+    public String sql() {
+        return sqlString;
+    }
+
+    protected Execute() {
+    }
 
     protected Execute(String sql) {
-        this.sql = sql;
+        this.sqlString = sql;
     }
 
     public void execute() {
-        System.out.println("Execute - " + sql);
+        System.out.println("Execute - " + sqlString);
     }
 
     public void execute(Consumer<String> f) {
-        System.out.println("Execute Consumer - " + sql);
-        f.accept(sql);
+        System.out.println("Execute Consumer - " + sqlString);
+        f.accept(sqlString);
     }
 
     public boolean execute(Connection conn) {
-        System.out.println("Execute Connection - " + sql);
+        System.out.println("Execute Connection - " + sqlString);
         boolean r = false;
         try {
             Statement stmt = conn.createStatement();
-            r = stmt.execute(sql);
+            r = stmt.execute(sqlString);
             stmt.close();
             conn.close();
         } catch (SQLException e) {
@@ -38,10 +45,10 @@ public class Execute {
     }
 
     public void execute(Consumer<ResultSet> f, Connection conn) {
-        System.out.println("Execute Connection - " + sql);
+        System.out.println("Execute Connection - " + sqlString);
         try {
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery(sqlString);
             f.accept(rs);
             rs.close();
             stmt.close();
@@ -53,7 +60,30 @@ public class Execute {
 
     @Override
     public String toString() {
-        return sql;
+        return sqlString;
+    }
+
+    // this.assertMe(t -> assertEquals(t, "xyz"))
+    public void assertMe(java.util.function.Consumer<String> c) {
+        c.accept(sqlString);
+    }
+
+    // this.assertEquals(Assertions::fail, "abc")
+    public void assertEquals(java.util.function.Consumer<String> c, String sql) {
+        System.out.println("Execute - " + sqlString);
+        if (!sql.equalsIgnoreCase(sqlString)) {
+            String msg = "expected: <" + sqlString + "> but was: <" + sql + ">";
+            c.accept(msg);
+        }
+    }
+
+    //未实现；后续将全部转换改为当前实例转换。
+    private Execute camelToUnderline() {
+        return this;
+    }
+
+    private Execute underlineToCamel() {
+        return this;
     }
 
 }

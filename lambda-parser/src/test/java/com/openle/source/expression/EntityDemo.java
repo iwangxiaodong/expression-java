@@ -1,4 +1,4 @@
-package com.openle.source.expression.example;
+package com.openle.source.expression;
 
 public class EntityDemo {
 

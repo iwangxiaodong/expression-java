@@ -24,49 +24,27 @@ Gradle:
 **Test**: lambda-parser/src/test/java/com/openle/source/expression/LambdaParserTest.java
 ```java
 
-        select(EntityDemo::getName, EntityDemo::getAge).from(EntityDemo.class)
-                .where((EntityDemo t) -> t.getAge() > 0)
-                .execute(System.out::println);
+        select().from(EntityDemo.class).assertMe(t -> assertEquals(t, "select * from EntityDemo"));
 
-        select().from(EntityDemo.class).where((EntityDemo t) -> t.getAge() == 8 && true)
-                .execute(System.out::println);
+        select(EntityDemo::getName, EntityDemo::getAge, EntityDemo::getFullName)
+                .from(EntityDemo.class).where((EntityDemo t) -> t.getAge() > 0)
+                .assertMe(t -> assertEquals(t, "select Name,Age,FullName from EntityDemo where Age > 0"));
+
+        delete().from(EntityDemo.class).assertMe(t -> assertEquals(t, "delete from EntityDemo"));
 
         delete().from(EntityDemo.class).where((EntityDemo t) -> t.getName().equals("abc"))
-                .execute(System.out::println);
+                .assertMe(t -> assertEquals(t, "delete from EntityDemo where Name = 'abc'"));
 
-        insert(EntityDemo.class, EntityDemo::getName, EntityDemo::getAge).values("a", "b")
-                .execute(System.out::println);
+        insert(EntityDemo.class).values("abc").assertMe(t -> assertEquals(t, "insert EntityDemo values ('abc')"));
 
-        insert(EntityDemo.class).values("abc", 123, null).execute(System.out::println);
+        insert(EntityDemo.class, EntityDemo::getName, EntityDemo::getAge, EntityDemo::getFullName).values("abc", 123, null)
+                .assertMe(t -> assertEquals(t, "insert EntityDemo (Name,Age,FullName) values ('abc',123,null)"));
 
-        String sql = LambdaParser.toSQL("SELECT * FROM myTable",
-                 (EntityDemo t) -> t.getAge() < (t.getAge() + 1) && t.getFullName().equals("myName") && true);
-        System.out.println(sql);
+        update(EntityDemo.class).set(kv(EntityDemo::getName, "abc"))
+                .assertMe(t -> assertEquals(t, "update EntityDemo set Name = 'abc'"));
 
-        //for Camel To Underline
-        LambdaParser.isCamelToUnderline = true;
-        sql = LambdaParser.toSQL("SELECT * FROM myTable",
-                 (EntityDemo t) -> t.getAge() < (t.getAge() + 1) && t.getFullName().equals("myName") && true);
-        System.out.println();
-        System.out.println("Camel To Underline:\r\n" + sql);
+        update(EntityDemo.class).set(kv(EntityDemo::getAge, 123), kv(EntityDemo::getFullName, "abcd"))
+                .where((EntityDemo t) -> t.getName().equals("abc"))
+                .assertMe(t -> assertEquals(t, "update EntityDemo set Age = 123 , FullName = 'abcd' where Name = 'abc'"));
 
-```
-
-**Output**:
-```sql
-select Name,Age from EntityDemo where Age > 0
-```
-...
-```sql
-SELECT * FROM myTable where (
-    Age < (Age + 1)
-    and FullName = 'myName'
-)
-```
-```sql
-Camel To Underline:
-SELECT * FROM myTable where (
-  age < (age + 1)
-  and full_name = 'myName'
-)
 ```

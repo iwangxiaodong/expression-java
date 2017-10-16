@@ -24,27 +24,27 @@ Gradle:
 **Test**: lambda-parser/src/test/java/com/openle/source/expression/LambdaParserTest.java
 ```java
 
-        select().from(EntityDemo.class).assertMe(t -> assertEquals(t, "select * from EntityDemo"));
+    select().from(User.class).assertMe(t -> assertEquals(t, "select * from User"));
 
-        select(EntityDemo::getName, EntityDemo::getAge, EntityDemo::getFullName)
-                .from(EntityDemo.class).where((EntityDemo t) -> t.getAge() > 0)
-                .assertMe(t -> assertEquals(t, "select Name,Age,FullName from EntityDemo where Age > 0"));
+    select(User::getName, User::getAge, User::getFullName)
+            .from(User.class).where((User t) -> t.getAge() > 0)
+            .assertMe(t -> assertEquals(t, "select Name,Age,FullName from User where Age > 0"));
 
-        delete().from(EntityDemo.class).assertMe(t -> assertEquals(t, "delete from EntityDemo"));
+    delete().from(User.class).assertMe(t -> assertEquals(t, "delete from User"));
 
-        delete().from(EntityDemo.class).where((EntityDemo t) -> t.getName().equals("abc"))
-                .assertMe(t -> assertEquals(t, "delete from EntityDemo where Name = 'abc'"));
+    delete().from(User.class).where((User t) -> t.getName().equals("abc"))
+            .assertMe(t -> assertEquals(t, "delete from User where Name = 'abc'"));
 
-        insert(EntityDemo.class).values("abc").assertMe(t -> assertEquals(t, "insert EntityDemo values ('abc')"));
+    insert(User.class).values("abc").assertMe(t -> assertEquals(t, "insert User values ('abc')"));
 
-        insert(EntityDemo.class, EntityDemo::getName, EntityDemo::getAge, EntityDemo::getFullName).values("abc", 123, null)
-                .assertMe(t -> assertEquals(t, "insert EntityDemo (Name,Age,FullName) values ('abc',123,null)"));
+    insert(User.class, User::getName, User::getAge, User::getFullName).values("abc", 22, null)
+            .assertMe(t -> assertEquals(t, "insert User (Name,Age,FullName) values ('abc',22,null)"));
 
-        update(EntityDemo.class).set(kv(EntityDemo::getName, "abc"))
-                .assertMe(t -> assertEquals(t, "update EntityDemo set Name = 'abc'"));
+    update(User.class).set(kv(User::getName, "abc"))
+            .assertMe(t -> assertEquals(t, "update User set Name = 'abc'"));
 
-        update(EntityDemo.class).set(kv(EntityDemo::getAge, 123), kv(EntityDemo::getFullName, "abcd"))
-                .where((EntityDemo t) -> t.getName().equals("abc"))
-                .assertMe(t -> assertEquals(t, "update EntityDemo set Age = 123 , FullName = 'abcd' where Name = 'abc'"));
+    update(User.class).set(kv(User::getAge, 22), kv(User::getName, "a"))
+            .where((User t) -> t.getName().equals("abc"))
+            .assertMe(t -> assertEquals(t, "update User set Age = 22 , Name = 'a' where Name = 'abc'"));
 
 ```

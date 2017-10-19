@@ -24,32 +24,50 @@ Gradle:
 **Test**: lambda-parser/src/test/java/com/openle/source/expression/LambdaParserTest.java
 ```sql
 
-    //  import static com.openle.source.expression.sql.*;
-    //
+    /*
+    import static com.openle.source.expression.sql.*; 
+     */
+    String s = "select * from User";
     select().from(User.class)
-            .assertMe(t -> assertEquals(t, "select * from User"));
+            //
+            .assertEquals(Assertions::fail, s);
 
+    s = "select Name,Age,FullName from User where Age > 0";
     select(User::getName, User::getAge, User::getFullName)
             .from(User.class).where((User t) -> t.getAge() > 0)
-            .assertMe(t -> assertEquals(t, "select Name,Age,FullName from User where Age > 0"));
+            //
+            .assertEquals(Assertions::fail, s);
 
+    s = "delete from User";
     delete().from(User.class)
-            .assertMe(t -> assertEquals(t, "delete from User"));
+            //
+            .assertEquals(Assertions::fail, s);
 
+    s = "delete from User where Name = 'abc'";
     delete().from(User.class).where((User t) -> t.getName().equals("abc"))
-            .assertMe(t -> assertEquals(t, "delete from User where Name = 'abc'"));
+            //
+            .assertEquals(Assertions::fail, s);
 
-    update(User.class).set(kv(User::getName, "abc"))
-            .assertMe(t -> assertEquals(t, "update User set Name = 'abc'"));
+    s = "update User set Name = 'abc'";
+    update(User.class).set(eq(User::getName, "abc"))
+            //
+            .assertEquals(Assertions::fail, s);
 
-    update(User.class).set(kv(User::getAge, 22), kv(User::getName, "a"))
+    s = "update User set Age = 22 , Name = 'a' where Name = 'abc'";
+    update(User.class).set(eq(User::getAge, 22), eq(User::getName, "a"))
             .where((User t) -> t.getName().equals("abc"))
-            .assertMe(t -> assertEquals(t, "update User set Age = 22 , Name = 'a' where Name = 'abc'"));
+            //
+            .assertEquals(Assertions::fail, s);
 
-    insert(User.class).values("abc")
-            .assertMe(t -> assertEquals(t, "insert User values ('abc')"));
+    s = "insert User values ('abc',now())";
+    insert(User.class).values("abc", k("now()"))
+            //
+            .assertEquals(Assertions::fail, s);
 
-    insert(User.class, User::getName, User::getAge, User::getFullName).values("abc", 22, null)
-            .assertMe(t -> assertEquals(t, "insert User (Name,Age,FullName) values ('abc',22,null)"));
+    s = "insert User (Name,FullName,v) values ('abc',null,1)";
+    insert(User.class, User::getName, User::getFullName, kf("v"))
+            .values("abc", null, 1)
+            //
+            .assertEquals(Assertions::fail, s);
 
 ```

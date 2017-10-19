@@ -1,6 +1,12 @@
 package com.openle.source.expression;
 
 import java.lang.annotation.Annotation;
+import java.lang.invoke.CallSite;
+import java.lang.invoke.LambdaConversionException;
+import java.lang.invoke.LambdaMetafactory;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -11,9 +17,51 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
- * Created by i on 16-5-9.
+ * 公用类
  */
 public class Utils {
+
+    public static void main(String[] args) throws Throwable {
+        xxx();
+
+//        MethodHandles.Lookup caller = MethodHandles.lookup();
+//        MethodType methodType = MethodType.methodType(Object.class);
+//        MethodType actualMethodType = MethodType.methodType(String.class);
+//        MethodType invokedType = MethodType.methodType(Supplier.class);
+//        CallSite site = LambdaMetafactory.metafactory(caller,
+//                "get",
+//                invokedType,
+//                methodType,
+//                caller.findStatic(Utils.class, "print", actualMethodType),
+//                methodType);
+//        MethodHandle factory = site.getTarget();
+//        Supplier<String> r = (Supplier<String>) factory.invoke();
+//        System.out.println(r.get());
+    }
+
+    private static String print() {
+        return "hello world";
+    }
+
+    public String getVersion() {
+        return "hello world";
+    }
+
+    private static void xxx() throws NoSuchMethodException, IllegalAccessException, LambdaConversionException, Throwable {
+
+        MethodHandles.Lookup caller = MethodHandles.lookup();
+        MethodType getter = MethodType.methodType(String.class);
+        MethodHandle target = caller.findVirtual(Utils.class, "getVersion", getter);
+        MethodType func = target.type();
+        CallSite site = LambdaMetafactory.metafactory(caller,
+                "apply",
+                MethodType.methodType(Function.class),
+                func.generic(), target, func);
+
+        MethodHandle factory = site.getTarget();
+        Function r = (Function) factory.invoke();
+        System.out.println(r.apply(new Utils()));
+    }
 
     public static String camelToUnderline(String param) {
         Pattern p = Pattern.compile("[A-Z]");
@@ -35,12 +83,11 @@ public class Utils {
     }
 
     public static String getTableName(Class c) {
-        System.out.println("Entity " + c.getName());
+        //System.out.println("Entity " + c.getName());
         String tableName = c.getSimpleName();
         for (Annotation a : c.getAnnotations()) {
             //System.out.println(a.annotationType().getName());
             if (a.annotationType().getName().equals("javax.persistence.Table")) {
-                System.out.println("Custom Table Name");
                 try {
                     Method m = a.annotationType().getMethod("name", new Class[]{});
                     Object obj = m.invoke(a, new Object[]{});

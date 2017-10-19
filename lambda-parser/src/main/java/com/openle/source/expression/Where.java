@@ -20,14 +20,22 @@ public class Where extends Execute {
         for (Map<Function, ?> m : setMap) {
             for (Map.Entry<Function, ?> entry : m.entrySet()) {
                 Object value = entry.getValue();
-                String name = new Utils().getSelectName(c, entry.getKey());
+                Function f = entry.getKey();
+                String name = "";
+                if (f instanceof KeepField) {
+                    System.out.println("keepField");
+                    name = ((KeepField) f).getFieldName();
+                } else {
+                    name = new Utils().getSelectName(c, f);
+                }
+
                 if (name.startsWith("get")) {
                     name = name.replaceFirst("get", "");
                 }
+
                 String s = Objects.isNull(value) ? "null" : String.valueOf(value);
                 if (Objects.nonNull(value) && value.getClass().equals(String.class)) {
                     s = "'" + value + "'";
-                    System.out.println("is String.class");
                 }
                 list.add(name + " = " + s);
             }

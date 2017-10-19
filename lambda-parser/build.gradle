@@ -7,12 +7,15 @@ apply plugin: 'com.jfrog.bintray'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version '1.0.3'
+version '1.0.4'
 group 'com.openle.source.expression'
 
 // 解决中文注释导致的Javadoc generation failed
 tasks.withType(Javadoc) {
     options.addStringOption('encoding', 'UTF-8')
+    title =title+" (开源项目)"
+    excludes = ['**/jinq/**', '**/jooq/**']
+    failOnError = false
 }
 
 configurations {
@@ -37,7 +40,7 @@ dependencies {
 }
 
 junitPlatform {
-	//reportsDir file('build/test-results/test')
+    //reportsDir file('build/test-results/test')
 }
 
 apply plugin: 'maven'

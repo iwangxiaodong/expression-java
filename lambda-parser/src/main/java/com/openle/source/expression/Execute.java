@@ -64,7 +64,7 @@ public class Execute {
     }
 
     // this.assertMe(t -> assertEquals(t, "xyz"))
-    public void assertMe(java.util.function.Consumer<String> c) {
+    public void test(java.util.function.Consumer<String> c) {
         c.accept(sqlString);
     }
 

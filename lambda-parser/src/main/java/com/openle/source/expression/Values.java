@@ -19,10 +19,17 @@ public class Values {
         if (fs.length > 0) {
             List<String> list = new ArrayList<>();
             for (Function f : fs) {
-                String name = new Utils().getSelectName(c, f);
+                String name = "";
+                if (f instanceof KeepField) {
+                    System.out.println("keepField");
+                    name = ((KeepField) f).getFieldName();
+                } else {
+                    name = new Utils().getSelectName(c, f);
+                }
                 if (name.startsWith("get")) {
                     name = name.replaceFirst("get", "");
                 }
+
                 list.add(name);
             }
             sName = sName + "(" + String.join(",", list) + ") ";
@@ -48,18 +55,15 @@ public class Values {
         }
 
         List<String> list = new ArrayList<>();
-        for (Object obj : objArray) {
-            Object value = obj;
+        for (Object value : objArray) {
             String s = Objects.isNull(value) ? "null" : String.valueOf(value);
-            if (Objects.nonNull(value) && value.getClass().equals(String.class)) {
-                s = "'" + value + "'";
-                System.out.println("is String.class");
+            if (Objects.nonNull(value)) {
+                if (value.getClass().equals(String.class)) {
+                    s = "'" + value + "'";
+                    //System.out.println("is String.class");
+                }
             }
 
-//                if (obj.getClass().equals(Integer.class)) {
-//                    s = String.valueOf(obj);
-//                    System.out.println("is Integer.class");
-//                }
             list.add(s);
         }
         String values = String.join(",", list);

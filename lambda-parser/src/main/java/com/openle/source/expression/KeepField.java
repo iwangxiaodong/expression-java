@@ -6,6 +6,7 @@ import java.util.function.Function;
  *
  * @author xiaodong
  */
+// 由于getFunctionByName通过抛异常方式性能可能会低，so 保留该方案
 public class KeepField implements Function {
 
     private String fieldName;

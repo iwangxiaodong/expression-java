@@ -18,6 +18,12 @@ tasks.withType(Javadoc) {
     failOnError = false
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    options.compilerArgs = ['-Xlint:unchecked']   
+}
+
+
 configurations {
     deployerJars
 }
@@ -37,6 +43,9 @@ dependencies {
 
     testCompile("org.junit.jupiter:junit-jupiter-api:5.0.1")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.1")
+    
+    compile group: 'org.ow2.asm', name: 'asm-util', version: '6.0'
+
 }
 
 junitPlatform {

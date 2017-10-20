@@ -1,17 +1,19 @@
 package com.openle.source.expression;
 
+import static com.openle.source.expression.LambdaHelper.getFunctionByName;
 import static com.openle.source.expression.sql.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.TestInfo;
 
-public class LambdaParserTest {
+public class LambdaTest {
 
     @BeforeAll
     public static void init() {
@@ -75,6 +77,12 @@ public class LambdaParserTest {
     public void testAssert() {
         delete().from(User.class).test(t -> assertEquals(t, "xyz"));
         delete().from(User.class).assertEquals(Assertions::fail, "abc");
+    }
+
+    @Test
+    public void testLambdaGetter() {
+        Function f = getFunctionByName("fieldName");
+        assertEquals("fieldName", new Utils().getSelectName(LambdaHelper.class, f));
     }
 
     @Disabled

@@ -105,11 +105,23 @@ public class Utils {
     @SuppressWarnings("unchecked")
     protected <T> String getSelectName(Class c, final Function<T, ?> getter) {
         final Method[] method = new Method[1];
-        //System.out.println(getter);
-        getter.apply((T) Mockito.mock(c, Mockito.withSettings().invocationListeners(methodInvocationReport -> {
-            method[0] = ((InvocationOnMock) methodInvocationReport.getInvocation()).getMethod();
-        })));
-        String name = method[0].getName();
+        //System.out.println(getter);  
+        String name = null;
+        try {
+
+            getter.apply((T) Mockito.mock(c, Mockito.withSettings().invocationListeners(methodInvocationReport -> {
+                method[0] = ((InvocationOnMock) methodInvocationReport.getInvocation()).getMethod();
+            })));
+            name = method[0].getName();
+
+        } catch (NoSuchMethodError ex) {
+            // 实体类字段不存在则通过异常NoSuchMethodError来获取。
+            String msg = ex.getMessage();
+            //System.out.println(msg);
+            name = msg.substring(msg.lastIndexOf(".") + 1, msg.indexOf("()"));
+            //System.out.println(name);
+        }
+
         //System.out.println(" - " + name);
         return name;
     }

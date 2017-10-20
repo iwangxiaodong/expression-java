@@ -22,13 +22,13 @@ public class Where extends Execute {
                 Object value = entry.getValue();
                 Function f = entry.getKey();
                 String name = "";
-                if (f instanceof KeepField) {
-                    System.out.println("keepField");
-                    name = ((KeepField) f).getFieldName();
-                } else {
-                    name = new Utils().getSelectName(c, f);
-                }
-
+//                if (f instanceof KeepField) {
+//                    System.out.println("keepField");
+//                    name = ((KeepField) f).getFieldName();
+//                } else {
+//                    name = new Utils().getSelectName(c, f);
+//                }
+                name = new Utils().getSelectName(c, f);
                 if (name.startsWith("get")) {
                     name = name.replaceFirst("get", "");
                 }

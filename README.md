@@ -12,7 +12,7 @@ Gradle:
 > 
 > dependencies {
 >
-> > compile 'com.openle.source.expression:lambda-parser:1.0.3'
+> > compile 'com.openle.source.expression:lambda-parser:1.0.4'
 >
 > }
 <br />
@@ -21,7 +21,7 @@ Gradle:
 <br />
 <br />
 
-**Test**: lambda-parser/src/test/java/com/openle/source/expression/LambdaParserTest.java
+**Test**: lambda-parser/src/test/java/com/openle/source/expression/LambdaTest.java
 ```sql
 
     /*

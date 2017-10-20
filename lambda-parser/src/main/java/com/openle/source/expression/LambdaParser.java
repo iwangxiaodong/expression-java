@@ -15,6 +15,9 @@ import org.jinq.jooq.transform.MetamodelUtil;
 import org.jinq.jooq.transform.MyLambdaInfo;
 import org.jinq.jooq.transform.MyWhereTransform;
 
+/**
+ * 类似开源项目 - https://github.com/ajermakovics/lambda2sql
+ */
 public class LambdaParser {
 
     public static boolean isCamelToUnderline = false;

@@ -102,6 +102,7 @@ public class sql {
      * @return
      */
     public static Function kf(String s) {
-        return new KeepField(s);
+        //return new KeepField(s);
+        return LambdaHelper.getFunctionByName(s);
     }
 }

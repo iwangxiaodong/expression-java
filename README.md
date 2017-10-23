@@ -12,7 +12,7 @@ Gradle:
 > 
 > dependencies {
 >
-> > compile 'com.openle.source.expression:lambda-parser:1.0.4'
+> > compile 'com.openle.source.expression:lambda-parser:1.0.5'
 >
 > }
 <br />

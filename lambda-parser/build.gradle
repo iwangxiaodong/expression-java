@@ -7,7 +7,7 @@ apply plugin: 'com.jfrog.bintray'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version '1.0.4'
+version '1.0.5'
 group 'com.openle.source.expression'
 
 // 解决中文注释导致的Javadoc generation failed

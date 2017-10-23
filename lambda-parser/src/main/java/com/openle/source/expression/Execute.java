@@ -22,30 +22,48 @@ public class Execute {
     }
 
     public void execute() {
-        System.out.println("Execute - " + sqlString);
+        execute(sql.getConnection());
     }
 
     public void execute(Consumer<String> f) {
-        System.out.println("Execute Consumer - " + sqlString);
         f.accept(sqlString);
     }
 
     public boolean execute(Connection conn) {
         System.out.println("Execute Connection - " + sqlString);
         boolean r = false;
-        try {
-            Statement stmt = conn.createStatement();
-            r = stmt.execute(sqlString);
-            stmt.close();
-            conn.close();
-        } catch (SQLException e) {
-            System.err.println(e);
+        if (conn != null) {
+            try {
+                Statement stmt = conn.createStatement();
+                r = stmt.execute(sqlString);
+                stmt.close();
+                conn.close();
+            } catch (SQLException e) {
+                System.err.println(e);
+            }
         }
         return r;
     }
 
-    public void execute(Consumer<ResultSet> f, Connection conn) {
-        System.out.println("Execute Connection - " + sqlString);
+    public ResultSet executeQuery() {
+        ResultSet rs = null;
+        try {
+            Statement stmt = sql.getConnection().createStatement();
+            rs = stmt.executeQuery(sqlString);
+            stmt.close();
+            sql.getConnection().close();
+        } catch (SQLException e) {
+            System.err.println(e);
+        }
+        return rs;
+    }
+
+    public void executeQuery(Consumer<ResultSet> f) {
+        executeQuery(f, sql.getConnection());
+    }
+
+    public void executeQuery(Consumer<ResultSet> f, Connection conn) {
+        System.out.println("Execute Consumer,Connection - " + sqlString);
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sqlString);

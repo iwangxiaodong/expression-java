@@ -31,7 +31,7 @@ public class LambdaHelper {
         System.setProperty("jdk.internal.lambda.dumpProxyClasses", "D:\\temp");
         Function f = null;
 
-        // 由于方法引用的方法必须存在，so临时创建一个类来模拟。
+        // 方法引用的getter方法不存在时，临时创建一个类来模拟。
         Class<?> c = new ByteBuddy()
                 .subclass(Object.class)
                 .defineMethod(methodName, String.class, Visibility.PUBLIC)
@@ -54,12 +54,10 @@ public class LambdaHelper {
                     target.type().generic(), target, target.type());
 //
 //            //         LambdaMetafactory.metafactory反射版本：
-//            Class<?>[] EMPTY_CLASS_ARRAY = new Class<?>[0];
-//            MethodType[] EMPTY_MT_ARRAY = new MethodType[0];
 //            Class cClass = Class.forName("java.lang.invoke.InnerClassLambdaMetafactory");
 //            Constructor con = cClass.getConstructor(MethodHandles.Lookup.class, MethodType.class, String.class, MethodType.class, MethodHandle.class, MethodType.class, boolean.class, Class[].class, MethodType[].class);
 //            con.setAccessible(true);
-//            Object inner = con.newInstance(caller, MethodType.methodType(Function.class), "apply", target.type().generic(), target, target.type(), false, EMPTY_CLASS_ARRAY, EMPTY_MT_ARRAY);
+//            Object inner = con.newInstance(caller, MethodType.methodType(Function.class), "apply", target.type().generic(), target, target.type(), false, new Class<?>[0], new MethodType[0]);
 //            con.setAccessible(false);
 //            Method m = cClass.getDeclaredMethod("buildCallSite");
 //            m.setAccessible(true);

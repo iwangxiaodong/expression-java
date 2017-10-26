@@ -28,7 +28,8 @@ public class LambdaHelper {
 
     // 若开启javaagent可直接用库 - https://github.com/ruediste/lambda-inspector
     public static Function getFunctionByName(String methodName) {
-        System.setProperty("jdk.internal.lambda.dumpProxyClasses", "D:\\temp");
+        methodName = replaceSymbol(methodName);
+        //System.setProperty("jdk.internal.lambda.dumpProxyClasses", "D:\\temp");
         Function f = null;
 
         // 方法引用的getter方法不存在时，临时创建一个类来模拟。
@@ -129,6 +130,15 @@ public class LambdaHelper {
         MethodHandle factory = site.getTarget();
         Supplier<String> r = (Supplier<String>) factory.invoke();
         System.out.println(r.get());
+    }
+
+    // 后续通过Base32或Base36处理
+    public static String replaceSymbol(String s) {
+        return s.replace("(", "左括号").replace(")", "右括号");
+    }
+
+    public static String restoreSymbol(String s) {
+        return s.replace("左括号", "(").replace("右括号", ")");
     }
 
 }

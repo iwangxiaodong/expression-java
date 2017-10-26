@@ -52,9 +52,9 @@ public class sql {
         initializeOther();
     }
 
-    public static void initialize(String connString, String driverClassName) throws ClassNotFoundException {
+    // 数据库Driver均已采用SPI技术，不再需要加载Class.forName(driverClass);
+    public static void initialize(String connString, boolean isDebug) throws ClassNotFoundException {
         connType = CONNTYPE.STRING;
-        Class.forName(driverClassName);
         sql.connString = connString;
         initializeOther();
     }
@@ -173,7 +173,7 @@ public class sql {
      * @return
      */
     public static Function kf(String s) {
-        //return new KeepField(s);
+        //return new KeepField(s);     
         return LambdaHelper.getFunctionByName(s);
     }
 }

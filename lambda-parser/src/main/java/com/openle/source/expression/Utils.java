@@ -117,6 +117,7 @@ public class Utils {
         } catch (NoSuchMethodError ex) {
             // 实体类字段不存在则通过异常NoSuchMethodError来获取。
             String msg = ex.getMessage();
+            msg = LambdaHelper.restoreSymbol(msg);
             //System.out.println(msg);
             name = msg.substring(msg.lastIndexOf(".") + 1, msg.indexOf("()"));
             //System.out.println(name);

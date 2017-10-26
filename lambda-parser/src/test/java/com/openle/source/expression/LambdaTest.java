@@ -39,6 +39,11 @@ public class LambdaTest {
                 //
                 .assertEquals(Assertions::fail, s);
 
+        s = "select max(id) from User";
+        select(kf("max(id)")).from(User.class)
+                //
+                .assertEquals(Assertions::fail, s);
+
         s = "delete from User";
         delete().from(User.class)
                 //

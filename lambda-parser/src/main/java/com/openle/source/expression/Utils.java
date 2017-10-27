@@ -8,6 +8,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -104,6 +105,7 @@ public class Utils {
 
     @SuppressWarnings("unchecked")
     protected <T> String getSelectName(Class c, final Function<T, ?> getter) {
+        Objects.requireNonNull(c);
         final Method[] method = new Method[1];
         //System.out.println(getter);  
         String name = null;
@@ -121,6 +123,18 @@ public class Utils {
             //System.out.println(msg);
             name = msg.substring(msg.lastIndexOf(".") + 1, msg.indexOf("()"));
             //System.out.println(name);
+        } catch (ClassCastException ex) {
+            // 未传入实体Class则通过异常ClassCastException来获取。
+            String msg = ex.getMessage();
+            msg = msg.substring(msg.lastIndexOf("cast to") + 8);
+            Class clazz = null;
+            try {
+                clazz = Class.forName(msg);
+            } catch (ClassNotFoundException ex1) {
+                throw new RuntimeException(ex1);
+            }
+            System.out.println("msg - " + clazz);
+            name = getSelectName(clazz, getter);
         }
 
         //System.out.println(" - " + name);

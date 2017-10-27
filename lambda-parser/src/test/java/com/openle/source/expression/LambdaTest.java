@@ -54,6 +54,11 @@ public class LambdaTest {
                 //
                 .assertEquals(Assertions::fail, s);
 
+        s = "delete from MyUser";
+        delete().from("MyUser")
+                //
+                .assertEquals(Assertions::fail, s);
+
         s = "update User set Name = 'abc'";
         update(User.class).set(eq(User::getName, "abc"))
                 //
@@ -62,6 +67,11 @@ public class LambdaTest {
         s = "update User set Age = 22 , Name = 'a' where Name = 'abc'";
         update(User.class).set(eq(User::getAge, 22), eq(User::getName, "a"))
                 .where((User t) -> t.getName().equals("abc"))
+                //
+                .assertEquals(Assertions::fail, s);
+
+        s = "update MyTable set Name = 'abc'";
+        update("MyTable").set(eq(User::getName, "abc"))
                 //
                 .assertEquals(Assertions::fail, s);
 

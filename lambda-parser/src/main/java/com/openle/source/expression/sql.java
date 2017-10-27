@@ -133,6 +133,16 @@ public class sql {
     public static <T> Set update(Class c) {
         return new Set(c);
     }
+    
+        /**
+     *
+     * @param <T>
+     * @param tableName 表名
+     * @return SQL链式对象
+     */
+    public static <T> Set update(String tableName) {
+        return new Set(tableName);
+    }
 
     /**
      *

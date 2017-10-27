@@ -19,7 +19,11 @@ public class From<T> {
     }
 
     public Where from(Class c) {
-        return new Where(dml, c, fs);
+        return new Where(dml, c, null, fs);
+    }
+
+    public Where from(String tableName) {
+        return new Where(dml, null, tableName, fs);
     }
 
 }

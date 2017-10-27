@@ -12,7 +12,7 @@ Gradle:
 > 
 > dependencies {
 >
-> > compile 'com.openle.source.expression:lambda-parser:1.0.5'
+> > compile 'com.openle.source.expression:lambda-parser:1.0.6'
 >
 > }
 <br />
@@ -38,6 +38,11 @@ Gradle:
             //
             .assertEquals(Assertions::fail, s);
 
+    s = "select max(id) from User";
+    select(kf("max(id)")).from(User.class)
+            //
+            .assertEquals(Assertions::fail, s);
+
     s = "delete from User";
     delete().from(User.class)
             //
@@ -45,6 +50,11 @@ Gradle:
 
     s = "delete from User where Name = 'abc'";
     delete().from(User.class).where((User t) -> t.getName().equals("abc"))
+            //
+            .assertEquals(Assertions::fail, s);
+
+    s = "delete from MyUser";
+    delete().from("MyUser")
             //
             .assertEquals(Assertions::fail, s);
 
@@ -56,6 +66,11 @@ Gradle:
     s = "update User set Age = 22 , Name = 'a' where Name = 'abc'";
     update(User.class).set(eq(User::getAge, 22), eq(User::getName, "a"))
             .where((User t) -> t.getName().equals("abc"))
+            //
+            .assertEquals(Assertions::fail, s);
+
+    s = "update MyTable set Name = 'abc'";
+    update("MyTable").set(eq(User::getName, "abc"))
             //
             .assertEquals(Assertions::fail, s);
 

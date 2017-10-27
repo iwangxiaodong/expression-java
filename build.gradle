@@ -25,4 +25,5 @@ task clean(type: Delete) {
 
 task wrapper(type:Wrapper){
     gradleVersion='4.2.1'
+    //distributionUrl='file:///E:/gradle/gradle-4.1-all.zip'
 }

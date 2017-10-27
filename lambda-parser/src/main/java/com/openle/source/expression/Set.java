@@ -11,9 +11,14 @@ public class Set {
 
     DML dml = DML.UPDATE;
     Class c;
+    String tableName;
 
     protected Set(Class c) {
         this.c = c;
+    }
+
+    protected Set(String tableName) {
+        this.tableName = tableName;
     }
 
     //首个参数使其至少存在1个更新项参数！
@@ -23,7 +28,7 @@ public class Set {
         List<Map<Function, ?>> list = new ArrayList<>();
         list.add(firstSetMap);
         list.addAll(Arrays.asList(setMap));
-        Where where = new Where(dml, c, list);
+        Where where = new Where(dml, c, tableName,list);
         return where;
     }
 }

@@ -15,7 +15,8 @@ public class Where extends Execute {
     DML dml;
 
     //for Update
-    protected Where(DML dml, Class c, List<Map<Function, ?>> setMap) {
+    protected Where(DML dml, Class c, String tableName, List<Map<Function, ?>> setMap) {
+        tableName = c != null ? Utils.getTableName(c) : tableName;
         List<String> list = new ArrayList<>();
         for (Map<Function, ?> m : setMap) {
             for (Map.Entry<Function, ?> entry : m.entrySet()) {
@@ -28,7 +29,8 @@ public class Where extends Execute {
 //                } else {
 //                    name = new Utils().getSelectName(c, f);
 //                }
-                name = new Utils().getSelectName(c, f);
+
+                name = new Utils().getSelectName(c != null ? c : Object.class, f);
                 if (name.startsWith("get")) {
                     name = name.replaceFirst("get", "");
                 }
@@ -40,15 +42,16 @@ public class Where extends Execute {
                 list.add(name + " = " + s);
             }
         }
-        beforeWhere = "update " + Utils.getTableName(c) + " set " + String.join(" , ", list);
+        beforeWhere = "update " + tableName + " set " + String.join(" , ", list);
         super.sqlString = beforeWhere;
     }
 
     //for select delete
-    protected Where(DML dml, Class c, Function[] fs) {
+    protected Where(DML dml, Class c, String tableName, Function[] fs) {
+        tableName = c != null ? Utils.getTableName(c) : tableName;
         this.c = c;
         if (dml.equals(DML.DELETE)) {
-            beforeWhere = "delete from " + Utils.getTableName(c);
+            beforeWhere = "delete from " + tableName;
         }
 
         if (dml.equals(DML.SELECT)) {
@@ -61,9 +64,9 @@ public class Where extends Execute {
                     }
                     list.add(name);
                 }
-                beforeWhere = "select " + String.join(",", list) + " from " + Utils.getTableName(c);
+                beforeWhere = "select " + String.join(",", list) + " from " + tableName;
             } else {
-                beforeWhere = "select * from " + Utils.getTableName(c);
+                beforeWhere = "select * from " + tableName;
             }
         }
 

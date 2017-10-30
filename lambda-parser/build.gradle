@@ -7,7 +7,7 @@ apply plugin: 'com.jfrog.bintray'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version '1.0.6'
+version '1.0.7'
 group 'com.openle.source.expression'
 
 // 解决中文注释导致的Javadoc generation failed
@@ -45,7 +45,9 @@ dependencies {
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.1")
     
     compile group: 'org.ow2.asm', name: 'asm-util', version: '6.0'
-
+    
+    // for @javax.persistence.Table and @Embeddable
+    compile group: 'javax', name: 'javaee-web-api', version: '8.0'
 }
 
 junitPlatform {

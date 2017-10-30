@@ -84,8 +84,9 @@ public class Utils {
     }
 
     public static String getTableName(Class c) {
-        //System.out.println("Entity " + c.getName());
+        System.out.println("getTableName Entity " + c.getName() + "|" + c.getAnnotations().length);
         String tableName = c.getSimpleName();
+
         for (Annotation a : c.getAnnotations()) {
             //System.out.println(a.annotationType().getName());
             if (a.annotationType().getName().equals("javax.persistence.Table")) {

@@ -10,7 +10,7 @@ import org.jooq.Condition;
 
 public class Where extends Execute {
 
-    Class c;
+    //Class c;
     String beforeWhere;
     DML dml;
 
@@ -48,8 +48,9 @@ public class Where extends Execute {
 
     //for select delete
     protected Where(DML dml, Class c, String tableName, Function[] fs) {
+        //this.c = c;
         tableName = c != null ? Utils.getTableName(c) : tableName;
-        this.c = c;
+
         if (dml.equals(DML.DELETE)) {
             beforeWhere = "delete from " + tableName;
         }
@@ -58,7 +59,7 @@ public class Where extends Execute {
             if (fs != null && fs.length > 0) {
                 List<String> list = new ArrayList<>();
                 for (Function f : fs) {
-                    String name = new Utils().getSelectName(c, f);
+                    String name = new Utils().getSelectName(c != null ? c : Object.class, f);
                     if (name.startsWith("get")) {
                         name = name.replaceFirst("get", "");
                     }

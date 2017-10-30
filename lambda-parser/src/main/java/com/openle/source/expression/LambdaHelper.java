@@ -12,9 +12,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.modifier.Visibility;
-import net.bytebuddy.implementation.FixedValue;
 
 /**
  *
@@ -30,17 +27,15 @@ public class LambdaHelper {
     public static Function getFunctionByName(String methodName) {
         methodName = replaceSymbol(methodName);
         //System.setProperty("jdk.internal.lambda.dumpProxyClasses", "D:\\temp");
-        Function f = null;
 
-        // 方法引用的getter方法不存在时，临时创建一个类来模拟。
-        Class<?> c = new ByteBuddy()
-                .subclass(Object.class)
-                .defineMethod(methodName, String.class, Visibility.PUBLIC)
-                .intercept(FixedValue.value(methodName))
-                .make()
-                .load(LambdaHelper.class.getClassLoader())
-                .getLoaded();
-
+//        // 方法引用的getter方法不存在时，临时创建一个类来模拟。
+//        Class<?> c = new ByteBuddy()
+//                .subclass(Object.class)
+//                .defineMethod(methodName, String.class, Visibility.PUBLIC)
+//                .intercept(FixedValue.value(methodName))
+//                .make()
+//                .load(LambdaHelper.class.getClassLoader())
+//                .getLoaded();
         try {
             MethodHandles.Lookup caller = MethodHandles.lookup();
             MethodType getter = MethodType.methodType(String.class);
@@ -66,7 +61,7 @@ public class LambdaHelper {
 //            m.setAccessible(false);
 //
             MethodHandle factory = site.getTarget();
-            f = (Function) factory.invoke();
+            Function f = (Function) factory.invoke();
 
             //System.out.println(new Utils().getSelectName(c, f));
             //System.out.println(f.apply(c.getConstructor().newInstance()));
@@ -134,11 +129,11 @@ public class LambdaHelper {
 
     // 后续通过Base32或Base36处理
     public static String replaceSymbol(String s) {
-        return s.replace("(", "左括号").replace(")", "右括号");
+        return s.replace("(", "左括号").replace(")", "右括号").replace("*", "星号");
     }
 
     public static String restoreSymbol(String s) {
-        return s.replace("左括号", "(").replace("右括号", ")");
+        return s.replace("左括号", "(").replace("右括号", ")").replace("星号", "*");
     }
 
 }

@@ -7,14 +7,14 @@ import java.util.function.Function;
 
 public class Values {
 
-    Class c;
+    //Class c;
     Function[] fs;
     String sName = "";
 
-    protected Values(Class c, Function[] fs) {
-        this.c = c;
+    protected Values(Class c, Function[] fs, boolean isIgnore) {
+        //this.c = c;
         this.fs = fs;
-        sName = "insert " + Utils.getTableName(c) + " ";
+        sName = "insert " + (isIgnore ? "ignore " : "") + Utils.getTableName(c) + " ";
 
         if (fs.length > 0) {
             List<String> list = new ArrayList<>();
@@ -39,9 +39,8 @@ public class Values {
 
     }
 
-    protected Values(Class c) {
-        sName = "insert " + Utils.getTableName(c) + " ";
-
+    protected Values(Class c, boolean isIgnore) {
+        sName = "insert " + (isIgnore ? "ignore " : "") + Utils.getTableName(c) + " ";
     }
 
     public Execute values(Object... objArray) {

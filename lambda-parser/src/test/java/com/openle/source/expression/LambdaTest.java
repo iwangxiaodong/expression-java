@@ -39,8 +39,8 @@ public class LambdaTest {
                 //
                 .assertEquals(Assertions::fail, s);
 
-        s = "select max(id) from User";
-        select(kf("max(id)")).from(User.class)
+        s = "select max(id),count(*) from User";
+        select(kf("max(id)"), kf("count(*)")).from(User.class)
                 //
                 .assertEquals(Assertions::fail, s);
 
@@ -83,6 +83,11 @@ public class LambdaTest {
         s = "insert User (Name,FullName,v) values ('abc',null,1)";
         insert(User.class, User::getName, User::getFullName, kf("v"))
                 .values("abc", null, 1)
+                //
+                .assertEquals(Assertions::fail, s);
+
+        s = "insert ignore User values ('abc')";
+        insertIgnore(User.class).values("abc")
                 //
                 .assertEquals(Assertions::fail, s);
 

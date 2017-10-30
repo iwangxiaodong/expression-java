@@ -109,7 +109,17 @@ public class sql {
      * @return SQL链式对象
      */
     public static <T> Values insert(Class c) {
-        return new Values(c);
+        return new Values(c, false);
+    }
+
+    /**
+     * insert数据已存在时忽略不抛异常
+     * @param <T>
+     * @param c 实体Class User.class
+     * @return SQL链式对象
+     */
+    public static <T> Values insertIgnore(Class c) {
+        return new Values(c, true);
     }
 
     /**
@@ -121,7 +131,19 @@ public class sql {
      */
     @SafeVarargs
     public static <T> Values insert(Class c, final Function<T, ?>... getter) {
-        return new Values(c, getter);
+        return new Values(c, getter, false);
+    }
+
+    /**
+     *
+     * @param <T>
+     * @param c 实体Class User.class
+     * @param getter
+     * @return SQL链式对象
+     */
+    @SafeVarargs
+    public static <T> Values insertIgnore(Class c, final Function<T, ?>... getter) {
+        return new Values(c, getter, true);
     }
 
     /**
@@ -133,8 +155,8 @@ public class sql {
     public static <T> Set update(Class c) {
         return new Set(c);
     }
-    
-        /**
+
+    /**
      *
      * @param <T>
      * @param tableName 表名

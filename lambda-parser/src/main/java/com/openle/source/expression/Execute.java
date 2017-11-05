@@ -9,6 +9,7 @@ import java.sql.Statement;
 public class Execute {
 
     protected String sqlString;
+    private String debugSqlString;
 
     public String sql() {
         return sqlString;
@@ -18,7 +19,9 @@ public class Execute {
     }
 
     protected Execute(String sql) {
+
         this.sqlString = sql;
+        this.debugSqlString = sqlString.length() > 500 ? sqlString.substring(0, 500) + " ... 超出字符已省略！" : sqlString;
     }
 
     public void execute() {
@@ -30,7 +33,8 @@ public class Execute {
     }
 
     public boolean execute(Connection conn) {
-        System.out.println("Execute Connection - " + sqlString);
+
+        System.out.println("Execute Connection - " + debugSqlString);
         boolean r = false;
         if (conn != null) {
             try {
@@ -63,7 +67,7 @@ public class Execute {
     }
 
     public void executeQuery(Consumer<ResultSet> f, Connection conn) {
-        System.out.println("Execute Consumer,Connection - " + sqlString);
+        System.out.println("Execute Consumer,Connection - " + debugSqlString);
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sqlString);

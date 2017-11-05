@@ -114,6 +114,7 @@ public class sql {
 
     /**
      * insert数据已存在时忽略不抛异常
+     *
      * @param <T>
      * @param c 实体Class User.class
      * @return SQL链式对象
@@ -140,6 +141,7 @@ public class sql {
      * @param c 实体Class User.class
      * @param getter
      * @return SQL链式对象
+     * @since 1.0.7
      */
     @SafeVarargs
     public static <T> Values insertIgnore(Class c, final Function<T, ?>... getter) {
@@ -151,6 +153,7 @@ public class sql {
      * @param <T>
      * @param c 实体Class User.class
      * @return SQL链式对象
+     * @since 1.0.7
      */
     public static <T> Set update(Class c) {
         return new Set(c);
@@ -204,7 +207,7 @@ public class sql {
      * @param s
      * @return
      */
-    public static Function kf(String s) {
+    public static <T> Function<T,?> kf(String s) {
         //return new KeepField(s);     
         return LambdaHelper.getFunctionByName(s);
     }

@@ -12,7 +12,7 @@ Gradle:
 > 
 > dependencies {
 >
-> > compile 'com.openle.source.expression:lambda-parser:1.0.8'
+> > compile 'com.openle.source.expression:lambda-parser:1.0.9'
 >
 > }
 <br />
@@ -24,70 +24,89 @@ Gradle:
 **Test**: lambda-parser/src/test/java/com/openle/source/expression/LambdaTest.java
 ```sql
 
-    /*
-    import static com.openle.source.expression.sql.*; 
-     */
+    //  import static com.openle.source.expression.sql.*; 
+    //
     String s = "select * from User";
-    select().from(User.class)
-            //
-            .assertEquals(Assertions::fail, s);
 
-    s = "select Name,Age,FullName from User where Age > 0";
-    select(User::getName, User::getAge, User::getFullName)
-            .from(User.class).where((User t) -> t.getAge() > 0)
-            //
-            .assertEquals(Assertions::fail, s);
+    @Test
+    public void testSelect() {
+        select().from(User.class)
+                //
+                .assertEquals(Assertions::fail, s);
 
-    s = "select max(id),count(*) from User";
-    select(kf("max(id)"), kf("count(*)")).from(User.class)
-            //
-            .assertEquals(Assertions::fail, s);
+        s = "select Name,Age,FullName from User where Age > 0";
+        select(User::getName, User::getAge, User::getFullName)
+                .from(User.class).where((User t) -> t.getAge() > 0)
+                //
+                .assertEquals(Assertions::fail, s);
 
-    s = "delete from User";
-    delete().from(User.class)
-            //
-            .assertEquals(Assertions::fail, s);
+        s = "select max(id),count(*) from User";
+        select(kf("max(id)"), kf("count(*)")).from(User.class)
+                //
+                .assertEquals(Assertions::fail, s);
+    }
 
-    s = "delete from User where Name = 'abc'";
-    delete().from(User.class).where((User t) -> t.getName().equals("abc"))
-            //
-            .assertEquals(Assertions::fail, s);
+    @Test
+    public void testDelete() {
+        s = "delete from User";
+        delete().from(User.class)
+                //
+                .assertEquals(Assertions::fail, s);
 
-    s = "delete from MyUser";
-    delete().from("MyUser")
-            //
-            .assertEquals(Assertions::fail, s);
+        s = "delete from User where id = 18";
+        delete().from(User.class).where((User t) -> t.id() == 18)
+                //
+                .assertEquals(Assertions::fail, s);
 
-    s = "update User set Name = 'abc'";
-    update(User.class).set(eq(User::getName, "abc"))
-            //
-            .assertEquals(Assertions::fail, s);
+        s = "delete from MyUser";
+        delete().from("MyUser")
+                //
+                .assertEquals(Assertions::fail, s);
 
-    s = "update User set Age = 22 , Name = 'a' where Name = 'abc'";
-    update(User.class).set(eq(User::getAge, 22), eq(User::getName, "a"))
-            .where((User t) -> t.getName().equals("abc"))
-            //
-            .assertEquals(Assertions::fail, s);
+        s = "delete from MyUser where Name = 'abc'";
+        delete().from("MyUser").where((User t) -> t.getName().equals("abc"))
+                //
+                .assertEquals(Assertions::fail, s);
+    }
 
-    s = "update MyTable set Name = 'abc'";
-    update("MyTable").set(eq(User::getName, "abc"))
-            //
-            .assertEquals(Assertions::fail, s);
+    @Test
+    public void testUpdate() {
+        s = "update User set Name = 'abc'";
+        update(User.class).set(eq(User::getName, "abc"))
+                //
+                .assertEquals(Assertions::fail, s);
 
-    s = "insert User values ('abc',now())";
-    insert(User.class).values("abc", k("now()"))
-            //
-            .assertEquals(Assertions::fail, s);
+        s = "update User set Age = 22 , Name = 'a' where Age >= 18";
+        update(User.class).set(eq(User::getAge, 22), eq(User::getName, "a"))
+                .where((User t) -> t.getAge() >= 18)
+                //
+                .assertEquals(Assertions::fail, s);
 
-    s = "insert User (Name,FullName,v) values ('abc',null,1)";
-    insert(User.class, User::getName, User::getFullName, kf("v"))
-            .values("abc", null, 1)
-            //
-            .assertEquals(Assertions::fail, s);
+        s = "update MyTable set Name = 'abc' where Age <> 18";
+        update("MyTable").set(eq(User::getName, "abc"))
+                .where((User t) -> t.getAge() != 18)
+                //
+                .assertEquals(Assertions::fail, s);
+    }
 
-    s = "insert ignore User values ('abc')";
-    insertIgnore(User.class).values("abc")
-            //
-            .assertEquals(Assertions::fail, s);
+    @Test
+    public void testInsert() {
+        s = "insert User values ('abc',now())";
+        insert(User.class).values("abc", k("now()"))
+                //
+                .assertEquals(Assertions::fail, s);
+
+        s = "insert User (Name,FullName,v) values ('abc',null,1)";
+        insert(User.class, User::getName, User::getFullName, kf("v"))
+                .values("abc", null, 1)
+                //
+                .assertEquals(Assertions::fail, s);
+
+        s = "insert ignore User values ('abc')";
+        insertIgnore(User.class).values("abc")
+                //
+                .assertEquals(Assertions::fail, s);
+    }
+
 
 ```

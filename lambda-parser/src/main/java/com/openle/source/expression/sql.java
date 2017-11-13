@@ -64,11 +64,8 @@ public class sql {
             throw new IllegalArgumentException("你输入的JNDI名格式有误，应该以java:comp/...开头！");
         }
 
-        Context ctx;
-        DataSource dsJNDI = null;
-
-        ctx = new InitialContext();
-        dsJNDI = (DataSource) ctx
+        Context ctx = new InitialContext();
+        DataSource dsJNDI = (DataSource) ctx
                 .lookup(jndiName);
 
         initialize(dsJNDI);
@@ -207,7 +204,7 @@ public class sql {
      * @param s
      * @return
      */
-    public static <T> Function<T,?> kf(String s) {
+    public static <T> Function<T, ?> kf(String s) {
         //return new KeepField(s);     
         return LambdaHelper.getFunctionByName(s);
     }

@@ -1,5 +1,6 @@
 package com.openle.source.expression;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.CallSite;
 import java.lang.invoke.LambdaConversionException;
@@ -8,6 +9,12 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -23,8 +30,15 @@ import org.mockito.invocation.InvocationOnMock;
 public class Utils {
 
     public static void main(String[] args) throws Throwable {
-        xxx();
+        sql.initialize();
+        Integer ii = 100;
+        PredicateSerializable<?> lambda = (Utils u) -> u.print() == "bbb" && u.id() == 345;
+        System.out.println(LambdaParser.parseWhere(lambda));
 
+//        lambda = (Utils u) -> u.getAge() > 18 && u.getClass().getName().toString().equals("abc");
+//        System.out.println(LambdaParser.parseWhere(lambda));
+        //System.out.println(Lambda2Sql.toSql(lambda));
+        //   xxx();
 //        MethodHandles.Lookup caller = MethodHandles.lookup();
 //        MethodType methodType = MethodType.methodType(Object.class);
 //        MethodType actualMethodType = MethodType.methodType(String.class);
@@ -40,8 +54,16 @@ public class Utils {
 //        System.out.println(r.get());
     }
 
-    private static String print() {
+    public String print() {
         return "hello world";
+    }
+
+    public int id() {
+        return 123;
+    }
+
+    public Integer getAge() {
+        return 123;
     }
 
     public String getVersion() {
@@ -84,7 +106,7 @@ public class Utils {
     }
 
     public static String getTableName(Class c) {
-        System.out.println("getTableName Entity " + c.getName() + "|" + c.getAnnotations().length);
+
         String tableName = c.getSimpleName();
 
         for (Annotation a : c.getAnnotations()) {
@@ -93,7 +115,8 @@ public class Utils {
                 try {
                     Method m = a.annotationType().getMethod("name", new Class[]{});
                     Object obj = m.invoke(a, new Object[]{});
-                    System.out.println("Table Name = " + obj);
+                    System.out.println("getTableName Entity " + c.getName() + "|TableName - " + obj);
+                    //System.out.println("Table Name = " + obj);
                     tableName = obj.toString();
                 } catch (java.lang.ReflectiveOperationException ex) {
                     Logger.getLogger(From.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,5 +163,34 @@ public class Utils {
 
         //System.out.println(" - " + name);
         return name;
+    }
+
+    //该方法已写入base模块，此处为冗余
+    /**
+     * 强制删除文件/文件夹(含不为空的文件夹)<br>
+     *
+     * @param dir
+     * @throws IOException
+     * @see Files#deleteIfExists(Path)
+     * @see Files#walkFileTree(Path, java.nio.file.FileVisitor)
+     */
+    public static void deleteIfExistsWithNotEmpty(Path dir) throws IOException {
+        try {
+            Files.deleteIfExists(dir);
+        } catch (DirectoryNotEmptyException e) {
+            Files.walkFileTree(dir, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    Files.delete(dir);
+                    return super.postVisitDirectory(dir, exc);
+                }
+            });
+        }
     }
 }

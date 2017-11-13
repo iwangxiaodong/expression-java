@@ -1,6 +1,5 @@
 package com.openle.source.expression;
 
-import static com.openle.source.expression.LambdaParser.parseWhere;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -74,14 +73,15 @@ public class Where extends Execute {
         super.sqlString = beforeWhere;
     }
 
-    // 注意：lambda表达式左侧为getXxx()方法，右侧输入最好将方法转换为变量再代入。
+    // 注意：where表达式两侧若是方法，则取方法名，若是变量则直接代入值而不进入方法名判断。
     public Execute where(PredicateSerializable<?> lambda) {
+
         String where = "";
         if (lambda != null) {
-            Condition con = parseWhere(lambda);
+            Condition cond = LambdaParser.parseWhere(lambda);
 
-            if (con != null) {
-                where = " where " + con;
+            if (cond != null) {
+                where = " where " + cond;
             }
 
         }
@@ -89,4 +89,8 @@ public class Where extends Execute {
 
     }
 
+//    public Execute where(Predicate<?> lambda) {
+//        System.out.println("where Predicate");
+//        return null;
+//    }
 }

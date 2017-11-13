@@ -22,13 +22,12 @@ public class LambdaTest {
         sql.initialize();
     }
 
-    @Test
-    public void testMain() {
+    //  import static com.openle.source.expression.sql.*; 
+    //
+    String s = "select * from User";
 
-        /*
-        import static com.openle.source.expression.sql.*; 
-         */
-        String s = "select * from User";
+    @Test
+    public void testSelect() {
         select().from(User.class)
                 //
                 .assertEquals(Assertions::fail, s);
@@ -43,14 +42,17 @@ public class LambdaTest {
         select(kf("max(id)"), kf("count(*)")).from(User.class)
                 //
                 .assertEquals(Assertions::fail, s);
+    }
 
+    @Test
+    public void testDelete() {
         s = "delete from User";
         delete().from(User.class)
                 //
                 .assertEquals(Assertions::fail, s);
 
-        s = "delete from User where Name = 'abc'";
-        delete().from(User.class).where((User t) -> t.getName().equals("abc"))
+        s = "delete from User where id = 18";
+        delete().from(User.class).where((User t) -> t.id() == 18)
                 //
                 .assertEquals(Assertions::fail, s);
 
@@ -59,22 +61,34 @@ public class LambdaTest {
                 //
                 .assertEquals(Assertions::fail, s);
 
+        s = "delete from MyUser where Name = 'abc'";
+        delete().from("MyUser").where((User t) -> t.getName().equals("abc"))
+                //
+                .assertEquals(Assertions::fail, s);
+    }
+
+    @Test
+    public void testUpdate() {
         s = "update User set Name = 'abc'";
         update(User.class).set(eq(User::getName, "abc"))
                 //
                 .assertEquals(Assertions::fail, s);
 
-        s = "update User set Age = 22 , Name = 'a' where Name = 'abc'";
+        s = "update User set Age = 22 , Name = 'a' where Age >= 18";
         update(User.class).set(eq(User::getAge, 22), eq(User::getName, "a"))
-                .where((User t) -> t.getName().equals("abc"))
+                .where((User t) -> t.getAge() >= 18)
                 //
                 .assertEquals(Assertions::fail, s);
 
-        s = "update MyTable set Name = 'abc'";
+        s = "update MyTable set Name = 'abc' where Age <> 18";
         update("MyTable").set(eq(User::getName, "abc"))
+                .where((User t) -> t.getAge() != 18)
                 //
                 .assertEquals(Assertions::fail, s);
+    }
 
+    @Test
+    public void testInsert() {
         s = "insert User values ('abc',now())";
         insert(User.class).values("abc", k("now()"))
                 //
@@ -90,7 +104,6 @@ public class LambdaTest {
         insertIgnore(User.class).values("abc")
                 //
                 .assertEquals(Assertions::fail, s);
-
     }
 
     @Disabled
@@ -106,38 +119,35 @@ public class LambdaTest {
         assertEquals("fieldName", new Utils().getSelectName(LambdaHelper.class, f));
     }
 
-    @Disabled
     @Test
     public void testOther() {
-
-        String sqlString = LambdaParser.toSQL("SELECT * FROM myTable",
-                (User t) -> t.getAge() < (t.getAge() + 1) && t.getFullName().equals("myName") && true);
-        System.out.println(sqlString);
-
-        //for Camel To Underline
-        LambdaParser.isCamelToUnderline = true;
-        sqlString = LambdaParser.toSQL("SELECT * FROM myTable",
-                (User t) -> t.getAge() < (t.getAge() + 1) && t.getFullName().equals("myName") && true);
-        System.out.println();
-        System.out.println("Camel To Underline:\r\n" + sqlString);
+        System.out.println("testOther");
+        int i = 18; // where条件支持外部变量值
+        s = "select Name,Age,FullName from User where (\n"
+                + "  userId > 18\n"
+                + "  and 100 > Age\n"
+                + ")";
+        select(User::getName, User::getAge, User::getFullName)
+                .from(User.class).where((User t) -> t.userId().id() > i && 100 > t.getAge())
+                //
+                .assertEquals(Assertions::fail, s);
     }
 
-    @Disabled
-    @Test
-    public void testLambdaParser() {
-        String sql = LambdaParser.toSQL("SELECT * FROM myTable", (User t) -> t.getAge() < (t.getAge() + 1) && t.getFullName().equals("myName") && true);
-        System.out.println(sql);
-
-        //for Camel To Underline
-        LambdaParser.isCamelToUnderline = true;
-        sql = LambdaParser.toSQL("SELECT * FROM myTable", (User t) -> t.getFullName().equals("xyz"));
-        LambdaParser.isCamelToUnderline = false;
-        System.out.println();
-
-        System.out.println("Camel To Underline:\r\n" + sql);
-
-    }
-
+//    @Disabled
+//    @Test
+//    public void testLambdaParser() {
+//        String sql = LambdaParser.toSQL("SELECT * FROM myTable",
+//                (User t) -> t.getAge() < (t.getAge() + 1) && t.getFullName().equals("myName") && true);
+//        System.out.println(sql);
+//
+//        //for Camel To Underline
+//        LambdaParser.isCamelToUnderline = true;
+//        sql = LambdaParser.toSQL("SELECT * FROM myTable", (User t) -> t.getFullName().equals("xyz"));
+//        LambdaParser.isCamelToUnderline = false;
+//        System.out.println();
+//
+//        System.out.println("Camel To Underline:\r\n" + sql);
+//    }
     @Disabled
     @Test
     public void testStream() {

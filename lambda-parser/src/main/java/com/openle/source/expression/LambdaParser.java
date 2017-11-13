@@ -1,6 +1,6 @@
 package com.openle.source.expression;
 
-import org.jinq.jooq.transform.MySchema;
+import ch.epfl.labos.iu.orm.queryll2.symbolic.MethodSignature;
 import org.jinq.jooq.transform.LambdaInfo;
 import org.jooq.Condition;
 import org.jooq.SelectField;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.jinq.jooq.transform.MetamodelUtil;
-import org.jinq.jooq.transform.MyLambdaInfo;
+import org.jinq.jooq.transform.MyInterceptor;
 import org.jinq.jooq.transform.MyWhereTransform;
 
 /**
@@ -23,14 +23,13 @@ public class LambdaParser {
     public static boolean isCamelToUnderline = false;
 
     protected static Condition parseWhere(PredicateSerializable<?> lambda) {
-
-        LambdaInfo where = MyLambdaInfo.analyze(null, lambda);
+        MetamodelUtil mu = new MyInterceptor().getMetamodelUtil();
+        LambdaInfo where = LambdaInfo.analyze(mu, lambda);
         if (where == null) {
             throw new IllegalArgumentException("Could not create convert Lambda into a query");
         }
 
-        MetamodelUtil m = new MetamodelUtil(MySchema.APP);
-        MyWhereTransform whereTransform = new MyWhereTransform(m, where);
+        MyWhereTransform whereTransform = new MyWhereTransform(mu, where);
         List<Table<?>> from = new ArrayList<>();
         Condition cond = whereTransform.apply(from);
         //System.out.println(cond);

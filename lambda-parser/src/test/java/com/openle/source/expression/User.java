@@ -8,6 +8,16 @@ public class User {
     private String name;
     private String fullName;
     private Integer age;
+    private int id;
+    private UserId userId;
+
+    public UserId userId() {
+        return userId;
+    }
+
+    public int id() {
+        return id;
+    }
 
     public Integer getAge() {
         return age;

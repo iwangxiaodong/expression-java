@@ -1,6 +1,9 @@
 package com.openle.source.expression;
 
+import com.openle.source.expression.serializable.FunctionSerializable;
+import com.user00.thunk.SerializedLambda;
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.CallSite;
 import java.lang.invoke.LambdaConversionException;
@@ -27,13 +30,13 @@ import org.mockito.invocation.InvocationOnMock;
 /**
  * 公用类
  */
-public class Utils {
+public class Utils implements Serializable {
 
     public static void main(String[] args) throws Throwable {
-        sql.initialize();
-        Integer ii = 100;
-        PredicateSerializable<?> lambda = (Utils u) -> u.print() == "bbb" && u.id() == 345;
-        System.out.println(LambdaParser.parseWhere(lambda));
+//        sql.initialize();
+//        Integer ii = 100;
+//        PredicateSerializable<?> lambda = (Utils u) -> u.print() == "bbb" && u.id() == 345;
+//        System.out.println(LambdaParser.parseWhere(lambda));
 
 //        lambda = (Utils u) -> u.getAge() > 18 && u.getClass().getName().toString().equals("abc");
 //        System.out.println(LambdaParser.parseWhere(lambda));
@@ -52,6 +55,27 @@ public class Utils {
 //        MethodHandle factory = site.getTarget();
 //        Supplier<String> r = (Supplier<String>) factory.invoke();
 //        System.out.println(r.get());
+        parseLambda(Utils::getVersion);
+
+    }
+
+    protected static void parseLambda(FunctionSerializable<Utils, ?> lambda) {
+
+        System.out.println(lambda.apply(new Utils()));
+        SerializedLambda s;
+        try {
+            s = SerializedLambda.extractLambda(lambda);
+            System.out.println(s.implClass);
+            System.out.println(s.implMethodName);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+//        MetamodelUtil mu = new MyInterceptor().getMetamodelUtil();
+//        LambdaInfo where = LambdaInfo.analyze(mu, lambda);
+//        if (where == null) {
+//            throw new IllegalArgumentException("Could not create convert Lambda into a query");
+//        }
     }
 
     public String print() {

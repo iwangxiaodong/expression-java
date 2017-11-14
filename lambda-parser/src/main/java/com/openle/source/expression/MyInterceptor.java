@@ -1,20 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.jinq.jooq.transform;
+package com.openle.source.expression;
 
+import org.jinq.jooq.transform.*;
 import ch.epfl.labos.iu.orm.queryll2.path.TransformationClassAnalyzer;
 import ch.epfl.labos.iu.orm.queryll2.symbolic.MethodCallValue;
 import ch.epfl.labos.iu.orm.queryll2.symbolic.MethodSignature;
-import com.openle.source.expression.LambdaParser;
-import com.openle.source.expression.Utils;
 import java.lang.reflect.Constructor;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.bind.annotation.AllArguments;
 import net.bytebuddy.implementation.bind.annotation.RuntimeType;
@@ -29,6 +24,8 @@ import org.jooq.impl.SchemaImpl;
  *
  * @author xiaodong
  */
+// 将WhereTransform.java中new SymbExToColumns修改为new MyInterceptor().getSymbExToColumns即可
+// 考虑通过--patch-module替换WhereTransform.java类
 public class MyInterceptor {
 
     public MetamodelUtil getMetamodelUtil() {
@@ -37,8 +34,8 @@ public class MyInterceptor {
 
             Constructor<?> c = new ByteBuddy()
                     .subclass(MetamodelUtil.class)
-                    .method(named("isFieldGetterMethod")).intercept(MethodDelegation.to(MyInterceptor.Target1.class))
-                    .method(named("isSafeMethod")).intercept(MethodDelegation.to(MyInterceptor.Target2.class))
+                    .method(named("isFieldGetterMethod")).intercept(FixedValue.value(false))
+                    .method(named("isSafeMethod")).intercept(FixedValue.value(true))
                     .make()
                     .load(getClass().getClassLoader())
                     .getLoaded()
@@ -48,7 +45,7 @@ public class MyInterceptor {
             metamodel = (MetamodelUtil) c.newInstance(new SchemaImpl(""));
             c.setAccessible(false);
         } catch (ReflectiveOperationException ex) {
-            Logger.getLogger(MyWhereTransform.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return metamodel;
     }
@@ -69,7 +66,7 @@ public class MyInterceptor {
             translator = (SymbExToColumns) c.newInstance(metamodel, seah);
             c.setAccessible(false);
         } catch (ReflectiveOperationException ex) {
-            Logger.getLogger(MyWhereTransform.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return translator;
     }
@@ -83,7 +80,7 @@ public class MyInterceptor {
 
             MethodSignature sig = val.getSignature();
             //System.out.println("sig - " + sig.toString() + " | " + "val - " + val.base.toString());
-            
+
             String rName = null;
             if (sig.name.startsWith("get")) {
                 rName = sig.name;
@@ -121,23 +118,9 @@ public class MyInterceptor {
             try {
                 return callable.call();
             } catch (Exception ex) {
-                Logger.getLogger(MyWhereTransform.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Logger.class.getName()).log(Level.SEVERE, null, ex);
             }
             return null;
-        }
-    }
-
-    public static class Target1 {
-
-        public static boolean isFieldGetterMethod(MethodSignature sig) {
-            return false;
-        }
-    }
-
-    public static class Target2 {
-
-        public static boolean isSafeMethod(MethodSignature sig) {
-            return true;
         }
     }
 

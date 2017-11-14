@@ -1,13 +1,32 @@
-defaultTasks  'clean','build','uploadArchives'
+//defaultTasks  'clean','build','uploadArchives'
 
-apply plugin: 'java'
+// https://guides.gradle.org/building-java-9-modules/
+plugins {
+    id 'java-library'
+}
+
+ext.moduleName = 'com.openle.source.expression'
+
+compileJava {
+    inputs.property("moduleName", moduleName)
+    doFirst {
+        options.compilerArgs = [
+            '--module-path', classpath.asPath,
+            //'--patch-module', "moduleName=C:\\Users\\xiaodong\\Documents\\NetBeansProjects\\xxx\\build\\modules\\ModuleName",
+        ]
+        classpath = files()  // <2>
+    }
+}
+
+//apply plugin: 'java'
 apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: 'com.jfrog.bintray'
 
 sourceCompatibility = 1.9
 
-version '1.0.9'
+version '1.1.0'
 group 'com.openle.source.expression'
+
 
 // 解决中文注释导致的Javadoc generation failed
 tasks.withType(Javadoc) {
@@ -32,10 +51,11 @@ dependencies {
     deployerJars "org.apache.maven.wagon:wagon-webdav:1.0-beta-2"
         
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    
+        
     //for lambda to sql
-    compile group: 'org.jinq', name: 'jinq-jooq', version: '1.8.22'
+    //compile group: 'org.jinq', name: 'jinq-jooq', version: '1.8.22'
     compile group: 'org.jooq', name: 'jooq', version: '3.10.1'
+    compile group: 'org.jinq', name: 'analysis', version: '1.8.22'
 
     //for method ref
     compile "org.mockito:mockito-core:+"
@@ -46,7 +66,9 @@ dependencies {
     compile group: 'org.ow2.asm', name: 'asm-util', version: '6.0'
     
     // for @javax.persistence.Table and @Embeddable
-    compile group: 'javax', name: 'javaee-web-api', version: '8.0'
+    //compile group: 'javax', name: 'javaee-web-api', version: '8.0'
+    // javaee-web-api跟java.sql冲突，so暂用eclipse persistence api
+    compile group: 'org.eclipse.persistence', name: 'javax.persistence', version: '2.2.0'
 }
 
 junitPlatform {

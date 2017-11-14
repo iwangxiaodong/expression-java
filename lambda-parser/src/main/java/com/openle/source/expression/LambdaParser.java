@@ -1,6 +1,6 @@
 package com.openle.source.expression;
 
-import ch.epfl.labos.iu.orm.queryll2.symbolic.MethodSignature;
+import com.openle.source.expression.serializable.PredicateSerializable;
 import org.jinq.jooq.transform.LambdaInfo;
 import org.jooq.Condition;
 import org.jooq.SelectField;
@@ -12,12 +12,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.jinq.jooq.transform.MetamodelUtil;
-import org.jinq.jooq.transform.MyInterceptor;
-import org.jinq.jooq.transform.MyWhereTransform;
+import org.jinq.jooq.transform.WhereTransform;
 
-/**
- * 类似开源项目 - https://github.com/ajermakovics/lambda2sql
- */
+// 解析Lambda表达式 - SerializedLambda.extractLambda(lambda).implMethodName;
 public class LambdaParser {
 
     public static boolean isCamelToUnderline = false;
@@ -29,7 +26,7 @@ public class LambdaParser {
             throw new IllegalArgumentException("Could not create convert Lambda into a query");
         }
 
-        MyWhereTransform whereTransform = new MyWhereTransform(mu, where);
+        WhereTransform whereTransform = new WhereTransform(mu, where);
         List<Table<?>> from = new ArrayList<>();
         Condition cond = whereTransform.apply(from);
         //System.out.println(cond);

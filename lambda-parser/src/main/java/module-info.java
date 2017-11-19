@@ -2,14 +2,14 @@
 module com.openle.source.expression {
     requires java.sql;
     requires java.naming;
-    requires org.mockito;
     requires org.jooq;
+    requires jinq.asm.rebased;
     //requires jinq.jooq;
-    
+    //requires org.mockito;
+
 //    // 限定 - 前者只能被后者访问
 //    exports org.jinq.jooq.transform to com.openle.source.expression;
 //    exports org.jinq.jooq.querygen to com.openle.source.expression;
-    
     // 不限定
     exports com.openle.source.expression;
 }

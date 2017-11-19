@@ -1,12 +1,21 @@
 //defaultTasks  'clean','build','uploadArchives'
 
-// https://guides.gradle.org/building-java-9-modules/
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.2' 
+    }
+}
+
 plugins {
     id 'java-library'
+    id "com.jfrog.bintray" version "1.7.3"
 }
 
 ext.moduleName = 'com.openle.source.expression'
-
+// https://guides.gradle.org/building-java-9-modules/
 compileJava {
     inputs.property("moduleName", moduleName)
     doFirst {
@@ -20,7 +29,9 @@ compileJava {
 
 //apply plugin: 'java'
 apply plugin: 'org.junit.platform.gradle.plugin'
-apply plugin: 'com.jfrog.bintray'
+junitPlatform {
+    //reportsDir file('build/test-results/test')
+}
 
 sourceCompatibility = 1.9
 
@@ -60,8 +71,8 @@ dependencies {
     //for method ref
     compile "org.mockito:mockito-core:+"
 
-    testCompile("org.junit.jupiter:junit-jupiter-api:5.0.1")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.1")
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.0.2")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.2")
     
     compile group: 'org.ow2.asm', name: 'asm-util', version: '6.0'
     
@@ -71,9 +82,7 @@ dependencies {
     compile group: 'org.eclipse.persistence', name: 'javax.persistence', version: '2.2.0'
 }
 
-junitPlatform {
-    //reportsDir file('build/test-results/test')
-}
+
 
 apply plugin: 'maven'
 uploadArchives {
@@ -90,22 +99,6 @@ uploadArchives {
             }
         }
     }
-}
-
-// custom tasks for creating source/javadoc jars
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-// add javadoc/source jar tasks as artifacts
-artifacts {
-    archives sourcesJar, javadocJar
 }
 
 // ./gradlew build bintrayUpload -PBINTRAY_API_KEY=myKey  //or 设定环境变量: export BINTRAY_API_KEY=myKey

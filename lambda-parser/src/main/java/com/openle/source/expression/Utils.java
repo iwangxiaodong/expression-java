@@ -2,7 +2,6 @@ package com.openle.source.expression;
 
 import com.openle.source.expression.serializable.FunctionSerializable;
 import com.user00.thunk.SerializedLambda;
-import java.io.IOException;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.CallSite;
@@ -12,12 +11,6 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -187,34 +180,5 @@ public class Utils implements Serializable {
 
         //System.out.println(" - " + name);
         return name;
-    }
-
-    //该方法已写入base模块，此处为冗余
-    /**
-     * 强制删除文件/文件夹(含不为空的文件夹)<br>
-     *
-     * @param dir
-     * @throws IOException
-     * @see Files#deleteIfExists(Path)
-     * @see Files#walkFileTree(Path, java.nio.file.FileVisitor)
-     */
-    public static void deleteIfExistsWithNotEmpty(Path dir) throws IOException {
-        try {
-            Files.deleteIfExists(dir);
-        } catch (DirectoryNotEmptyException e) {
-            Files.walkFileTree(dir, new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    Files.delete(file);
-                    return FileVisitResult.CONTINUE;
-                }
-
-                @Override
-                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                    Files.delete(dir);
-                    return super.postVisitDirectory(dir, exc);
-                }
-            });
-        }
     }
 }

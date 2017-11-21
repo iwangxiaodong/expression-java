@@ -37,7 +37,9 @@ public class Where extends Execute {
 
                 String s = Objects.isNull(value) ? "null" : String.valueOf(value);
                 if (Objects.nonNull(value) && value.getClass().equals(String.class)) {
-                    s = "'" + value + "'";
+                    System.out.println("~"+value.toString());
+                    s = "'" + Utils.escapeSql(value.toString()) + "'";
+                    //s = "'" + value + "'";
                 }
                 list.add(name + " = " + s);
             }

@@ -181,4 +181,13 @@ public class Utils implements Serializable {
         //System.out.println(" - " + name);
         return name;
     }
+
+    // 已收录至module.data,此为冗余。
+    public static String escapeSql(String str) {
+        if (str == null) {
+            return null;
+        }
+        return str.replace("'", "''").replace("\\", "\\\\")
+                .replace("\r", "\\r").replace("\n", "\\n");
+    }
 }

@@ -14,11 +14,17 @@ plugins {
     id "com.jfrog.bintray" version "1.7.3"
 }
 
+apply plugin: 'org.junit.platform.gradle.plugin'
+junitPlatform {
+    //reportsDir file('build/test-results/test')
+}
+
 ext.moduleName = 'com.openle.source.expression'
 // https://guides.gradle.org/building-java-9-modules/
 compileJava {
     inputs.property("moduleName", moduleName)
     doFirst {
+        println classpath.asPath
         options.compilerArgs = [
             '--module-path', classpath.asPath,
             //'--patch-module', "moduleName=C:\\Users\\xiaodong\\Documents\\NetBeansProjects\\xxx\\build\\modules\\ModuleName",
@@ -27,15 +33,19 @@ compileJava {
     }
 }
 
-//apply plugin: 'java'
-apply plugin: 'org.junit.platform.gradle.plugin'
-junitPlatform {
-    //reportsDir file('build/test-results/test')
+// 可选 - 以下配置仅用于NetBeans+Gradle Plugin的BUG
+sourceSets {
+    test {
+        java {
+            srcDirs  = ['src/main/java','src/test/java']
+            exclude 'module-info.java'
+        }
+    }
 }
 
 sourceCompatibility = 1.9
 
-version '1.1.0'
+version '1.1.1'
 group 'com.openle.source.expression'
 
 
@@ -59,7 +69,9 @@ configurations {
 
 dependencies {
     
-    deployerJars "org.apache.maven.wagon:wagon-webdav:1.0-beta-2"
+    // v3.0.0版本似乎上传不了！
+    deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '2.12'
+
         
     compile fileTree(include: ['*.jar'], dir: 'libs')
         

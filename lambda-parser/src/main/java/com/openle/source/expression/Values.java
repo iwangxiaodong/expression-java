@@ -60,7 +60,8 @@ public class Values {
             String s = Objects.isNull(value) ? "null" : String.valueOf(value);
             if (Objects.nonNull(value)) {
                 if (value.getClass().equals(String.class)) {
-                    s = "'" + value + "'";
+                    s = "'" + Utils.escapeSql(value.toString()) + "'";
+                    //s = "'" + value + "'";
                     //System.out.println("is String.class");
                 }
             }

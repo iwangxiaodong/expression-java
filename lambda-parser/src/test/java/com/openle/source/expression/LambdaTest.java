@@ -119,6 +119,15 @@ public class LambdaTest {
         assertEquals("fieldName", new Utils().getSelectName(LambdaHelper.class, f));
     }
 
+    // where条件值未进行SQL注入防护，后续补上。
+    @Test
+    public void testSqlInjection() {
+        s = "insert User values ('''injection')";
+        insert(User.class).values("'injection")
+                //
+                .assertEquals(Assertions::fail, s);
+    }
+
     @Test
     public void testOther() {
         System.out.println("testOther");

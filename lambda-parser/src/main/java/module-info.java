@@ -4,6 +4,8 @@ module com.openle.source.expression {
     requires java.naming;
     requires org.jooq;
     requires jinq.asm.rebased;
+    //requires org.junit.jupiter.api;
+    //requires javax.persistence;
     //requires jinq.jooq;
     //requires org.mockito;
 

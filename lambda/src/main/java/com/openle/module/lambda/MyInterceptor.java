@@ -1,4 +1,4 @@
-package com.openle.source.expression;
+package com.openle.module.lambda;
 
 import org.jinq.jooq.transform.*;
 import ch.epfl.labos.iu.orm.queryll2.path.TransformationClassAnalyzer;
@@ -8,6 +8,8 @@ import java.lang.reflect.Constructor;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.implementation.MethodDelegation;
@@ -27,6 +29,27 @@ import org.jooq.impl.SchemaImpl;
 // 将WhereTransform.java中new SymbExToColumns修改为new MyInterceptor().getSymbExToColumns即可
 // 考虑通过--patch-module替换WhereTransform.java类
 public class MyInterceptor {
+
+    public static boolean isCamelToUnderline = false;
+
+    public static String camelToUnderline(String param) {
+        Pattern p = Pattern.compile("[A-Z]");
+        if (param == null || param.equals("")) {
+            return "";
+        }
+        StringBuilder builder = new StringBuilder(param);
+        Matcher mc = p.matcher(param);
+        int i = 0;
+        while (mc.find()) {
+            builder.replace(mc.start() + i, mc.end() + i, "_" + mc.group().toLowerCase());
+            i++;
+        }
+
+        if ('_' == builder.charAt(0)) {
+            builder.deleteCharAt(0);
+        }
+        return builder.toString();
+    }
 
     public MetamodelUtil getMetamodelUtil() {
         MetamodelUtil metamodel = null;
@@ -107,8 +130,8 @@ public class MyInterceptor {
 
             if (rName != null) {
                 rName = rName.replace("get", "");
-                if (LambdaParser.isCamelToUnderline) {
-                    rName = Utils.camelToUnderline(rName);
+                if (isCamelToUnderline) {
+                    rName = camelToUnderline(rName);
                 }
                 ColumnExpressions<?> newColumns = new ColumnExpressions<>(null);
                 newColumns.columns.add(DSL.field(rName));

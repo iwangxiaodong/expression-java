@@ -10,7 +10,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -67,7 +66,7 @@ public class LambdaHelper {
             //System.out.println(f.apply(c.getConstructor().newInstance()));
             return f;
         } catch (Throwable ex) {
-            Logger.getLogger(LambdaHelper.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getGlobal().severe(ex.toString());
         }
 
         return null;

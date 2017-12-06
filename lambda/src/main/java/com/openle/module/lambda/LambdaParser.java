@@ -1,6 +1,5 @@
-package com.openle.source.expression;
+package com.openle.module.lambda;
 
-import com.openle.source.expression.serializable.PredicateSerializable;
 import org.jinq.jooq.transform.LambdaInfo;
 import org.jooq.Condition;
 import org.jooq.SelectField;
@@ -19,7 +18,7 @@ public class LambdaParser {
 
     public static boolean isCamelToUnderline = false;
 
-    protected static Condition parseWhere(PredicateSerializable<?> lambda) {
+    public static Condition parseWhere(SerializedPredicate<?> lambda) {
         MetamodelUtil mu = new MyInterceptor().getMetamodelUtil();
         LambdaInfo where = LambdaInfo.analyze(mu, lambda);
         if (where == null) {
@@ -34,13 +33,13 @@ public class LambdaParser {
         return cond;
     }
 
-    public static String toSelectAllSQL(String fromTable, PredicateSerializable<?> lambda) {
+    public static String toSelectAllSQL(String fromTable, SerializedPredicate<?> lambda) {
         String sql = DSL.select().from(fromTable).where(parseWhere(lambda)).getSQL(ParamType.INLINED);
         //System.out.println(sql);
         return sql;
     }
 
-    public static String toSQL(String selectFromSQL, PredicateSerializable<?> lambda) {
+    public static String toSQL(String selectFromSQL, SerializedPredicate<?> lambda) {
         Condition condition = parseWhere(lambda);
         if (condition == null) {
             return selectFromSQL;
@@ -51,7 +50,7 @@ public class LambdaParser {
         return sql;
     }
 
-    public static String toSQL(String selectFields, String fromTable, PredicateSerializable<?> lambda) {
+    public static String toSQL(String selectFields, String fromTable, SerializedPredicate<?> lambda) {
         Collection<SelectField> fields = new ArrayList<>();
         for (String s : selectFields.split(",")) {
             fields.add(DSL.field(s.trim()));
@@ -59,7 +58,7 @@ public class LambdaParser {
         return toSQL(fields, fromTable, lambda);
     }
 
-    public static String toSQL(Collection selectFields, String fromTable, PredicateSerializable<?> lambda) {
+    public static String toSQL(Collection selectFields, String fromTable, SerializedPredicate<?> lambda) {
         String sql = DSL.select(selectFields).from(fromTable).where(parseWhere(lambda)).getSQL(ParamType.INLINED);
         // String sql = DSL.select(DSL.field("Age"), DSL.field("Name")).from(table).where(where(lambda)).getSQL(ParamType.INLINED);
         //System.out.println(sql);

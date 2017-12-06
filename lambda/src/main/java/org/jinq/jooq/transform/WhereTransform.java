@@ -13,7 +13,8 @@ import ch.epfl.labos.iu.orm.queryll2.path.PathAnalysisSimplifier;
 import ch.epfl.labos.iu.orm.queryll2.symbolic.ConstantValue;
 import ch.epfl.labos.iu.orm.queryll2.symbolic.TypedValue;
 import ch.epfl.labos.iu.orm.queryll2.symbolic.TypedValueVisitorException;
-import com.openle.source.expression.MyInterceptor;
+import com.openle.module.lambda.MyInterceptor;
+
 
 public class WhereTransform 
 {

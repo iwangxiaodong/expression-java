@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -40,7 +39,7 @@ public class sql {
                 return dataSource.getConnection();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(sql.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getGlobal().severe(ex.toString());
         }
         return null;
     }

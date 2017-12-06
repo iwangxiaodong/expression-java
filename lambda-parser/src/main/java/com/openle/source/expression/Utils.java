@@ -1,7 +1,5 @@
 package com.openle.source.expression;
 
-import com.openle.source.expression.serializable.FunctionSerializable;
-import com.user00.thunk.SerializedLambda;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.CallSite;
@@ -13,7 +11,6 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,7 +31,6 @@ public class Utils implements Serializable {
 //        lambda = (Utils u) -> u.getAge() > 18 && u.getClass().getName().toString().equals("abc");
 //        System.out.println(LambdaParser.parseWhere(lambda));
         //System.out.println(Lambda2Sql.toSql(lambda));
-        //   xxx();
 //        MethodHandles.Lookup caller = MethodHandles.lookup();
 //        MethodType methodType = MethodType.methodType(Object.class);
 //        MethodType actualMethodType = MethodType.methodType(String.class);
@@ -48,29 +44,31 @@ public class Utils implements Serializable {
 //        MethodHandle factory = site.getTarget();
 //        Supplier<String> r = (Supplier<String>) factory.invoke();
 //        System.out.println(r.get());
-        parseLambda(Utils::getVersion);
-
+        //parseLambda(Utils::getVersion);
+        //parseLambda((Utils u) -> u.getAge());
     }
 
-    protected static void parseLambda(FunctionSerializable<Utils, ?> lambda) {
-
-        System.out.println(lambda.apply(new Utils()));
-        SerializedLambda s;
-        try {
-            s = SerializedLambda.extractLambda(lambda);
-            System.out.println(s.implClass);
-            System.out.println(s.implMethodName);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-//        MetamodelUtil mu = new MyInterceptor().getMetamodelUtil();
-//        LambdaInfo where = LambdaInfo.analyze(mu, lambda);
-//        if (where == null) {
-//            throw new IllegalArgumentException("Could not create convert Lambda into a query");
-//        }
-    }
-
+//    protected static void parseLambda(ConsumerSerializable<?> lambda) {
+//        SerializedLambda sl = LambdaParser.extractLambda(lambda);
+//        System.out.println(sl.implClass);
+//        System.out.println(sl.capturedArgs);
+////  
+////        System.out.println(lambda.apply(new Utils()));
+////        SerializedLambda s;
+////        try {
+////            s = SerializedLambda.extractLambda(lambda);
+////            System.out.println(s.implClass);
+////            System.out.println(s.implMethodName);
+////        } catch (Exception e) {
+////            Logger.getGlobal().severe(e.toString());
+////        }
+//
+////        MetamodelUtil mu = new MyInterceptor().getMetamodelUtil();
+////        LambdaInfo where = LambdaInfo.analyze(mu, lambda);
+////        if (where == null) {
+////            throw new IllegalArgumentException("Could not create convert Lambda into a query");
+////        }
+//    }
     public String print() {
         return "hello world";
     }
@@ -136,7 +134,7 @@ public class Utils implements Serializable {
                     //System.out.println("Table Name = " + obj);
                     tableName = obj.toString();
                 } catch (java.lang.ReflectiveOperationException ex) {
-                    Logger.getLogger(From.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getGlobal().severe(ex.toString());
                 }
             }
         }

@@ -19,7 +19,7 @@ public class LambdaTest {
     @BeforeAll
     public static void init() {
         System.out.println("Start testing");
-        sql.initialize();
+        sql.initialize(); 
     }
 
     //  import static com.openle.source.expression.sql.*; 

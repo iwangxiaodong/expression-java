@@ -11,6 +11,10 @@ public class User {
     private int id;
     private UserId userId;
 
+    public User() {
+        System.out.println("User Init!");
+    }
+
     public UserId userId() {
         return userId;
     }

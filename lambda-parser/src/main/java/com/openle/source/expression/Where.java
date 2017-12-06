@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import org.jooq.Condition;
 import com.openle.module.lambda.LambdaParser;
-import com.openle.module.lambda.serializable.*;
+import com.openle.module.lambda.SerializedPredicate;
 
 public class Where extends Execute {
 
@@ -38,7 +38,7 @@ public class Where extends Execute {
 
                 String s = Objects.isNull(value) ? "null" : String.valueOf(value);
                 if (Objects.nonNull(value) && value.getClass().equals(String.class)) {
-                    System.out.println("~"+value.toString());
+                    System.out.println("~" + value.toString());
                     s = "'" + Utils.escapeSql(value.toString()) + "'";
                     //s = "'" + value + "'";
                 }
@@ -78,7 +78,7 @@ public class Where extends Execute {
     }
 
     // 注意：where表达式两侧若是方法，则取方法名，若是变量则直接代入值而不进入方法名判断。
-    public Execute where(PredicateSerializable<?> lambda) {
+    public Execute where(SerializedPredicate<?> lambda) {
 
         String where = "";
         if (lambda != null) {

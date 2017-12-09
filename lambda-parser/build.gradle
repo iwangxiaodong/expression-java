@@ -67,6 +67,15 @@ repositories {
     maven {
         url 'https://dl.bintray.com/wangxiaodong/maven/'
     }
+    maven {
+        credentials {
+            username 'webdav'
+            ext.pwd = project.hasProperty('WEBDAV_PASSWORD') ? project.property('WEBDAV_PASSWORD') : System.getenv('WEBDAV_PASSWORD')
+            println ext.pwd
+            password ext.pwd
+        }
+        url "http://all.openle.com:58888/repository"
+    }
 }
     
 configurations {
@@ -81,6 +90,9 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
         
     compile 'com.openle.module.lambda:lambda:1.0.1'
+    compile('com.openle.module:core:1.0.0')
+    
+    compile group: 'javax.enterprise', name: 'cdi-api', version: '2.0'
 
     //for method ref
     compile "org.mockito:mockito-core:+"

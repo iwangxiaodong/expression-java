@@ -1,5 +1,6 @@
 package com.openle.source.expression;
 
+import com.openle.module.core.DataCommon;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -60,7 +61,7 @@ public class Values {
             String s = Objects.isNull(value) ? "null" : String.valueOf(value);
             if (Objects.nonNull(value)) {
                 if (value.getClass().equals(String.class)) {
-                    s = "'" + Utils.escapeSql(value.toString()) + "'";
+                    s = "'" + DataCommon.escapeSql(value.toString()) + "'";
                     //s = "'" + value + "'";
                     //System.out.println("is String.class");
                 }

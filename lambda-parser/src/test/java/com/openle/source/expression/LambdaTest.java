@@ -1,12 +1,10 @@
 package com.openle.source.expression;
 
-import static com.openle.source.expression.LambdaHelper.getFunctionByName;
 import static com.openle.source.expression.sql.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -19,7 +17,7 @@ public class LambdaTest {
     @BeforeAll
     public static void init() {
         System.out.println("Start testing");
-        sql.initialize(); 
+        sql.initialize();
     }
 
     //  import static com.openle.source.expression.sql.*; 
@@ -39,7 +37,7 @@ public class LambdaTest {
                 .assertEquals(Assertions::fail, s);
 
         s = "select max(id),count(*) from User";
-        select(kf("max(id)"), kf("count(*)")).from(User.class)
+        select(f("max(id)"), f("count(*)")).from(User.class)
                 //
                 .assertEquals(Assertions::fail, s);
     }
@@ -90,12 +88,12 @@ public class LambdaTest {
     @Test
     public void testInsert() {
         s = "insert User values ('abc',now())";
-        insert(User.class).values("abc", k("now()"))
+        insert(User.class).values("abc", v("now()"))
                 //
                 .assertEquals(Assertions::fail, s);
 
         s = "insert User (Name,FullName,v) values ('abc',null,1)";
-        insert(User.class, User::getName, User::getFullName, kf("v"))
+        insert(User.class, User::getName, User::getFullName, f("v"))
                 .values("abc", null, 1)
                 //
                 .assertEquals(Assertions::fail, s);
@@ -111,12 +109,6 @@ public class LambdaTest {
     public void testAssert() {
         delete().from(User.class).test(t -> assertEquals(t, "xyz"));
         delete().from(User.class).assertEquals(Assertions::fail, "abc");
-    }
-
-    @Test
-    public void testLambdaGetter() {
-        Function f = getFunctionByName("fieldName");
-        assertEquals("fieldName", new Utils().getSelectName(LambdaHelper.class, f));
     }
 
     // where条件值未进行SQL注入防护，后续补上。

@@ -17,7 +17,7 @@ Gradle:
 > }
 <br />
 <br />
-    https://bintray.com/wangxiaodong/maven/lambda-parser
+    https://bintray.com/wangxiaodong/maven
 <br />
 <br />
 
@@ -41,7 +41,7 @@ Gradle:
                 .assertEquals(Assertions::fail, s);
 
         s = "select max(id),count(*) from User";
-        select(kf("max(id)"), kf("count(*)")).from(User.class)
+        select(f("max(id)"), f("count(*)")).from(User.class)
                 //
                 .assertEquals(Assertions::fail, s);
     }
@@ -92,12 +92,12 @@ Gradle:
     @Test
     public void testInsert() {
         s = "insert User values ('abc',now())";
-        insert(User.class).values("abc", k("now()"))
+        insert(User.class).values("abc", v("now()"))
                 //
                 .assertEquals(Assertions::fail, s);
 
         s = "insert User (Name,FullName,v) values ('abc',null,1)";
-        insert(User.class, User::getName, User::getFullName, kf("v"))
+        insert(User.class, User::getName, User::getFullName, f("v"))
                 .values("abc", null, 1)
                 //
                 .assertEquals(Assertions::fail, s);

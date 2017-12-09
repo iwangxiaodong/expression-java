@@ -19,8 +19,10 @@ junitPlatform {
 
 //defaultTasks  'clean','build','uploadArchives'
 
+
 ext.moduleName = 'com.openle.module.lambda'
 // https://guides.gradle.org/building-java-9-modules/
+// 不加compileJava配置块儿gradle依然可以编译，仅用于netbeans ide bug。
 compileJava {
     inputs.property("moduleName", moduleName)
     doFirst {

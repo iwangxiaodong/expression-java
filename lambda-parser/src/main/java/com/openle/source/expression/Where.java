@@ -1,5 +1,6 @@
 package com.openle.source.expression;
 
+import com.openle.module.core.DataCommon;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class Where extends Execute {
                 String s = Objects.isNull(value) ? "null" : String.valueOf(value);
                 if (Objects.nonNull(value) && value.getClass().equals(String.class)) {
                     System.out.println("~" + value.toString());
-                    s = "'" + Utils.escapeSql(value.toString()) + "'";
+                    s = "'" + DataCommon.escapeSql(value.toString()) + "'";
                     //s = "'" + value + "'";
                 }
                 list.add(name + " = " + s);

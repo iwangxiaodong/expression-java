@@ -1,19 +1,15 @@
 package com.openle.source.expression;
 
+import com.openle.module.core.lambda.LambdaFactory;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
-import java.lang.invoke.CallSite;
-import java.lang.invoke.LambdaConversionException;
-import java.lang.invoke.LambdaMetafactory;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.enterprise.util.TypeLiteral;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 
@@ -31,44 +27,11 @@ public class Utils implements Serializable {
 //        lambda = (Utils u) -> u.getAge() > 18 && u.getClass().getName().toString().equals("abc");
 //        System.out.println(LambdaParser.parseWhere(lambda));
         //System.out.println(Lambda2Sql.toSql(lambda));
-//        MethodHandles.Lookup caller = MethodHandles.lookup();
-//        MethodType methodType = MethodType.methodType(Object.class);
-//        MethodType actualMethodType = MethodType.methodType(String.class);
-//        MethodType invokedType = MethodType.methodType(Supplier.class);
-//        CallSite site = LambdaMetafactory.metafactory(caller,
-//                "get",
-//                invokedType,
-//                methodType,
-//                caller.findStatic(Utils.class, "print", actualMethodType),
-//                methodType);
-//        MethodHandle factory = site.getTarget();
-//        Supplier<String> r = (Supplier<String>) factory.invoke();
-//        System.out.println(r.get());
         //parseLambda(Utils::getVersion);
         //parseLambda((Utils u) -> u.getAge());
+        System.out.println(LambdaFactory.getMethodReferencesName(sql.f("abcdefg")));
     }
 
-//    protected static void parseLambda(ConsumerSerializable<?> lambda) {
-//        SerializedLambda sl = LambdaParser.extractLambda(lambda);
-//        System.out.println(sl.implClass);
-//        System.out.println(sl.capturedArgs);
-////  
-////        System.out.println(lambda.apply(new Utils()));
-////        SerializedLambda s;
-////        try {
-////            s = SerializedLambda.extractLambda(lambda);
-////            System.out.println(s.implClass);
-////            System.out.println(s.implMethodName);
-////        } catch (Exception e) {
-////            Logger.getGlobal().severe(e.toString());
-////        }
-//
-////        MetamodelUtil mu = new MyInterceptor().getMetamodelUtil();
-////        LambdaInfo where = LambdaInfo.analyze(mu, lambda);
-////        if (where == null) {
-////            throw new IllegalArgumentException("Could not create convert Lambda into a query");
-////        }
-//    }
     public String print() {
         return "hello world";
     }
@@ -83,22 +46,6 @@ public class Utils implements Serializable {
 
     public String getVersion() {
         return "hello world";
-    }
-
-    private static void xxx() throws NoSuchMethodException, IllegalAccessException, LambdaConversionException, Throwable {
-
-        MethodHandles.Lookup caller = MethodHandles.lookup();
-        MethodType getter = MethodType.methodType(String.class);
-        MethodHandle target = caller.findVirtual(Utils.class, "getVersion", getter);
-        MethodType func = target.type();
-        CallSite site = LambdaMetafactory.metafactory(caller,
-                "apply",
-                MethodType.methodType(Function.class),
-                func.generic(), target, func);
-
-        MethodHandle factory = site.getTarget();
-        Function r = (Function) factory.invoke();
-        System.out.println(r.apply(new Utils()));
     }
 
     public static String camelToUnderline(String param) {
@@ -142,28 +89,30 @@ public class Utils implements Serializable {
         return tableName;
     }
 
-    @SuppressWarnings("unchecked")
-    protected <T> String getSelectName(Class c, final Function<T, ?> getter) {
+    protected String getSelectName(Class c, final Function getter) {
         Objects.requireNonNull(c);
+
+        Class<Function<Object, ?>> raw = new TypeLiteral<Function<Object, ?>>() {
+        }.getRawType();
+
+        // 字符串方法名，若getter不支持序列化则可通过NoSuchMethodError来获取。
+        if (getter instanceof Serializable) {
+            return LambdaFactory.getMethodReferencesName(raw.cast(getter));
+        }
+
+        Class<Class<Object>> rawClass = new TypeLiteral<Class<Object>>() {
+        }.getRawType();
+
         final Method[] method = new Method[1];
-        //System.out.println(getter);  
-        String name = null;
+        Object t = Mockito.mock(rawClass.cast(c), Mockito.withSettings().invocationListeners(methodInvocationReport -> {
+            method[0] = ((InvocationOnMock) methodInvocationReport.getInvocation()).getMethod();
+        }));
+        // T t = (T) Mockito.mock(c, ...);
         try {
-
-            getter.apply((T) Mockito.mock(c, Mockito.withSettings().invocationListeners(methodInvocationReport -> {
-                method[0] = ((InvocationOnMock) methodInvocationReport.getInvocation()).getMethod();
-            })));
-            name = method[0].getName();
-
-        } catch (NoSuchMethodError ex) {
-            // 实体类字段不存在则通过异常NoSuchMethodError来获取。
-            String msg = ex.getMessage();
-            msg = LambdaHelper.restoreSymbol(msg);
-            //System.out.println(msg);
-            name = msg.substring(msg.lastIndexOf(".") + 1, msg.indexOf("()"));
-            //System.out.println(name);
+            raw.cast(getter).apply(t);
+            return method[0].getName();
         } catch (ClassCastException ex) {
-            // 未传入实体Class则通过异常ClassCastException来获取。
+            // 字符串表名则通过异常ClassCastException来获取。
             String msg = ex.getMessage();
             msg = msg.substring(msg.lastIndexOf("cast to") + 8);
             Class clazz = null;
@@ -173,19 +122,7 @@ public class Utils implements Serializable {
                 throw new RuntimeException(ex1);
             }
             System.out.println("msg - " + clazz);
-            name = getSelectName(clazz, getter);
+            return getSelectName(clazz, getter);
         }
-
-        //System.out.println(" - " + name);
-        return name;
-    }
-
-    // 已收录至module.data,此为冗余。
-    public static String escapeSql(String str) {
-        if (str == null) {
-            return null;
-        }
-        return str.replace("'", "''").replace("\\", "\\\\")
-                .replace("\r", "\\r").replace("\n", "\\n");
     }
 }

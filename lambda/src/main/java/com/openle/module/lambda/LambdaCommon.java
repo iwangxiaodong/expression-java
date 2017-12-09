@@ -8,11 +8,11 @@ package com.openle.module.lambda;
 import com.user00.thunk.SerializedLambda;
 import java.util.logging.Logger;
 
-// 优先使用module.base.lambda的原生实现。
-public class Lambda {
+// 优先使用com.openle.module.core.lambda的原生实现。
+public class LambdaCommon {
 
     // extractLambda(ConsumerSerializable<?> lambda);
-    public static SerializedLambda extractLambda(Object lambda) {
+    static SerializedLambda extractLambda(Object lambda) {
         SerializedLambda s;
         try {
             s = SerializedLambda.extractLambda(lambda);

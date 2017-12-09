@@ -5,6 +5,7 @@ module com.openle.source.expression {
     requires org.jooq;
     requires jinq.asm.rebased;
     requires com.openle.module.lambda;
+    requires com.openle.module.core;
 
     //requires org.junit.jupiter.api;
     //requires javax.persistence;

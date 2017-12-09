@@ -1,11 +1,13 @@
 package com.openle.source.expression;
 
+import com.openle.module.core.lambda.LambdaFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.logging.Logger;
+import javax.enterprise.util.TypeLiteral;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -73,7 +75,7 @@ public class sql {
     /**
      * JNDI DataSource
      *
-     * @param dataSource
+     * @param dataSource `
      */
     public static void initialize(DataSource dataSource) {
         connType = CONNTYPE.DATASOURCE;
@@ -89,7 +91,7 @@ public class sql {
 
     /**
      *
-     * @param <T>
+     * @param <T> `
      * @param getter 实体方法引用 User::getName,User::getAge
      * @return SQL链式对象
      */
@@ -100,7 +102,7 @@ public class sql {
 
     /**
      *
-     * @param <T>
+     * @param <T> `
      * @param c 实体Class User.class
      * @return SQL链式对象
      */
@@ -111,7 +113,7 @@ public class sql {
     /**
      * insert数据已存在时忽略不抛异常
      *
-     * @param <T>
+     * @param <T> `
      * @param c 实体Class User.class
      * @return SQL链式对象
      */
@@ -121,9 +123,9 @@ public class sql {
 
     /**
      *
-     * @param <T>
+     * @param <T> `
      * @param c 实体Class User.class
-     * @param getter
+     * @param getter `
      * @return SQL链式对象
      */
     @SafeVarargs
@@ -133,9 +135,9 @@ public class sql {
 
     /**
      *
-     * @param <T>
+     * @param <T> `
      * @param c 实体Class User.class
-     * @param getter
+     * @param getter `
      * @return SQL链式对象
      * @since 1.0.7
      */
@@ -146,7 +148,7 @@ public class sql {
 
     /**
      *
-     * @param <T>
+     * @param <T> `
      * @param c 实体Class User.class
      * @return SQL链式对象
      * @since 1.0.7
@@ -157,7 +159,7 @@ public class sql {
 
     /**
      *
-     * @param <T>
+     * @param <T> `
      * @param tableName 表名
      * @return SQL链式对象
      */
@@ -167,7 +169,7 @@ public class sql {
 
     /**
      *
-     * @param <T>
+     * @param <T> `
      * @return SQL链式对象
      */
     public static <T> From delete() {
@@ -177,10 +179,10 @@ public class sql {
     //用于UPDATE XXX SET K=V更新项
     /**
      *
-     * @param <T>
-     * @param getter
-     * @param obj
-     * @return
+     * @param <T> `
+     * @param getter `
+     * @param obj `
+     * @return `
      */
     public static <T> Map<Function, Object> eq(final Function<T, ?> getter, Object obj) {
         //注意of方法构造的对象是只读的！
@@ -188,23 +190,26 @@ public class sql {
     }
 
     /**
-     * 保持字符
+     * 字符型数值
      *
-     * @param s
-     * @return
+     * @param s `
+     * @return `
      */
-    public static KeepOriginal k(String s) {
+    public static KeepOriginal v(String s) {
         return new KeepOriginal(s);
     }
 
     /**
-     * 保持字段
+     * 字符型字段
      *
-     * @param s
-     * @return
+     * @param <T> `
+     * @param s `
+     * @return `
      */
-    public static <T> Function<T, ?> kf(String s) {
-        //return new KeepField(s);     
-        return LambdaHelper.getFunctionByName(s);
+    public static <T> Function<T, ?> f(String s) {
+        Class<Function<T, ?>> raw = new TypeLiteral<Function<T, ?>>() {
+        }.getRawType();
+        Function<T, ?> f = raw.cast(LambdaFactory.newSerializedMethodReferences(s));
+        return f;
     }
 }

@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+
+import com.openle.module.core.lambda.SerializedPredicate;
 import org.jooq.Condition;
 import com.openle.module.lambda.LambdaParser;
-import com.openle.module.lambda.SerializedPredicate;
 
 public class Where extends Execute {
 

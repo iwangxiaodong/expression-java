@@ -1,5 +1,6 @@
 package com.openle.module.lambda;
 
+import com.openle.module.core.lambda.SerializedPredicate;
 import org.jinq.jooq.transform.LambdaInfo;
 import org.jooq.Condition;
 import org.jooq.SelectField;

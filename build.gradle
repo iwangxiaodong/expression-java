@@ -9,7 +9,8 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+// wxd - wrapper放至common.gradle无效
 task wrapper(type:Wrapper){
-    gradleVersion='4.3.1'
-    //distributionUrl='file:///E:/gradle/gradle-4.1-all.zip'
+    gradleVersion='4.4'
+    //distributionUrl='file:///E:/gradle/gradle-4.4-all.zip'
 }

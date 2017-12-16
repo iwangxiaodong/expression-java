@@ -2,10 +2,12 @@
 module com.openle.source.expression {
     requires java.sql;
     requires java.naming;
+    requires cdi.api;
     requires org.jooq;
     requires jinq.asm.rebased;
     requires com.openle.module.lambda;
     requires com.openle.module.core;
+    requires org.mockito;
 
     //requires org.junit.jupiter.api;
     //requires javax.persistence;

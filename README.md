@@ -12,12 +12,12 @@ Gradle:
 > 
 > dependencies {
 >
-> > compile 'com.openle.source.expression:lambda-parser:1.1.2'
+> > compile 'com.openle.source.expression:lambda-parser:1.1.3'
 >
 > }
 <br />
 <br />
-    https://bintray.com/wangxiaodong/maven
+[ ![Download](https://api.bintray.com/packages/wangxiaodong/maven/lambda-parser/images/download.svg) ](https://bintray.com/wangxiaodong/maven/lambda-parser/_latestVersion)
 <br />
 <br />
 

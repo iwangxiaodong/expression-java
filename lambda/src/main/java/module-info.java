@@ -8,9 +8,6 @@ module com.openle.module.lambda {
     requires transitive com.openle.module.core;
     requires net.bytebuddy;
 
-    //requires org.junit.jupiter.api;
-    //requires javax.persistence;
-    //requires jinq.jooq;
     //requires org.mockito;
 //    // 限定 - 前者只能被后者访问
 //    exports org.jinq.jooq.transform to com.openle.source.expression;

@@ -1,6 +1,8 @@
 package com.openle.source.expression;
 
+import com.openle.module.core.DataCommon;
 import com.openle.module.core.lambda.LambdaFactory;
+
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -10,8 +12,12 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.enterprise.util.TypeLiteral;
+
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
+
+import static com.openle.source.expression.sql.insert;
+import static com.openle.source.expression.sql.select;
 
 /**
  * 公用类
@@ -29,7 +35,10 @@ public class Utils implements Serializable {
         //System.out.println(Lambda2Sql.toSql(lambda));
         //parseLambda(Utils::getVersion);
         //parseLambda((Utils u) -> u.getAge());
-        System.out.println(LambdaFactory.getMethodReferencesName(sql.f("abcdefg")));
+        //System.out.println(LambdaFactory.getMethodReferencesName(sql.f("abcdefg")));
+
+        //insert(KeepOriginal.class).values("abc", sql.f.now());
+        select(sql.f.max("id"), sql.f.count("*"), sql.f.now(), sql.f.len("name")).from(Object.class);
     }
 
     public String print() {
@@ -87,6 +96,25 @@ public class Utils implements Serializable {
         }
 
         return tableName;
+    }
+
+    protected static String getValueString(Class c, Object value) {
+        if (Objects.isNull(value)) {
+            return "null";
+        }
+
+        String s = String.valueOf(value);
+        if (value.getClass().equals(String.class)) {
+            System.out.println("String value - " + value.toString());
+            s = "'" + DataCommon.escapeSql(value.toString()) + "'";
+        }
+        if (value instanceof Function) {
+            Logger.getGlobal().info("function===================");
+            System.out.println("Function value");
+            String v = new Utils().getSelectName(c != null ? c : Object.class, (Function) value);
+            s = DataCommon.escapeSql(v);
+        }
+        return s;
     }
 
     protected String getSelectName(Class c, final Function getter) {

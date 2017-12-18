@@ -2,9 +2,12 @@ package com.openle.source.expression;
 
 import static com.openle.source.expression.sql.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -36,8 +39,9 @@ public class LambdaTest {
                 //
                 .assertEquals(Assertions::fail, s);
 
-        s = "select max(id),count(*) from User";
-        select(f("max(id)"), f("count(*)")).from(User.class)
+        s = "select max(id),count(*),now(),len(name) from User";
+        select(f.max("id"), f.count("*"), f.now(), f.len("name"))
+                .from(User.class)
                 //
                 .assertEquals(Assertions::fail, s);
     }
@@ -88,12 +92,12 @@ public class LambdaTest {
     @Test
     public void testInsert() {
         s = "insert User values ('abc',now())";
-        insert(User.class).values("abc", v("now()"))
+        insert(User.class).values("abc", f.now())
                 //
                 .assertEquals(Assertions::fail, s);
 
-        s = "insert User (Name,FullName,v) values ('abc',null,1)";
-        insert(User.class, User::getName, User::getFullName, f("v"))
+        s = "insert User (Name,FullName,f) values ('abc',null,1)";
+        insert(User.class, User::getName, User::getFullName, s("f"))
                 .values("abc", null, 1)
                 //
                 .assertEquals(Assertions::fail, s);
@@ -134,7 +138,7 @@ public class LambdaTest {
                 .assertEquals(Assertions::fail, s);
     }
 
-//    @Disabled
+    //    @Disabled
 //    @Test
 //    public void testLambdaParser() {
 //        String sql = LambdaParser.toSQL("SELECT * FROM myTable",

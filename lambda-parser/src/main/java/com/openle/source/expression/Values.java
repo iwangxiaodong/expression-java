@@ -8,12 +8,12 @@ import java.util.function.Function;
 
 public class Values {
 
-    //Class c;
+    Class c;
     Function[] fs;
     String sName = "";
 
     protected Values(Class c, Function[] fs, boolean isIgnore) {
-        //this.c = c;
+        this.c = c;
         this.fs = fs;
         sName = "insert " + (isIgnore ? "ignore " : "") + Utils.getTableName(c) + " ";
 
@@ -58,15 +58,7 @@ public class Values {
 
         List<String> list = new ArrayList<>();
         for (Object value : objArray) {
-            String s = Objects.isNull(value) ? "null" : String.valueOf(value);
-            if (Objects.nonNull(value)) {
-                if (value.getClass().equals(String.class)) {
-                    s = "'" + DataCommon.escapeSql(value.toString()) + "'";
-                    //s = "'" + value + "'";
-                    //System.out.println("is String.class");
-                }
-            }
-
+            String s =Utils.getValueString(c, value);
             list.add(s);
         }
         String values = String.join(",", list);

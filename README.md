@@ -12,7 +12,7 @@ Gradle:
 > 
 > dependencies {
 >
-> > compile 'com.openle.source.expression:lambda-parser:1.1.3'
+> > compile 'com.openle.source.expression:lambda-parser:1.1.4'
 >
 > }
 <br />
@@ -37,8 +37,9 @@ Gradle:
                 //
                 .assertEquals(Assertions::fail, s);
 
-        s = "select max(id),count(*) from User";
-        select(f("max(id)"), f("count(*)")).from(User.class)
+        s = "select max(id),count(*),now(),len(name) from User";
+        select(f.max("id"), f.count("*"), f.now(), f.len("name"))
+                .from(User.class)
                 //
                 .assertEquals(Assertions::fail, s);
     }
@@ -89,12 +90,12 @@ Gradle:
     @Test
     public void testInsert() {
         s = "insert User values ('abc',now())";
-        insert(User.class).values("abc", v("now()"))
+        insert(User.class).values("abc", f.now())
                 //
                 .assertEquals(Assertions::fail, s);
 
-        s = "insert User (Name,FullName,v) values ('abc',null,1)";
-        insert(User.class, User::getName, User::getFullName, f("v"))
+        s = "insert User (Name,FullName,f) values ('abc',null,1)";
+        insert(User.class, User::getName, User::getFullName, s("f"))
                 .values("abc", null, 1)
                 //
                 .assertEquals(Assertions::fail, s);

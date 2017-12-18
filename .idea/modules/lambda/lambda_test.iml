@@ -18,8 +18,8 @@
     <orderEntry type="library" name="Gradle: org.ow2.asm:asm-util:6.0" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.jupiter:junit-jupiter-api:5.1.0-M1" level="project" />
     <orderEntry type="library" name="Gradle: org.jinq:jinq-asm-rebased:1.8.22" level="project" />
-    <orderEntry type="library" name="Gradle: org.jinq:api:1.8.22" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.jupiter:junit-jupiter-engine:5.1.0-M1" level="project" />
+    <orderEntry type="library" name="Gradle: org.jinq:api:1.8.22" level="project" />
     <orderEntry type="library" name="Gradle: net.bytebuddy:byte-buddy-agent:1.7.9" level="project" />
     <orderEntry type="library" name="Gradle: org.objenesis:objenesis:2.6" level="project" />
     <orderEntry type="library" name="Gradle: org.ow2.asm:asm-tree:6.0" level="project" />

@@ -1,10 +1,12 @@
 package com.openle.source.expression;
 
 import com.openle.module.core.lambda.LambdaFactory;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.logging.Logger;
 import javax.enterprise.util.TypeLiteral;
@@ -12,11 +14,11 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
 import org.jooq.Log;
 import org.jooq.tools.JooqLogger;
 
 /**
- *
  * java模拟sql链式操作类
  *
  * @author xiaodong
@@ -90,8 +92,7 @@ public class sql {
     }
 
     /**
-     *
-     * @param <T> `
+     * @param <T>    `
      * @param getter 实体方法引用 User::getName,User::getAge
      * @return SQL链式对象
      */
@@ -101,9 +102,8 @@ public class sql {
     }
 
     /**
-     *
      * @param <T> `
-     * @param c 实体Class User.class
+     * @param c   实体Class User.class
      * @return SQL链式对象
      */
     public static <T> Values insert(Class c) {
@@ -114,7 +114,7 @@ public class sql {
      * insert数据已存在时忽略不抛异常
      *
      * @param <T> `
-     * @param c 实体Class User.class
+     * @param c   实体Class User.class
      * @return SQL链式对象
      */
     public static <T> Values insertIgnore(Class c) {
@@ -122,9 +122,8 @@ public class sql {
     }
 
     /**
-     *
-     * @param <T> `
-     * @param c 实体Class User.class
+     * @param <T>    `
+     * @param c      实体Class User.class
      * @param getter `
      * @return SQL链式对象
      */
@@ -134,9 +133,8 @@ public class sql {
     }
 
     /**
-     *
-     * @param <T> `
-     * @param c 实体Class User.class
+     * @param <T>    `
+     * @param c      实体Class User.class
      * @param getter `
      * @return SQL链式对象
      * @since 1.0.7
@@ -147,9 +145,8 @@ public class sql {
     }
 
     /**
-     *
      * @param <T> `
-     * @param c 实体Class User.class
+     * @param c   实体Class User.class
      * @return SQL链式对象
      * @since 1.0.7
      */
@@ -158,8 +155,7 @@ public class sql {
     }
 
     /**
-     *
-     * @param <T> `
+     * @param <T>       `
      * @param tableName 表名
      * @return SQL链式对象
      */
@@ -168,7 +164,6 @@ public class sql {
     }
 
     /**
-     *
      * @param <T> `
      * @return SQL链式对象
      */
@@ -177,11 +172,11 @@ public class sql {
     }
 
     //用于UPDATE XXX SET K=V更新项
+
     /**
-     *
-     * @param <T> `
+     * @param <T>    `
      * @param getter `
-     * @param obj `
+     * @param obj    `
      * @return `
      */
     public static <T> Map<Function, Object> eq(final Function<T, ?> getter, Object obj) {
@@ -189,27 +184,68 @@ public class sql {
         return Map.<Function, Object>of(getter, obj);
     }
 
-    /**
-     * 字符型数值
-     *
-     * @param s `
-     * @return `
-     */
-    public static KeepOriginal v(String s) {
-        return new KeepOriginal(s);
-    }
+//    /**
+//     * 字符型数值
+//     *
+//     * @param s `
+//     * @return `
+//     */
+//    public static KeepOriginal v(String s) {
+//        return new KeepOriginal(s);
+//    }
 
     /**
      * 字符型字段
      *
      * @param <T> `
-     * @param s `
+     * @param s   `
      * @return `
      */
-    public static <T> Function<T, ?> f(String s) {
+    public static <T> Function<T, ?> s(String s) {
         Class<Function<T, ?>> raw = new TypeLiteral<Function<T, ?>>() {
         }.getRawType();
         Function<T, ?> f = raw.cast(LambdaFactory.newSerializedMethodReferences(s));
         return f;
     }
+
+    public static class f {
+
+        public static <T> Function<T, ?> now() {
+            return s("now()");
+        }
+
+        public static <T> Function<T, ?> len(String s) {
+            Objects.requireNonNull(s);
+            return s("len(" + s.trim() + ")");
+        }
+
+        public static <T> Function<T, ?> avg(String s) {
+            Objects.requireNonNull(s);
+            return s("avg(" + s.trim() + ")");
+        }
+
+        public static <T> Function<T, ?> max(String s) {
+            Objects.requireNonNull(s);
+            return s("max(" + s.trim() + ")");
+        }
+
+        public static <T> Function<T, ?> min(String s) {
+            Objects.requireNonNull(s);
+            return s("min(" + s.trim() + ")");
+        }
+
+        public static <T> Function<T, ?> sum(String s) {
+            Objects.requireNonNull(s);
+            return s("sum(" + s.trim() + ")");
+        }
+
+        public static <T> Function<T, ?> count(String s) {
+            if (s != null && s.trim().length() > 0) {
+                return s("count(" + s.trim() + ")");
+            }
+            return s("count(*)");
+        }
+    }
+
+
 }

@@ -38,18 +38,15 @@ public class Where extends Execute {
                     name = name.replaceFirst("get", "");
                 }
 
-                String s = Objects.isNull(value) ? "null" : String.valueOf(value);
-                if (Objects.nonNull(value) && value.getClass().equals(String.class)) {
-                    System.out.println("~" + value.toString());
-                    s = "'" + DataCommon.escapeSql(value.toString()) + "'";
-                    //s = "'" + value + "'";
-                }
+                String s =Utils.getValueString(c, value);
                 list.add(name + " = " + s);
             }
         }
         beforeWhere = "update " + tableName + " set " + String.join(" , ", list);
         super.sqlString = beforeWhere;
     }
+
+
 
     //for select delete
     protected Where(DML dml, Class c, String tableName, Function[] fs) {

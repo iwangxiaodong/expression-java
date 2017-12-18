@@ -1,4 +1,4 @@
-# [expression-java](https://github.com/iwangxiaodong/expression-java) [![Build Status](https://travis-ci.org/iwangxiaodong/expression-java.svg?branch=master)](https://travis-ci.org/iwangxiaodong/expression-java)
+# [expression-java](https://github.com/iwangxiaodong/expression-java) [![Build Status](https://travis-ci.org/iwangxiaodong/expression-java.svg?branch=master)](https://travis-ci.org/iwangxiaodong/expression-java) [![Download](https://api.bintray.com/packages/wangxiaodong/maven/lambda-parser/images/download.svg)](https://bintray.com/wangxiaodong/maven/lambda-parser/_latestVersion)
 
 ***lambda-parser*** is a expression parser of lambda to sql.
 <br />
@@ -15,9 +15,6 @@ Gradle:
 > > compile 'com.openle.source.expression:lambda-parser:1.1.3'
 >
 > }
-<br />
-<br />
-[ ![Download](https://api.bintray.com/packages/wangxiaodong/maven/lambda-parser/images/download.svg) ](https://bintray.com/wangxiaodong/maven/lambda-parser/_latestVersion)
 <br />
 <br />
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/expression-java.iml" filepath="$PROJECT_DIR$/expression-java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lambda/lambda.iml" filepath="$PROJECT_DIR$/.idea/modules/lambda/lambda.iml" group="lambda" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lambda-parser/lambda-parser.iml" filepath="$PROJECT_DIR$/.idea/modules/lambda-parser/lambda-parser.iml" group="lambda-parser" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lambda-parser/lambda-parser_main.iml" filepath="$PROJECT_DIR$/.idea/modules/lambda-parser/lambda-parser_main.iml" group="lambda-parser" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lambda-parser/lambda-parser_test.iml" filepath="$PROJECT_DIR$/.idea/modules/lambda-parser/lambda-parser_test.iml" group="lambda-parser" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lambda/lambda_main.iml" filepath="$PROJECT_DIR$/.idea/modules/lambda/lambda_main.iml" group="lambda" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lambda/lambda_test.iml" filepath="$PROJECT_DIR$/.idea/modules/lambda/lambda_test.iml" group="lambda" />
+    </modules>
+  </component>
+</project>

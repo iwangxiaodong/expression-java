@@ -1,12 +1,43 @@
-#*.iml
-.gradle
-/local.properties
-#/.idea/workspace.xml
-#/.idea/libraries
-.DS_Store
-/build
-/captures
-/.nb-gradle/
+# Compiled class file
+*.class
 
-.idea
-*.iml
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+#####################
+# Added by wxd
+
+# Global
+build/
+.gradle
+
+# IDEA
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
+.idea/**/gradle.xml
+.idea/**/libraries
+
+# Netbeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/

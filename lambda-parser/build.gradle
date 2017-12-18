@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.1.0-M1' 
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.1.0-M1'
     }
 }
 
@@ -49,7 +49,7 @@ tasks.withType(Javadoc) {
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
-    options.compilerArgs = ['-Xlint:unchecked']   
+    options.compilerArgs = ['-Xlint:unchecked']
 }
 
 repositories {
@@ -67,35 +67,34 @@ repositories {
         url "http://all.openle.com:58888/repository"
     }
 }
-    
+
 configurations {
     deployerJars
 }
 
 dependencies {
-    
+
     // v3.0.0版本初测似乎上传不了！
     deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '2.12'
-        
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
-        
+
     compile 'com.openle.module.lambda:lambda:1.0.2'
-    compile('com.openle.module:core:1.0.0')
 
     compile group: 'javax.enterprise', name: 'cdi-api', version: '2.0'
 
     //for method ref
     compile "org.mockito:mockito-core:+"
-    
+
     compile group: 'org.ow2.asm', name: 'asm-util', version: '6.0'
-    
+
     // for @javax.persistence.Table and @Embeddable
     //compile group: 'javax', name: 'javaee-web-api', version: '8.0'
     // javaee-web-api跟java.sql冲突，so暂用eclipse persistence api
     compile group: 'org.eclipse.persistence', name: 'javax.persistence', version: '2.2.0'
-    
+
     testCompile("org.junit.jupiter:junit-jupiter-api:5.1.0-M1")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.1.0-M1")  
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.1.0-M1")
 }
 
 apply plugin: 'maven'
@@ -104,7 +103,7 @@ uploadArchives {
         mavenDeployer {
             pom.artifactId =project.archivesBaseName.toLowerCase()
             configuration = configurations.deployerJars
-            
+
             // Win10重启后环境变量方有效 echo %WEBDAV_PASSWORD%
             ext.pwd = project.hasProperty('WEBDAV_PASSWORD') ? project.property('WEBDAV_PASSWORD') : System.getenv('WEBDAV_PASSWORD')
             println ext.pwd

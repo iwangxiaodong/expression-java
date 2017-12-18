@@ -5,7 +5,7 @@ module com.openle.module.lambda {
     requires org.jooq;
     requires jinq.asm.rebased;
     requires analysis;
-    requires com.openle.module.core;
+    requires transitive com.openle.module.core;
     requires net.bytebuddy;
 
     //requires org.junit.jupiter.api;

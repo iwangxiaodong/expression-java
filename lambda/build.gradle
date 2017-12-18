@@ -37,7 +37,7 @@ compileJava {
 
 sourceCompatibility = JavaVersion.VERSION_1_9
 
-version '1.0.2'
+version '1.0.3'
 group 'com.openle.module.lambda'
 
 
@@ -91,7 +91,7 @@ uploadArchives {
         mavenDeployer {
             pom.artifactId =project.archivesBaseName.toLowerCase()
             configuration = configurations.deployerJars
-            
+
             // Win10重启后环境变量方有效 echo %WEBDAV_PASSWORD%
             ext.pwd = project.hasProperty('WEBDAV_PASSWORD') ? project.property('WEBDAV_PASSWORD') : System.getenv('WEBDAV_PASSWORD')
             println ext.pwd

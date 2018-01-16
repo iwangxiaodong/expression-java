@@ -21,7 +21,8 @@ Gradle:
 **Test**: lambda-parser/src/test/java/com/openle/source/expression/LambdaTest.java
 ```sql
 
-    //  import static com.openle.source.expression.sql.*; 
+    //  import static com.openle.source.expression.sql.*;
+    //  import static com.openle.source.expression.sql.f.*;
     //
     String s = "select * from User";
 
@@ -38,7 +39,7 @@ Gradle:
                 .assertEquals(Assertions::fail, s);
 
         s = "select max(id),count(*),now(),len(name) from User";
-        select(f.max("id"), f.count("*"), f.now(), f.len("name"))
+        select(max("id"), count("*"), now(), len("name"))
                 .from(User.class)
                 //
                 .assertEquals(Assertions::fail, s);
@@ -90,7 +91,7 @@ Gradle:
     @Test
     public void testInsert() {
         s = "insert User values ('abc',now())";
-        insert(User.class).values("abc", f.now())
+        insert(User.class).values("abc", now())
                 //
                 .assertEquals(Assertions::fail, s);
 

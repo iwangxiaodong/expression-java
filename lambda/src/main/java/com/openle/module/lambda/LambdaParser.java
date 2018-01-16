@@ -57,24 +57,6 @@ public class LambdaParser {
 //        return sql;
 //    }
 //
-//    public static String toSQL(String selectFromSQL, SerializedPredicate<?> lambda) {
-//        Condition condition = parseWhere(lambda);
-//        if (condition == null) {
-//            return selectFromSQL;
-//        }
-//
-//        String sql = selectFromSQL + " where " + condition;
-//        //System.out.println(sql);
-//        return sql;
-//    }
-//
-//    public static String toSQL(String selectFields, String fromTable, SerializedPredicate<?> lambda) {
-//        Collection<SelectField> fields = new ArrayList<>();
-//        for (String s : selectFields.split(",")) {
-//            fields.add(DSL.field(s.trim()));
-//        }
-//        return toSQL(fields, fromTable, lambda);
-//    }
 //
 //    public static String toSQL(Collection selectFields, String fromTable, SerializedPredicate<?> lambda) {
 //        String sql = DSL.select(selectFields).from(fromTable).where(parseWhere(lambda)).getSQL(ParamType.INLINED);

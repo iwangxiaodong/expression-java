@@ -1,6 +1,7 @@
 package com.openle.source.expression;
 
 import static com.openle.source.expression.sql.*;
+import static com.openle.source.expression.sql.f.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,8 @@ public class LambdaTest {
         sql.initialize();
     }
 
-    //  import static com.openle.source.expression.sql.*; 
+    //  import static com.openle.source.expression.sql.*;
+    //  import static com.openle.source.expression.sql.f.*;
     //
     String s = "select * from User";
 
@@ -40,7 +42,7 @@ public class LambdaTest {
                 .assertEquals(Assertions::fail, s);
 
         s = "select max(id),count(*),now(),len(name) from User";
-        select(f.max("id"), f.count("*"), f.now(), f.len("name"))
+        select(max("id"), count("*"), now(), len("name"))
                 .from(User.class)
                 //
                 .assertEquals(Assertions::fail, s);
@@ -92,7 +94,7 @@ public class LambdaTest {
     @Test
     public void testInsert() {
         s = "insert User values ('abc',now())";
-        insert(User.class).values("abc", f.now())
+        insert(User.class).values("abc", now())
                 //
                 .assertEquals(Assertions::fail, s);
 

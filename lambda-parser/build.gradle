@@ -39,9 +39,9 @@ tasks.withType(JavaCompile) {
 
 repositories {
     jcenter()
-    //    maven {
-    //        url 'https://dl.bintray.com/wangxiaodong/maven/'
-    //    }
+    maven {
+        url 'https://dl.bintray.com/wangxiaodong/maven/'
+    }
     maven {
         credentials {
             username 'webdav'
@@ -63,8 +63,7 @@ dependencies {
     deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '2.12'
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-
-    implementation 'com.openle.module.lambda:lambda:1.0.4'
+    implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.4'
 
     implementation group: 'javax.enterprise', name: 'cdi-api', version: '2.0'
 

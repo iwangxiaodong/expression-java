@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.1.0-M1' 
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.1.0' 
     }
 }
 
@@ -19,25 +19,9 @@ junitPlatform {
 
 //defaultTasks  'clean','build','uploadArchives'
 
-
-ext.moduleName = 'com.openle.module.lambda'
-// https://guides.gradle.org/building-java-9-modules/
-// 不加compileJava配置块儿gradle依然可以编译，仅用于netbeans ide bug。
-compileJava {
-    inputs.property("moduleName", moduleName)
-    doFirst {
-        println classpath.asPath
-        options.compilerArgs = [
-            '--module-path', classpath.asPath,
-            //'--patch-module', "moduleName=C:\\Users\\xiaodong\\Documents\\NetBeansProjects\\xxx\\build\\modules\\ModuleName",
-        ]
-        classpath = files()  // <2>
-    }
-}
-
 sourceCompatibility = JavaVersion.VERSION_1_9
 
-version '1.0.3'
+version '1.0.4'
 group 'com.openle.module.lambda'
 
 
@@ -66,8 +50,8 @@ dependencies {
         
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
-    compile('com.openle.module:core:1.0.0')
-    compile group: 'net.bytebuddy', name: 'byte-buddy', version: '1.7.9'
+    compile('com.openle.module:core:1.0.1')
+    compile group: 'net.bytebuddy', name: 'byte-buddy', version: '1.8.3'    // 1.8.4版本起报IllegalAccessError
 
     //for lambda to sql
     //compile group: 'org.jinq', name: 'jinq-jooq', version: '1.8.22'
@@ -77,13 +61,20 @@ dependencies {
     //for method ref
     compile "org.mockito:mockito-core:+"
     
-    compile group: 'org.ow2.asm', name: 'asm-util', version: '6.0'
+    compile group: 'org.ow2.asm', name: 'asm-util', version: '6.1.1'
         
-    testCompile("org.junit.jupiter:junit-jupiter-api:5.1.0-M1")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.1.0-M1")  
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.1.1")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.1.1")
 }
 
-
+compileJava {
+    doFirst {
+        options.compilerArgs = [
+                    '--module-path', classpath.asPath,
+        ]
+        classpath = files()
+    }
+}
 
 apply plugin: 'maven'
 uploadArchives {
@@ -94,8 +85,8 @@ uploadArchives {
 
             // Win10重启后环境变量方有效 echo %WEBDAV_PASSWORD%
             ext.pwd = project.hasProperty('WEBDAV_PASSWORD') ? project.property('WEBDAV_PASSWORD') : System.getenv('WEBDAV_PASSWORD')
-            println ext.pwd
-            repository(url: "dav:http://all.openle.com:58888/repository/") {
+            //println ext.pwd
+            repository(url: "dav:http://all.openle.com:30580/repository/") {
                 authentication(userName: "webdav", password: ext.pwd)
             }
         }
@@ -122,7 +113,7 @@ artifacts {
 bintray {
     user = project.hasProperty('BINTRAY_USER') ? project.property('BINTRAY_USER') : System.getenv('BINTRAY_USER')
     key = project.hasProperty('BINTRAY_API_KEY') ? project.property('BINTRAY_API_KEY') : System.getenv('BINTRAY_API_KEY')
-    println key
+    //println key
     configurations = ['archives']
     publish = true
     pkg {

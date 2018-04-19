@@ -11,6 +11,6 @@ task clean(type: Delete) {
 
 // wxd - wrapper放至common.gradle无效
 task wrapper(type:Wrapper){
-    gradleVersion='4.4'
+    gradleVersion='4.6'
     //distributionUrl='file:///E:/gradle/gradle-4.4-all.zip'
 }

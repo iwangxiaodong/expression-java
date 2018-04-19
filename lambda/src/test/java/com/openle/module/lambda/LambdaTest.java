@@ -1,5 +1,6 @@
 package com.openle.module.lambda;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +18,7 @@ public class LambdaTest {
 
     @Test
     public void testSelect() {
-
+        Assertions.assertEquals("abc", "abc");
     }
 
     // 显示测试相关信息

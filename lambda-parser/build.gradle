@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.1.0-M1'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.1.0' 
     }
 }
 
@@ -19,25 +19,10 @@ junitPlatform {
 
 //defaultTasks  'clean','build','uploadArchives'
 
-ext.moduleName = 'com.openle.source.expression'
-// https://guides.gradle.org/building-java-9-modules/
-compileJava {
-    inputs.property("moduleName", moduleName)
-    doFirst {
-        println classpath.asPath
-        options.compilerArgs = [
-            '--module-path', classpath.asPath,
-            //'--patch-module', "moduleName=C:\\Users\\xiaodong\\Documents\\NetBeansProjects\\xxx\\build\\modules\\ModuleName",
-        ]
-        classpath = files()  // <2>
-    }
-}
-
 sourceCompatibility = JavaVersion.VERSION_1_9
 
-version '1.1.4'
+version '1.1.5'
 group 'com.openle.source.expression'
-
 
 // 兼容中文注释和排除module-info.java
 tasks.withType(Javadoc) {
@@ -54,17 +39,17 @@ tasks.withType(JavaCompile) {
 
 repositories {
     jcenter()
-//    maven {
-//        url 'https://dl.bintray.com/wangxiaodong/maven/'
-//    }
+    //    maven {
+    //        url 'https://dl.bintray.com/wangxiaodong/maven/'
+    //    }
     maven {
         credentials {
             username 'webdav'
             ext.pwd = project.hasProperty('WEBDAV_PASSWORD') ? project.property('WEBDAV_PASSWORD') : System.getenv('WEBDAV_PASSWORD')
-            println ext.pwd
+            //println ext.pwd
             password ext.pwd
         }
-        url "http://all.openle.com:58888/repository"
+        url "http://all.openle.com:30580/repository"
     }
 }
 
@@ -77,24 +62,31 @@ dependencies {
     // v3.0.0版本初测似乎上传不了！
     deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '2.12'
 
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    compile 'com.openle.module.lambda:lambda:1.0.3'
+    implementation 'com.openle.module.lambda:lambda:1.0.4'
 
-    compile group: 'javax.enterprise', name: 'cdi-api', version: '2.0'
+    implementation group: 'javax.enterprise', name: 'cdi-api', version: '2.0'
 
     //for method ref
-    compile "org.mockito:mockito-core:+"
-
-    compile group: 'org.ow2.asm', name: 'asm-util', version: '6.0'
+    implementation "org.mockito:mockito-core:+"
 
     // for @javax.persistence.Table and @Embeddable
     //compile group: 'javax', name: 'javaee-web-api', version: '8.0'
-    // javaee-web-api跟java.sql冲突，so暂用eclipse persistence api
-    compile group: 'org.eclipse.persistence', name: 'javax.persistence', version: '2.2.0'
+    // javaee-web-api跟java.sql冲突，so暂用javax.persistence-api
+    implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
 
-    testCompile("org.junit.jupiter:junit-jupiter-api:5.1.0-M1")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.1.0-M1")
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.1.1")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.1.1")
+}
+
+compileJava {
+    doFirst {
+        options.compilerArgs = [
+                    '--module-path', classpath.asPath,
+        ]
+        classpath = files()
+    }
 }
 
 apply plugin: 'maven'
@@ -106,8 +98,8 @@ uploadArchives {
 
             // Win10重启后环境变量方有效 echo %WEBDAV_PASSWORD%
             ext.pwd = project.hasProperty('WEBDAV_PASSWORD') ? project.property('WEBDAV_PASSWORD') : System.getenv('WEBDAV_PASSWORD')
-            println ext.pwd
-            repository(url: "dav:http://all.openle.com:58888/repository/") {
+            //println ext.pwd
+            repository(url: "dav:http://all.openle.com:30580/repository/") {
                 authentication(userName: "webdav", password: ext.pwd)
             }
         }
@@ -134,7 +126,7 @@ artifacts {
 bintray {
     user = project.hasProperty('BINTRAY_USER') ? project.property('BINTRAY_USER') : System.getenv('BINTRAY_USER')
     key = project.hasProperty('BINTRAY_API_KEY') ? project.property('BINTRAY_API_KEY') : System.getenv('BINTRAY_API_KEY')
-    println key
+    //println key
     configurations = ['archives']
     publish = true
     pkg {

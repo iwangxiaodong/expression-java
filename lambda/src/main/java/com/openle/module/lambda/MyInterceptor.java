@@ -4,13 +4,16 @@ import org.jinq.jooq.transform.*;
 import ch.epfl.labos.iu.orm.queryll2.path.TransformationClassAnalyzer;
 import ch.epfl.labos.iu.orm.queryll2.symbolic.MethodCallValue;
 import ch.epfl.labos.iu.orm.queryll2.symbolic.MethodSignature;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.bind.annotation.AllArguments;
@@ -75,21 +78,30 @@ public class MyInterceptor {
 
     public SymbExToColumns getSymbExToColumns(MetamodelUtil metamodel, SymbExArgumentHandler seah) {
         SymbExToColumns translator = null;
-        try {
 
-            Constructor<?> c = new ByteBuddy()
+        Constructor<?> c;
+        try {
+            c = new ByteBuddy()
                     .subclass(SymbExToColumns.class)
                     .method(named("virtualMethodCallValue")).intercept(MethodDelegation.to(MyInterceptor.Target.class))
                     .make()
-                    .load(getClass().getClassLoader())
+                    //.load(getClass().getClassLoader())    // jdk9 must use UsingLookup
+                    .load(getClass().getClassLoader(), ClassLoadingStrategy.UsingLookup.of(MethodHandles
+                            .privateLookupIn(SymbExToColumns.class, MethodHandles.lookup())))
                     .getLoaded()
                     .getDeclaredConstructor(MetamodelUtil.class, SymbExArgumentHandler.class);
+
             c.setAccessible(true);
 
             translator = (SymbExToColumns) c.newInstance(metamodel, seah);
             c.setAccessible(false);
-        } catch (ReflectiveOperationException ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException ex) {
+            Logger.getLogger(MyInterceptor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException e) {
+            System.out.println("此处接收被调用方法内部未被捕获的异常");
+            Throwable t = e.getTargetException();// 获取目标异常  
+            t.printStackTrace();
         }
         return translator;
     }

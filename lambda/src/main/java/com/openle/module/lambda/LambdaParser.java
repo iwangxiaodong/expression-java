@@ -4,13 +4,9 @@ import com.openle.module.core.lambda.SerializedPredicate;
 import com.user00.thunk.SerializedLambda;
 import org.jinq.jooq.transform.LambdaInfo;
 import org.jooq.Condition;
-import org.jooq.SelectField;
 import org.jooq.Table;
-import org.jooq.conf.ParamType;
-import org.jooq.impl.DSL;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -19,6 +15,13 @@ import org.jinq.jooq.transform.WhereTransform;
 
 // 解析Lambda表达式 - SerializedLambda.extractLambda(lambda).implMethodName;
 public class LambdaParser {
+
+    // jdk9-jdk11 ByteBuddy 兼容性 - https://mydailyjava.blogspot.com/2018/04/jdk-11-and-proxies-in-world-past.html
+    public static void main(String[] args) throws Throwable {
+        SerializedPredicate<?> lambda = (LambdaParser u) -> u.hashCode() > 0;
+        System.out.println(LambdaParser.parseWhere(lambda));
+
+    }
 
     public static boolean isCamelToUnderline = false;
 
@@ -64,6 +67,4 @@ public class LambdaParser {
 //        //System.out.println(sql);
 //        return sql;
 //    }
-
-
 }

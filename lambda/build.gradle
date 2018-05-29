@@ -21,7 +21,7 @@ junitPlatform {
 
 sourceCompatibility = JavaVersion.VERSION_1_9
 
-version '1.0.4'
+version '1.0.6'
 group 'com.openle.module.lambda'
 
 
@@ -45,13 +45,12 @@ configurations {
 
 dependencies {
     
-    // v3.0.0版本初测似乎上传不了！
-    deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '2.12'
+    deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '3.0.0'
         
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
-    compile('com.openle.module:core:1.0.1')
-    compile group: 'net.bytebuddy', name: 'byte-buddy', version: '1.8.3'    // 1.8.4版本起报IllegalAccessError
+    compile('com.openle.module:core:1.0.2')
+    compile group: 'net.bytebuddy', name: 'byte-buddy', version: '1.8.12'    // 1.8.4版本起报IllegalAccessError
 
     //for lambda to sql
     //compile group: 'org.jinq', name: 'jinq-jooq', version: '1.8.22'

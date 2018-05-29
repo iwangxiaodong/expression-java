@@ -2,6 +2,8 @@ package com.openle.source.expression;
 
 import com.openle.module.core.DataCommon;
 import com.openle.module.core.lambda.LambdaFactory;
+import com.openle.module.core.lambda.SerializedPredicate;
+import com.openle.module.lambda.LambdaParser;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -27,8 +29,8 @@ public class Utils implements Serializable {
     public static void main(String[] args) throws Throwable {
 //        sql.initialize();
 //        Integer ii = 100;
-//        PredicateSerializable<?> lambda = (Utils u) -> u.print() == "bbb" && u.id() == 345;
-//        System.out.println(LambdaParser.parseWhere(lambda));
+        SerializedPredicate<?> lambda = (Utils u) -> u.print() == "bbb" && u.id() == 345;
+        System.out.println(LambdaParser.parseWhere(lambda));
 
 //        lambda = (Utils u) -> u.getAge() > 18 && u.getClass().getName().toString().equals("abc");
 //        System.out.println(LambdaParser.parseWhere(lambda));
@@ -36,7 +38,6 @@ public class Utils implements Serializable {
         //parseLambda(Utils::getVersion);
         //parseLambda((Utils u) -> u.getAge());
         //System.out.println(LambdaFactory.getMethodReferencesName(sql.f("abcdefg")));
-
         //insert(KeepOriginal.class).values("abc", sql.f.now());
         select(sql.f.max("id"), sql.f.count("*"), sql.f.now(), sql.f.len("name")).from(Object.class);
     }

@@ -10,8 +10,12 @@ module com.openle.module.lambda {
 
     //requires org.mockito;
 //    // 限定 - 前者只能被后者访问
-//    exports org.jinq.jooq.transform to com.openle.source.expression;
-//    exports org.jinq.jooq.querygen to com.openle.source.expression;
-    // 不限定
+//    exports org.jinq.jooq.transform to com.openle.module.lambda;
+//    exports org.jinq.jooq.querygen to com.openle.module.lambda;
+//    exports org.jinq.jooq.transform;
+//    opens org.jinq.jooq.transform;
+//    exports org.jinq.jooq.querygen;
+//    opens org.jinq.jooq.querygen;
+// 不限定
     exports com.openle.module.lambda;
 }

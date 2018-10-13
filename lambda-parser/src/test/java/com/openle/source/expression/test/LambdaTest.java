@@ -1,5 +1,7 @@
-package com.openle.source.expression;
+package com.openle.source.expression.test;
 
+import com.openle.source.expression.Utils;
+import com.openle.source.expression.sql;
 import static com.openle.source.expression.sql.*;
 import static com.openle.source.expression.sql.f.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -71,6 +73,7 @@ public class LambdaTest {
                 .assertEquals(Assertions::fail, s);
     }
 
+    //@Disabled
     @Test
     public void testUpdate() {
         s = "update User set Name = 'abc'";
@@ -91,6 +94,7 @@ public class LambdaTest {
                 .assertEquals(Assertions::fail, s);
     }
 
+    //@Disabled
     @Test
     public void testInsert() {
         s = "insert User values ('abc',now())";

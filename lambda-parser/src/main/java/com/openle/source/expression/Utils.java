@@ -1,9 +1,7 @@
 package com.openle.source.expression;
 
 import com.openle.module.core.DataCommon;
-import com.openle.module.core.lambda.LambdaFactory;
-import com.openle.module.core.lambda.SerializedPredicate;
-import com.openle.module.lambda.LambdaParser;
+import com.openle.our.core.lambda.LambdaFactory;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -18,8 +16,6 @@ import javax.enterprise.util.TypeLiteral;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 
-import static com.openle.source.expression.sql.insert;
-import static com.openle.source.expression.sql.select;
 
 /**
  * 公用类
@@ -29,8 +25,8 @@ public class Utils implements Serializable {
     public static void main(String[] args) throws Throwable {
 //        sql.initialize();
 //        Integer ii = 100;
-        SerializedPredicate<?> lambda = (Utils u) -> u.print() == "bbb" && u.id() == 345;
-        System.out.println(LambdaParser.parseWhere(lambda));
+//        SerializedPredicate<?> lambda = (Utils u) -> u.print() == "bbb" && u.id() == 345;
+//        System.out.println(LambdaParser.parseWhere(lambda));
 
 //        lambda = (Utils u) -> u.getAge() > 18 && u.getClass().getName().toString().equals("abc");
 //        System.out.println(LambdaParser.parseWhere(lambda));
@@ -39,7 +35,10 @@ public class Utils implements Serializable {
         //parseLambda((Utils u) -> u.getAge());
         //System.out.println(LambdaFactory.getMethodReferencesName(sql.f("abcdefg")));
         //insert(KeepOriginal.class).values("abc", sql.f.now());
-        select(sql.f.max("id"), sql.f.count("*"), sql.f.now(), sql.f.len("name")).from(Object.class);
+        //System.out.println(select(NewClass::getName, sql.f.max("id"), sql.f.count("*"), sql.f.now(), sql.f.len("name")).from(NewClass.class).sql());
+        //System.out.println(sql.f.now());
+        //select(sql.f.now()).from(User.class);
+        sql.update("abcdef").set(sql.eq(Utils::getVersion, "aaaa")).where((Utils u) -> true);
     }
 
     public String print() {
@@ -121,6 +120,10 @@ public class Utils implements Serializable {
     protected String getSelectName(Class c, final Function getter) {
         Objects.requireNonNull(c);
 
+        if (getter == null) {
+            throw new NullPointerException("getter is null!!!");
+        }
+
         Class<Function<Object, ?>> raw = new TypeLiteral<Function<Object, ?>>() {
         }.getRawType();
 
@@ -128,7 +131,6 @@ public class Utils implements Serializable {
         if (getter instanceof Serializable) {
             return LambdaFactory.getMethodReferencesName(raw.cast(getter));
         }
-
         Class<Class<Object>> rawClass = new TypeLiteral<Class<Object>>() {
         }.getRawType();
 
@@ -137,20 +139,31 @@ public class Utils implements Serializable {
             method[0] = ((InvocationOnMock) methodInvocationReport.getInvocation()).getMethod();
         }));
         // T t = (T) Mockito.mock(c, ...);
+
         try {
             raw.cast(getter).apply(t);
+            //System.err.println("apply(t)");
             return method[0].getName();
         } catch (ClassCastException ex) {
             // 字符串表名则通过异常ClassCastException来获取。
             String msg = ex.getMessage();
-            msg = msg.substring(msg.lastIndexOf("cast to") + 8);
+            //System.err.println(msg);
+
+            if (msg.contains("cannot be cast to class")) {
+                msg = msg.split(" ")[7];
+                //msg = msg.substring(msg.lastIndexOf("cast to") + 8);
+            }
+
+            System.err.println("msg class:" + msg);
+
             Class clazz = null;
             try {
                 clazz = Class.forName(msg);
             } catch (ClassNotFoundException ex1) {
                 throw new RuntimeException(ex1);
             }
-            System.out.println("msg - " + clazz);
+
+            //System.out.println("Again getSelectName - " + clazz);
             return getSelectName(clazz, getter);
         }
     }

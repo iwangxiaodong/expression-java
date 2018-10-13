@@ -1,6 +1,6 @@
 package com.openle.module.lambda;
 
-import com.openle.module.core.lambda.SerializedPredicate;
+import com.openle.our.core.lambda.SerializedPredicate;
 import com.user00.thunk.SerializedLambda;
 import org.jinq.jooq.transform.LambdaInfo;
 import org.jooq.Condition;

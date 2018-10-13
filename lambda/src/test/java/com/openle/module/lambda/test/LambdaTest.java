@@ -1,4 +1,4 @@
-package com.openle.module.lambda;
+package com.openle.module.lambda.test;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

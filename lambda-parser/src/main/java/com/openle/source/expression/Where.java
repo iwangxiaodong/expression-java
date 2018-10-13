@@ -1,13 +1,11 @@
 package com.openle.source.expression;
 
-import com.openle.module.core.DataCommon;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 
-import com.openle.module.core.lambda.SerializedPredicate;
+import com.openle.our.core.lambda.SerializedPredicate;
 import org.jooq.Condition;
 import com.openle.module.lambda.LambdaParser;
 

@@ -1,28 +1,18 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.1.0' 
-    }
-}
-
 plugins {
     id 'java-library'
-    id "com.jfrog.bintray" version "1.8.0"
-}
-
-apply plugin: 'org.junit.platform.gradle.plugin'
-junitPlatform {
-    //reportsDir file('build/test-results/test')
+    id "com.jfrog.bintray" version "1.8.4"
 }
 
 //defaultTasks  'clean','build','uploadArchives'
 
 sourceCompatibility = JavaVersion.VERSION_1_9
 
-version '1.1.6'
+version '1.1.8'
 group 'com.openle.source.expression'
+
+test {
+    useJUnitPlatform()
+}
 
 // 兼容中文注释和排除module-info.java
 tasks.withType(Javadoc) {
@@ -49,7 +39,7 @@ repositories {
             //println ext.pwd
             password ext.pwd
         }
-        url "http://all.openle.com:30580/repository"
+        url "https://maven.openle.com/repository"
     }
     
     jcenter()
@@ -62,12 +52,11 @@ configurations {
 
 dependencies {
 
-    // v3.0.0版本初测似乎上传不了！
-    deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '2.12'
+    deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '3.0.0'
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     
-    implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.6'
+    implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.8'
 
     implementation group: 'javax.enterprise', name: 'cdi-api', version: '2.0'
 
@@ -102,7 +91,7 @@ uploadArchives {
             // Win10重启后环境变量方有效 echo %WEBDAV_PASSWORD%
             ext.pwd = project.hasProperty('WEBDAV_PASSWORD') ? project.property('WEBDAV_PASSWORD') : System.getenv('WEBDAV_PASSWORD')
             //println ext.pwd
-            repository(url: "dav:http://all.openle.com:30580/repository/") {
+            repository(url: "dav:https://maven.openle.com/repository/") {
                 authentication(userName: "webdav", password: ext.pwd)
             }
         }

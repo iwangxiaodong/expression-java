@@ -1,1 +1,1 @@
-include ':lambda-parser',':lambda'
+include ':functional-sql',':lambda'

@@ -68,8 +68,8 @@ dependencies {
     // javaee-web-api跟java.sql冲突，so暂用javax.persistence-api
     implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
 
-    testCompile("org.junit.jupiter:junit-jupiter-api:5.1.1")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.1.1")
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.3.1")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.1")
 }
 
 compileJava {

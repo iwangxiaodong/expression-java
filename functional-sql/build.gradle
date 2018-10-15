@@ -5,10 +5,11 @@ plugins {
 
 //defaultTasks  'clean','build','uploadArchives'
 
-sourceCompatibility = JavaVersion.VERSION_1_9
+sourceCompatibility = JavaVersion.VERSION_1_10
 
-version '1.1.8'
+version '1.1.10'
 group 'com.openle.source.expression'
+jar.baseName  = 'lambda-parser'
 
 test {
     useJUnitPlatform()
@@ -56,7 +57,7 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     
-    implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.8'
+    implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.9'
 
     implementation group: 'javax.enterprise', name: 'cdi-api', version: '2.0'
 
@@ -85,7 +86,7 @@ apply plugin: 'maven'
 uploadArchives {
     repositories {
         mavenDeployer {
-            pom.artifactId =project.archivesBaseName.toLowerCase()
+            pom.artifactId = project.archivesBaseName.toLowerCase()
             configuration = configurations.deployerJars
 
             // Win10重启后环境变量方有效 echo %WEBDAV_PASSWORD%

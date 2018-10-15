@@ -1,6 +1,6 @@
 package com.openle.source.expression;
 
-import com.openle.module.core.DataCommon;
+import com.openle.our.core.DataCommon;
 import com.openle.our.core.lambda.LambdaFactory;
 
 import java.io.Serializable;
@@ -127,7 +127,8 @@ public class Utils implements Serializable {
         Class<Function<Object, ?>> raw = new TypeLiteral<Function<Object, ?>>() {
         }.getRawType();
 
-        // 字符串方法名，若getter不支持序列化则可通过NoSuchMethodError来获取。
+        //  字符串方法名，若getter不支持序列化则可通过NoSuchMethodError来获取。
+        //  后续考虑自建getter时基类使用可序列化的SecretKeySpec
         if (getter instanceof Serializable) {
             return LambdaFactory.getMethodReferencesName(raw.cast(getter));
         }

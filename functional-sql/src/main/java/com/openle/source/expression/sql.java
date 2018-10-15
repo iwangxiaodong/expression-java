@@ -1,6 +1,6 @@
 package com.openle.source.expression;
 
-import com.openle.module.core.lambda.LambdaFactory;
+import com.openle.our.core.lambda.LambdaFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -92,7 +92,7 @@ public class sql {
     }
 
     /**
-     * @param <T>    `
+     * @param <T> `
      * @param getter 实体方法引用 User::getName,User::getAge
      * @return SQL链式对象
      */
@@ -103,7 +103,7 @@ public class sql {
 
     /**
      * @param <T> `
-     * @param c   实体Class User.class
+     * @param c 实体Class User.class
      * @return SQL链式对象
      */
     public static <T> Values insert(Class c) {
@@ -114,7 +114,7 @@ public class sql {
      * insert数据已存在时忽略不抛异常
      *
      * @param <T> `
-     * @param c   实体Class User.class
+     * @param c 实体Class User.class
      * @return SQL链式对象
      */
     public static <T> Values insertIgnore(Class c) {
@@ -122,8 +122,8 @@ public class sql {
     }
 
     /**
-     * @param <T>    `
-     * @param c      实体Class User.class
+     * @param <T> `
+     * @param c 实体Class User.class
      * @param getter `
      * @return SQL链式对象
      */
@@ -133,8 +133,8 @@ public class sql {
     }
 
     /**
-     * @param <T>    `
-     * @param c      实体Class User.class
+     * @param <T> `
+     * @param c 实体Class User.class
      * @param getter `
      * @return SQL链式对象
      * @since 1.0.7
@@ -146,7 +146,7 @@ public class sql {
 
     /**
      * @param <T> `
-     * @param c   实体Class User.class
+     * @param c 实体Class User.class
      * @return SQL链式对象
      * @since 1.0.7
      */
@@ -155,7 +155,7 @@ public class sql {
     }
 
     /**
-     * @param <T>       `
+     * @param <T> `
      * @param tableName 表名
      * @return SQL链式对象
      */
@@ -172,11 +172,10 @@ public class sql {
     }
 
     //用于UPDATE XXX SET K=V更新项
-
     /**
-     * @param <T>    `
+     * @param <T> `
      * @param getter `
-     * @param obj    `
+     * @param obj `
      * @return `
      */
     public static <T> Map<Function, Object> eq(final Function<T, ?> getter, Object obj) {
@@ -193,12 +192,11 @@ public class sql {
 //    public static KeepOriginal v(String s) {
 //        return new KeepOriginal(s);
 //    }
-
     /**
      * 字符型字段
      *
      * @param <T> `
-     * @param s   `
+     * @param s `
      * @return `
      */
     public static <T> Function<T, ?> s(String s) {
@@ -246,6 +244,5 @@ public class sql {
             return s("count(*)");
         }
     }
-
 
 }

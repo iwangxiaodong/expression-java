@@ -7,26 +7,15 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_1_10
 
-version '1.1.10'
+version "1.1.10"
 group 'com.openle.source.expression'
-jar.baseName  = 'lambda-parser'
+archivesBaseName="lambda-parser"
 
 test {
     useJUnitPlatform()
 }
 
-// 兼容中文注释和排除module-info.java
-tasks.withType(Javadoc) {
-    options.encoding = "UTF-8"
-    title =title+" - Open Source"
-    excludes = ['module-info.java','**/xxx/**']
-    //failOnError = false
-}
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
-    options.compilerArgs = ['-Xlint:unchecked']
-}
 
 repositories {
     maven {
@@ -73,12 +62,12 @@ dependencies {
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.1")
 }
 
-compileJava {
-    doFirst {
-        options.compilerArgs = [
-                    '--module-path', classpath.asPath,
-        ]
-        classpath = files()
+
+task uploadSnapshot {
+    doLast{
+        version version+'-SNAPSHOT'
+        println 'publish SNAPSHOT... '+project.version
+        uploadArchives.execute()
     }
 }
 
@@ -88,14 +77,42 @@ uploadArchives {
         mavenDeployer {
             pom.artifactId = project.archivesBaseName.toLowerCase()
             configuration = configurations.deployerJars
-
+            
             // Win10重启后环境变量方有效 echo %WEBDAV_PASSWORD%
             ext.pwd = project.hasProperty('WEBDAV_PASSWORD') ? project.property('WEBDAV_PASSWORD') : System.getenv('WEBDAV_PASSWORD')
             //println ext.pwd
-            repository(url: "dav:https://maven.openle.com/repository/") {
+            
+            repository(url: "dav:https://maven.openle.com/releases/") {
+                authentication(userName: "webdav", password: ext.pwd)
+            }
+            
+            snapshotRepository(url: "dav:https://maven.openle.com/snapshots/") {
                 authentication(userName: "webdav", password: ext.pwd)
             }
         }
+    }
+}
+
+// 兼容中文注释和排除module-info.java
+tasks.withType(Javadoc) {
+    options.encoding = "UTF-8"
+    title =title+" - Open Source"
+    excludes = ['module-info.java','**/xxx/**']
+    //failOnError = false
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    options.compilerArgs = ['-Xlint:unchecked']
+}
+
+
+compileJava {
+    doFirst {
+        options.compilerArgs = [
+                    '--module-path', classpath.asPath,
+        ]
+        classpath = files()
     }
 }
 

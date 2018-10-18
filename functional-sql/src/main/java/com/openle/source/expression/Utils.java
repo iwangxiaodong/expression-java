@@ -16,10 +16,6 @@ import javax.enterprise.util.TypeLiteral;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 
-
-/**
- * 公用类
- */
 public class Utils implements Serializable {
 
     public static void main(String[] args) throws Throwable {
@@ -42,7 +38,7 @@ public class Utils implements Serializable {
     }
 
     public String print() {
-        return "hello world";
+        return "hello world123";
     }
 
     public int id() {

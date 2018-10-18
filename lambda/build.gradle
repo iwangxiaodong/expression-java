@@ -9,22 +9,10 @@ sourceCompatibility = JavaVersion.VERSION_1_10
 
 version '1.0.9'
 group 'com.openle.module.lambda'
+//archivesBaseName="lambda"
 
 test {
     useJUnitPlatform()
-}
-
-// 兼容中文注释和排除module-info.java
-tasks.withType(Javadoc) {
-    options.encoding = "UTF-8"
-    title =title+" - Open Source"
-    excludes = ['module-info.java','**/jinq/**', '**/jooq/**']
-    //failOnError = false
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
-    options.compilerArgs = ['-Xlint:unchecked']   
 }
 
 
@@ -55,12 +43,12 @@ dependencies {
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.1")
 }
 
-compileJava {
-    doFirst {
-        options.compilerArgs = [
-                    '--module-path', classpath.asPath,
-        ]
-        classpath = files()
+
+task uploadSnapshot {
+    doLast{
+        version version+'-SNAPSHOT'
+        println 'publish SNAPSHOT... '+project.version
+        uploadArchives.execute()
     }
 }
 
@@ -78,6 +66,29 @@ uploadArchives {
                 authentication(userName: "webdav", password: ext.pwd)
             }
         }
+    }
+}
+
+// 兼容中文注释和排除module-info.java
+tasks.withType(Javadoc) {
+    options.encoding = "UTF-8"
+    title =title+" - Open Source"
+    excludes = ['module-info.java','**/jinq/**', '**/jooq/**']
+    //failOnError = false
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    options.compilerArgs = ['-Xlint:unchecked']   
+}
+
+
+compileJava {
+    doFirst {
+        options.compilerArgs = [
+                    '--module-path', classpath.asPath,
+        ]
+        classpath = files()
     }
 }
 

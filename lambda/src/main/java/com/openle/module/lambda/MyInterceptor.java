@@ -25,10 +25,6 @@ import org.jooq.Schema;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SchemaImpl;
 
-/**
- *
- * @author xiaodong
- */
 // 将WhereTransform.java中new SymbExToColumns修改为new MyInterceptor().getSymbExToColumns即可
 // 考虑通过--patch-module替换WhereTransform.java类
 public class MyInterceptor {
@@ -100,8 +96,8 @@ public class MyInterceptor {
             Logger.getLogger(MyInterceptor.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvocationTargetException e) {
             System.out.println("此处接收被调用方法内部未被捕获的异常");
-            Throwable t = e.getTargetException();// 获取目标异常  
-            t.printStackTrace();
+            //Throwable t = e.getTargetException();// 获取目标异常  
+            //t.printStackTrace();
         }
         return translator;
     }

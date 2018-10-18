@@ -22,16 +22,16 @@ configurations {
 
 dependencies {
     
-    deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '3.0.0'
+    deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '3.2.0'
         
     compile fileTree(include: ['*.jar'], dir: 'libs')
 
     compile('com.openle.module:core:1.0.6')
-    compile group: 'net.bytebuddy', name: 'byte-buddy', version: '1.8.12'
+    compile group: 'net.bytebuddy', name: 'byte-buddy', version: '1.8.22'
 
     //for lambda to sql
     //compile group: 'org.jinq', name: 'jinq-jooq', version: '1.8.22'
-    compile group: 'org.jooq', name: 'jooq', version: '3.11.1'  //  '3.10.2'
+    compile group: 'org.jooq', name: 'jooq', version: '3.11.5'  //  '3.10.2'
     compile group: 'org.jinq', name: 'analysis', version: '1.8.24'  //  '1.8.22'
 
     //for method ref
@@ -44,9 +44,9 @@ dependencies {
 }
 
 
-task uploadSnapshot {
+task uploadSnapshot(dependsOn: assemble) {
+    version version+'-SNAPSHOT'
     doLast{
-        version version+'-SNAPSHOT'
         println 'publish SNAPSHOT... '+project.version
         uploadArchives.execute()
     }
@@ -56,13 +56,18 @@ apply plugin: 'maven'
 uploadArchives {
     repositories {
         mavenDeployer {
-            pom.artifactId =project.archivesBaseName.toLowerCase()
+            pom.artifactId = project.archivesBaseName.toLowerCase()
             configuration = configurations.deployerJars
-
+            
             // Win10重启后环境变量方有效 echo %WEBDAV_PASSWORD%
             ext.pwd = project.hasProperty('WEBDAV_PASSWORD') ? project.property('WEBDAV_PASSWORD') : System.getenv('WEBDAV_PASSWORD')
             //println ext.pwd
-            repository(url: "dav:http://all.openle.com:30580/repository/") {
+            
+            repository(url: "dav:https://maven.openle.com/releases/") {
+                authentication(userName: "webdav", password: ext.pwd)
+            }
+            
+            snapshotRepository(url: "dav:https://maven.openle.com/snapshots/") {
                 authentication(userName: "webdav", password: ext.pwd)
             }
         }

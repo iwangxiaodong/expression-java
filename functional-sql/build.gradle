@@ -15,8 +15,6 @@ test {
     useJUnitPlatform()
 }
 
-
-
 repositories {
     maven {
         url 'https://dl.bintray.com/wangxiaodong/maven/'
@@ -42,7 +40,7 @@ configurations {
 
 dependencies {
 
-    deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '3.0.0'
+    deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '3.2.0'
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     
@@ -63,9 +61,9 @@ dependencies {
 }
 
 
-task uploadSnapshot {
+task uploadSnapshot(dependsOn: assemble) {
+    version version+'-SNAPSHOT'
     doLast{
-        version version+'-SNAPSHOT'
         println 'publish SNAPSHOT... '+project.version
         uploadArchives.execute()
     }

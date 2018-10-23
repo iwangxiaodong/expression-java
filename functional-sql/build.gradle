@@ -7,7 +7,7 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_1_10
 
-version "1.1.10"
+version "1.1.14"
 group 'com.openle.source.expression'
 archivesBaseName="lambda-parser"
 
@@ -27,7 +27,7 @@ repositories {
             //println ext.pwd
             password ext.pwd
         }
-        url "https://maven.openle.com/repository"
+        url "https://maven.openle.com/releases"
     }
     
     jcenter()
@@ -44,7 +44,7 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     
-    implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.9'
+    implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.11'
 
     implementation group: 'javax.enterprise', name: 'cdi-api', version: '2.0'
 
@@ -60,12 +60,13 @@ dependencies {
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.1")
 }
 
-
-task uploadSnapshot(dependsOn: assemble) {
-    version version+'-SNAPSHOT'
-    doLast{
-        println 'publish SNAPSHOT... '+project.version
-        uploadArchives.execute()
+task snapshot(dependsOn:assemble) << {
+    uploadArchives.execute()
+}
+gradle.taskGraph.whenReady {taskGraph ->
+    if (taskGraph.hasTask(snapshot)) {
+        version = version+'-SNAPSHOT'
+        println version
     }
 }
 
@@ -144,7 +145,7 @@ bintray {
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/iwangxiaodong/expression-java.git'
         version {
-            name = project.version.toString()
+            //name = project.version.toString()
             desc = 'Lambda Parser'
         }
     }

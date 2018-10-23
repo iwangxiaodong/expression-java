@@ -1,10 +1,10 @@
-module com.openle.source.expression {
+module com.openle.our.expression {
     requires java.sql;
     requires java.naming;
     requires cdi.api;
     requires org.jooq;
     requires jinq.asm.rebased;
-    requires com.openle.module.lambda;
+    requires com.openle.our.lambda;
     //requires com.openle.module.core;
     requires org.mockito;
 
@@ -14,6 +14,6 @@ module com.openle.source.expression {
 //    exports org.jinq.jooq.transform to com.openle.source.expression;
 //    exports org.jinq.jooq.querygen to com.openle.source.expression;
     // 不限定
-    exports com.openle.source.expression;
+    exports com.openle.our.expression;    
 
 }

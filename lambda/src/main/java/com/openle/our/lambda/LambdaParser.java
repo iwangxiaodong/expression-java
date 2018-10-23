@@ -1,4 +1,4 @@
-package com.openle.module.lambda;
+package com.openle.our.lambda;
 
 import com.openle.our.core.lambda.SerializedPredicate;
 import com.user00.thunk.SerializedLambda;

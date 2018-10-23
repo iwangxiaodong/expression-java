@@ -4,4 +4,4 @@ jdk:
 before_install:
   - chmod +x gradlew
 after_success:
-  - ./gradlew :lambda:uploadSnapshot
+  - ./gradlew :lambda:snapshot

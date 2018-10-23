@@ -1,7 +1,7 @@
 /**
  * 表达式包 - Lambda、SQL、RegEx
  */
-package com.openle.source.expression;
+package com.openle.our.expression;
 
 //这里是包类，声明一个包使用的公共类，强调的是包访问权限  
 class PkgClass {

@@ -7,7 +7,7 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_1_10
 
-version '1.0.9'
+version '1.0.11'
 group 'com.openle.module.lambda'
 //archivesBaseName="lambda"
 
@@ -43,12 +43,13 @@ dependencies {
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.1")
 }
 
-
-task uploadSnapshot(dependsOn: assemble) {
-    version version+'-SNAPSHOT'
-    doLast{
-        println 'publish SNAPSHOT... '+project.version
-        uploadArchives.execute()
+task snapshot(dependsOn:assemble) << {
+    uploadArchives.execute()
+}
+gradle.taskGraph.whenReady {taskGraph ->
+    if (taskGraph.hasTask(snapshot)) {
+        version = version+'-SNAPSHOT'
+        println version
     }
 }
 
@@ -126,7 +127,7 @@ bintray {
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/iwangxiaodong/expression-java.git'
         version {
-            name = project.version.toString()
+            //name = project.version.toString()
             desc = 'Lambda'
         }
     }

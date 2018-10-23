@@ -1,4 +1,4 @@
-package com.openle.module.lambda;
+package com.openle.our.lambda;
 
 import org.jinq.jooq.transform.*;
 import ch.epfl.labos.iu.orm.queryll2.path.TransformationClassAnalyzer;

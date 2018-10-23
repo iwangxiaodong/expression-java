@@ -1,4 +1,4 @@
-module com.openle.module.lambda {
+module com.openle.our.lambda {
     requires java.sql;
     requires java.naming;
     requires org.jooq;
@@ -16,5 +16,5 @@ module com.openle.module.lambda {
 //    exports org.jinq.jooq.querygen;
 //    opens org.jinq.jooq.querygen;
 // 不限定
-    exports com.openle.module.lambda;
+    exports com.openle.our.lambda;
 }

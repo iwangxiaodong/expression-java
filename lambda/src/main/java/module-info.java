@@ -4,7 +4,7 @@ module com.openle.our.lambda {
     requires org.jooq;
     requires jinq.asm.rebased;
     requires analysis;
-    requires net.bytebuddy;
+    requires net.bytebuddy; //  Only IDE 报错
 //    requires transitive com.openle.module.core;
 
     //requires org.mockito;

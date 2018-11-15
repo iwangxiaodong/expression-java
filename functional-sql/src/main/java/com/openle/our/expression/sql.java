@@ -1,6 +1,6 @@
 package com.openle.our.expression;
 
-import com.openle.our.core.lambda.LambdaFactory;
+import com.openle.our.lambda.LambdaFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

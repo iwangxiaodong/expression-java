@@ -1,6 +1,6 @@
 package com.openle.module.lambda.test;
 
-import com.openle.our.core.lambda.LambdaFactory;
+import com.openle.our.lambda.LambdaFactory;
 import java.util.function.Function;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

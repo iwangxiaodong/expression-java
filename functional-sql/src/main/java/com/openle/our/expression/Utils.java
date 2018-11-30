@@ -6,7 +6,10 @@ import com.openle.our.lambda.LambdaFactory;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -70,6 +73,21 @@ public class Utils implements Serializable {
             builder.deleteCharAt(0);
         }
         return builder.toString();
+    }
+
+    public static Optional<List<String>> functionsToList(Function[] fs, Class c) {
+        List<String> list = null;
+        if (fs != null && fs.length > 0) {
+            list = new ArrayList<>();
+            for (Function f : fs) {
+                String name = new Utils().getSelectName(c != null ? c : Object.class, f);
+                if (name.startsWith("get")) {
+                    name = name.replaceFirst("get", "");
+                }
+                list.add(name);
+            }
+        }
+        return Optional.ofNullable(list);
     }
 
     public static String getTableName(Class c) {

@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.TestInfo;
 
-@SuppressWarnings("unchecked") 
+@SuppressWarnings("unchecked")
 public class LambdaTest {
 
     @BeforeAll
@@ -33,7 +33,18 @@ public class LambdaTest {
 
     @Test
     public void testSelect() {
+
         select().from(User.class)
+                //
+                .assertEquals(Assertions::fail, s);
+
+        s = "select null";
+        select()
+                //
+                .assertEquals(Assertions::fail, s);
+
+        s = "select max(*)";
+        select(max("*"))
                 //
                 .assertEquals(Assertions::fail, s);
 

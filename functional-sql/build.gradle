@@ -7,7 +7,7 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_11
 
-version "1.1.15"
+version "1.1.16"
 group 'com.openle.source.expression'
 archivesBaseName="lambda-parser"
 
@@ -40,7 +40,7 @@ dependencies {
     
     implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.12'
 
-    implementation group: 'javax.enterprise', name: 'cdi-api', version: '2.0'
+    implementation group: 'javax.enterprise', name: 'cdi-api', version: '2.0.SP1'
 
     // for @javax.persistence.Table and @Embeddable
     //compile group: 'javax', name: 'javaee-web-api', version: '8.0'

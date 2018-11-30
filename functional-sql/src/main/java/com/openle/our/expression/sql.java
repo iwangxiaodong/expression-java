@@ -97,8 +97,9 @@ public class sql {
      * @return SQL链式对象
      */
     @SafeVarargs
-    public static <T> From select(final Function<T, ?>... getter) {
-        return new From(getter);
+    public static <T> FromOfSelect select(final Function<T, ?>... getter) {
+        FromOfSelect from = new FromOfSelect(getter);
+        return from;
     }
 
     /**
@@ -167,8 +168,8 @@ public class sql {
      * @param <T> `
      * @return SQL链式对象
      */
-    public static <T> From delete() {
-        return new From(DML.DELETE);
+    public static <T> FromOfDelete delete() {
+        return new FromOfDelete();
     }
 
     //用于UPDATE XXX SET K=V更新项

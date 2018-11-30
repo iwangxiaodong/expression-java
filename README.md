@@ -32,6 +32,16 @@ Gradle:
                 //
                 .assertEquals(Assertions::fail, s);
 
+        s = "select null";
+        select()
+                //
+                .assertEquals(Assertions::fail, s);
+
+        s = "select max(*)";
+        select(max("*"))
+                //
+                .assertEquals(Assertions::fail, s);
+
         s = "select Name,Age,FullName from User where Age > 0";
         select(User::getName, User::getAge, User::getFullName)
                 .from(User.class).where((User t) -> t.getAge() > 0)

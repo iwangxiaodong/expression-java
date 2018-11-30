@@ -15,18 +15,10 @@ public class Values {
         this.fs = fs;
         sName = "insert " + (isIgnore ? "ignore " : "") + Utils.getTableName(c) + " ";
 
-        if (fs.length > 0) {
+        if (fs != null && fs.length > 0) {
             List<String> list = new ArrayList<>();
             for (Function f : fs) {
-                String name = "";
-//                if (f instanceof KeepField) {
-//                    System.out.println("keepField");
-//                    name = ((KeepField) f).getFieldName();
-//                } else {
-//                    name = new Utils().getSelectName(c, f);
-//                }
-
-                name = new Utils().getSelectName(c, f);
+                String name = new Utils().getSelectName(c, f);
                 if (name.startsWith("get")) {
                     name = name.replaceFirst("get", "");
                 }
@@ -56,7 +48,7 @@ public class Values {
 
         List<String> list = new ArrayList<>();
         for (Object value : objArray) {
-            String s =Utils.getValueString(c, value);
+            String s = Utils.getValueString(c, value);
             list.add(s);
         }
         String values = String.join(",", list);

@@ -8,6 +8,7 @@ import java.util.function.Function;
 import com.openle.our.core.lambda.SerializedPredicate;
 import org.jooq.Condition;
 import com.openle.our.lambda.LambdaParser;
+import java.util.Optional;
 
 public class Where extends Execute {
 
@@ -23,20 +24,12 @@ public class Where extends Execute {
             for (Map.Entry<Function, ?> entry : m.entrySet()) {
                 Object value = entry.getValue();
                 Function f = entry.getKey();
-                String name = "";
-//                if (f instanceof KeepField) {
-//                    System.out.println("keepField");
-//                    name = ((KeepField) f).getFieldName();
-//                } else {
-//                    name = new Utils().getSelectName(c, f);
-//                }
-
-                name = new Utils().getSelectName(c != null ? c : Object.class, f);
+                String name = new Utils().getSelectName(c != null ? c : Object.class, f);
                 if (name.startsWith("get")) {
                     name = name.replaceFirst("get", "");
                 }
 
-                String s =Utils.getValueString(c, value);
+                String s = Utils.getValueString(c, value);
                 list.add(name + " = " + s);
             }
         }
@@ -44,34 +37,27 @@ public class Where extends Execute {
         super.sqlString = beforeWhere;
     }
 
-
-
     //for select delete
     protected Where(DML dml, Class c, String tableName, Function[] fs) {
         //this.c = c;
-        tableName = c != null ? Utils.getTableName(c) : tableName;
+        final String tName = c != null ? Utils.getTableName(c) : tableName;
 
         if (dml.equals(DML.DELETE)) {
-            beforeWhere = "delete from " + tableName;
+            beforeWhere = "delete from " + tName;
         }
 
         if (dml.equals(DML.SELECT)) {
-            if (fs != null && fs.length > 0) {
-                List<String> list = new ArrayList<>();
-                for (Function f : fs) {
-                    String name = new Utils().getSelectName(c != null ? c : Object.class, f);
-                    if (name.startsWith("get")) {
-                        name = name.replaceFirst("get", "");
-                    }
-                    list.add(name);
-                }
-                beforeWhere = "select " + String.join(",", list) + " from " + tableName;
-            } else {
-                beforeWhere = "select * from " + tableName;
-            }
+
+            String[] arr = new String[]{"select * from " + tName};
+            Utils.functionsToList(fs, c).ifPresent(list -> {
+                arr[0] = "select " + String.join(",", list) + " from " + tName;
+                System.out.println(" arr[0]" + arr[0]);
+            });
+            beforeWhere = arr[0];
         }
 
         super.sqlString = beforeWhere;
+
     }
 
     // 注意：where表达式两侧若是方法，则取方法名，若是变量则直接代入值而不进入方法名判断。

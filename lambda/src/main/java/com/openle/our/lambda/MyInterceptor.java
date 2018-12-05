@@ -125,10 +125,12 @@ public class MyInterceptor {
                     rName = sig.name;
                 } else if (val.base.toString().endsWith("()")) {
                     String[] rNames = val.base.toString().split("\\.");
-                    System.out.println("length - " + rNames.length);
+                    //System.out.println("length - " + rNames.length);
                     if (rNames.length > 1) {
-                        rName = rNames[1].replace("()", "");
-                        System.out.println("实体方法名链式调用无效，只取第一级方法名！" + rName);
+                        //  t.entityId().id()
+                        //  rName = rNames[1].replace("()", "");
+                        rName = rNames[rNames.length - 1].replace("()", "");
+                        System.out.println("链式调用只取最后一级方法名！" + rName);
                     }
                 } else {
                     //其他非数值型字段名
@@ -137,7 +139,7 @@ public class MyInterceptor {
             }
 
             if (rName != null) {
-                rName = rName.replace("get", "");
+                rName = rName.replaceFirst("get", "");
                 if (isCamelToUnderline) {
                     rName = camelToUnderline(rName);
                 }

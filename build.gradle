@@ -17,7 +17,7 @@ allprojects {
     uploadArchives {
         repositories {
             mavenDeployer {
-                pom.artifactId = project.archivesBaseName.toLowerCase()
+                pom.artifactId = project.archivesBaseName.toLowerCase().equals("functional-sql")?"lambda-parser":project.archivesBaseName.toLowerCase()
                 configuration = configurations.deployerJars
 
                 repository(url: project.repositories.mavenLocal().url)

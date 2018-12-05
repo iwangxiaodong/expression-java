@@ -41,19 +41,16 @@ public class Where extends Execute {
     protected Where(DML dml, Class c, String tableName, Function[] fs) {
         //this.c = c;
         final String tName = c != null ? Utils.getTableName(c) : tableName;
-
         if (dml.equals(DML.DELETE)) {
             beforeWhere = "delete from " + tName;
         }
 
         if (dml.equals(DML.SELECT)) {
-
-            String[] arr = new String[]{"select * from " + tName};
-            Utils.functionsToList(fs, c).ifPresent(list -> {
-                arr[0] = "select " + String.join(",", list) + " from " + tName;
-                System.out.println(" arr[0]" + arr[0]);
-            });
-            beforeWhere = arr[0];
+            beforeWhere = "select * from " + tName;
+            Optional<List<String>> oList = Utils.functionsToList(fs, c);
+            if (oList.isPresent()) {
+                beforeWhere = "select " + String.join(",", oList.get()) + " from " + tName;
+            }
         }
 
         super.sqlString = beforeWhere;

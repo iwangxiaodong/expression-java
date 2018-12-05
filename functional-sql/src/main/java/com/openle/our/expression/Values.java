@@ -2,6 +2,7 @@ package com.openle.our.expression;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class Values {
@@ -15,19 +16,10 @@ public class Values {
         this.fs = fs;
         sName = "insert " + (isIgnore ? "ignore " : "") + Utils.getTableName(c) + " ";
 
-        if (fs != null && fs.length > 0) {
-            List<String> list = new ArrayList<>();
-            for (Function f : fs) {
-                String name = new Utils().getSelectName(c, f);
-                if (name.startsWith("get")) {
-                    name = name.replaceFirst("get", "");
-                }
-
-                list.add(name);
-            }
-            sName = sName + "(" + String.join(",", list) + ") ";
+        Optional<List<String>> oList = Utils.functionsToList(fs, null);
+        if (oList.isPresent()) {
+            sName = sName + "(" + String.join(",", oList.get()) + ") ";
         }
-
     }
 
     protected Values(Class c, boolean isIgnore) {

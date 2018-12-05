@@ -65,7 +65,7 @@ public class LambdaFactory {
     }
 
     //  若开启javaagent可直接用库 - https://github.com/ruediste/lambda-inspector
-    //  可考虑将Object.class更换为可序列化的String和Integer等
+    //  可考虑将Object.class更换为可序列化的Throwable
     private static Function newMethodReferences(String methodName, boolean isSerializable) {
         methodName = HexConverter.bytesToHexString(methodName.getBytes());// 支持数字开头method。
 
@@ -74,7 +74,7 @@ public class LambdaFactory {
             MethodHandles.Lookup caller = MethodHandles.lookup();
             MethodType getter = MethodType.methodType(String.class);
 
-            // 跳过findVirtual方法是否存在检查，Object.class为方法引用依托的类型，支持动态类。
+            // 跳过findVirtual方法是否存在检查，Object.class、Throwable为方法引用依托的类型，支持动态类。
             MethodHandle target = getMethodHandle(Object.class, methodName, getter);
 //            MethodHandle target1 = caller.findVirtual(Object.class, methodName, getter);
 
@@ -114,7 +114,7 @@ public class LambdaFactory {
     private static MethodHandle getMethodHandle(Class<?> c, String methodName, MethodType getter) throws ReflectiveOperationException {
         final byte REF_invokeVirtual = 5, REF_invokeInterface = 9;
         byte refKind = (c.isInterface() ? REF_invokeInterface : REF_invokeVirtual);
-        
+
         Class memberNameClass = Class.forName("java.lang.invoke.MemberName");
         Constructor con = memberNameClass.getConstructor(Class.class, String.class, MethodType.class, byte.class);
         con.setAccessible(true);

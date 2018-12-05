@@ -1,5 +1,7 @@
 package com.openle.our.expression;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class FromOfSelect<T> extends Execute {
@@ -8,16 +10,16 @@ public class FromOfSelect<T> extends Execute {
 
     protected FromOfSelect(Function[] fs) {
         this.fs = fs;
-
-        String[] arr = new String[]{"select null"};
-        Utils.functionsToList(fs, null).ifPresent(list -> {
-            arr[0] = "select " + String.join(",", list);
-        });
-        super.sqlString = arr[0];
+        String rrr = "select null";
+        Optional<List<String>> oList = Utils.functionsToList(fs, null);
+        if (oList.isPresent()) {
+            rrr = "select " + String.join(",", oList.get());
+        }
+        super.sqlString = rrr;
     }
 
     public Where from(Class c) {
-        Where where=new Where(DML.SELECT, c, null, fs);
+        Where where = new Where(DML.SELECT, c, null, fs);
         return where;
     }
 

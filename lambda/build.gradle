@@ -7,7 +7,7 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_11
 
-version '1.0.12'
+version '1.0.13'
 group 'com.openle.module.lambda'
 //archivesBaseName="lambda"
 
@@ -28,6 +28,9 @@ dependencies {
 
     //for method ref
     implementation "org.mockito:mockito-core:+"
+    
+    //  GetSet
+    //implementation group: 'javax.enterprise', name: 'cdi-api', version: '2.0.SP1'
     
     //implementation group: 'org.ow2.asm', name: 'asm-util', version: '6.2.1'
         

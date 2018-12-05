@@ -23,5 +23,16 @@ public class TempTest {
         select().from(User.class)
                 //
                 .assertEquals(Assertions::fail, s);
+
+        s = "select cast('2010-10-10' as Date)";
+        select(f.cast("'2010-10-10'", "Date"))
+                //
+                .assertEquals(Assertions::fail, s);
+
+        s = "update MyTable set Name = 'abc'";
+        update("MyTable").set(eq(User::getName, "abc"))
+                //.where((User t) -> t.getAge() != 18)
+                //
+                .assertEquals(Assertions::fail, s);
     }
 }

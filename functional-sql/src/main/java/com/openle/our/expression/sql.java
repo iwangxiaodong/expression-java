@@ -213,6 +213,29 @@ public class sql {
             return s("now()");
         }
 
+        public static <T> Function<T, ?> uuid() {
+            return s("uuid()");
+        }
+
+        public static <T> Function<T, ?> rand() {
+            return s("rand()");
+        }
+
+        public static <T> Function<T, ?> lastInsertId() {
+            return s("last_insert_id()");
+        }
+
+        public static <T> Function<T, ?> count() {
+            return s("count('*')");
+        }
+
+        public static <T> Function<T, ?> count(String s) {
+            if (s != null && s.trim().length() > 0) {
+                return s("count(" + s.trim() + ")");
+            }
+            return s("count(*)");
+        }
+
         public static <T> Function<T, ?> len(String s) {
             Objects.requireNonNull(s);
             return s("len(" + s.trim() + ")");
@@ -238,12 +261,17 @@ public class sql {
             return s("sum(" + s.trim() + ")");
         }
 
-        public static <T> Function<T, ?> count(String s) {
-            if (s != null && s.trim().length() > 0) {
-                return s("count(" + s.trim() + ")");
-            }
-            return s("count(*)");
+//        //  无法引入java.sql.JDBCType？？？
+//        public static <T> Function<T, ?> cast(String s, SQLType asType) {
+//            Objects.requireNonNull(s);
+//            throw new java.lang.UnsupportedOperationException("请使用cast(String s, String asType)");
+//        }
+        public static <T> Function<T, ?> cast(String s, String asType) {
+            Objects.requireNonNull(s);
+
+            return s("cast(" + s.trim() + " as " + asType.trim() + ")");
         }
+
     }
 
 }

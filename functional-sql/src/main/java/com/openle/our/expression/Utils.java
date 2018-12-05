@@ -2,6 +2,7 @@ package com.openle.our.expression;
 
 import com.openle.our.core.DataCommon;
 import com.openle.our.lambda.LambdaFactory;
+import com.openle.our.lambda.MethodParser;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -37,7 +38,10 @@ public class Utils implements Serializable {
         //System.out.println(select(NewClass::getName, sql.f.max("id"), sql.f.count("*"), sql.f.now(), sql.f.len("name")).from(NewClass.class).sql());
         //System.out.println(sql.f.now());
         //select(sql.f.now()).from(User.class);
-        sql.update("abcdef").set(sql.eq(Utils::getVersion, "aaaa")).where((Utils u) -> true);
+//       
+//String r= sql.update("abcdef").set(sql.eq(Utils::getVersion, "aaaa")).where((Utils u) -> true).sql();
+        String r = sql.insert(Utils.class, sql.s("abc"), Utils::getVersion).values(1, 23).sql();
+        System.out.println("r = " + r);
     }
 
     public String print() {
@@ -119,11 +123,11 @@ public class Utils implements Serializable {
 
         String s = String.valueOf(value);
         if (value.getClass().equals(String.class)) {
-            System.out.println("String value - " + value.toString());
+            //System.out.println("String value - " + value.toString());
             s = "'" + DataCommon.escapeSql(value.toString()) + "'";
         }
         if (value instanceof Function) {
-            Logger.getGlobal().info("function===================");
+            //Logger.getGlobal().info("function===================");
             System.out.println("Function value");
             String v = new Utils().getSelectName(c != null ? c : Object.class, (Function) value);
             s = DataCommon.escapeSql(v);
@@ -146,6 +150,11 @@ public class Utils implements Serializable {
         if (getter instanceof Serializable) {
             return LambdaFactory.getMethodReferencesName(raw.cast(getter));
         }
+//        else if (!c.getClass().equals(Object.class)) {
+//            System.out.println("MethodParser");
+//            return new MethodParser().getMethodName(c, getter);
+//        }
+
         Class<Class<Object>> rawClass = new TypeLiteral<Class<Object>>() {
         }.getRawType();
 
@@ -169,7 +178,7 @@ public class Utils implements Serializable {
                 //msg = msg.substring(msg.lastIndexOf("cast to") + 8);
             }
 
-            System.err.println("msg class:" + msg);
+            System.out.println("x::getter存在类型信息，但未指定x.class - " + msg);
 
             Class clazz = null;
             try {

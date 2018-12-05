@@ -47,13 +47,13 @@ public class LambdaTest {
         //Assertions.assertEquals(s, "fieldName");
     }
 
-//    @Test
-//    //@Disabled
-//    public void testLambdaWhereMore() {
-//        SerializedPredicate<?> lambda = (LambdaTest u) -> u.getExample().getBytes().equals("abc");
-//        System.out.println(LambdaParser.parseWhere(lambda));
-//        //Assertions.assertEquals(s, "fieldName");
-//    }
+    @Test
+    //@Disabled
+    public void testLambdaWhereMore() {
+        SerializedPredicate<?> lambda = (LambdaTest u) -> u.getExample().getBytes().equals("abc");
+        System.out.println(LambdaParser.parseWhere(lambda));
+        //Assertions.assertEquals(s, "fieldName");
+    }
 
     public String getExample() {
         return "example";

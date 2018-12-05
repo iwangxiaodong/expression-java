@@ -7,7 +7,7 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_11
 
-version "1.1.17"
+version "1.1.17-b3"
 group 'com.openle.source.expression'
 archivesBaseName="lambda-parser"
 
@@ -44,12 +44,13 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     
     //implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.13'
-    implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.13-SNAPSHOT'
+    implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.13-b3'
     //  临时用,下次移除！！！
     implementation group: 'org.jooq', name: 'jooq', version: '3.11.7'  //  '3.10.5'
     implementation group: 'org.jinq', name: 'analysis', version: '1.8.25'  //  '1.8.22'
     implementation "org.mockito:mockito-core:+"
     implementation('com.openle.module:core:1.0.9')
+    implementation 'net.jodah:typetools:0.5.0'
 
     implementation group: 'javax.enterprise', name: 'cdi-api', version: '2.0.SP1'
 

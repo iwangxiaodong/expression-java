@@ -110,7 +110,7 @@ public class MyInterceptor {
             MethodCallValue.VirtualMethodCallValue val = (MethodCallValue.VirtualMethodCallValue) args[0];
 
             MethodSignature sig = val.getSignature();
-            //System.out.println("sig - " + sig.toString() + " | " + "val - " + val.base.toString());
+            System.out.println("sig - " + sig.toString() + " | " + "val - " + val.base.toString());
 
             String rName = null;
             if (sig.name.startsWith("get")) {
@@ -125,7 +125,6 @@ public class MyInterceptor {
                     rName = sig.name;
                 } else if (val.base.toString().endsWith("()")) {
                     String[] rNames = val.base.toString().split("\\.");
-                    //System.out.println("length - " + rNames.length);
                     if (rNames.length > 1) {
                         //  t.entityId().id()
                         //  rName = rNames[1].replace("()", "");

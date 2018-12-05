@@ -15,10 +15,6 @@ import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.enterprise.util.TypeLiteral;
-
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 
 public class Utils implements Serializable {
 
@@ -142,53 +138,71 @@ public class Utils implements Serializable {
             throw new NullPointerException("getter is null!!!");
         }
 
-        Class<Function<Object, ?>> raw = new TypeLiteral<Function<Object, ?>>() {
-        }.getRawType();
-
-        //  字符串方法名，若getter不支持序列化则可通过NoSuchMethodError来获取。
-        //  后续考虑自建getter时基类使用可序列化的SecretKeySpec
+        //  自建方法引用
         if (getter instanceof Serializable) {
-            return LambdaFactory.getMethodReferencesName(raw.cast(getter));
+            return LambdaFactory.getMethodReferencesName(getter);
         }
-//        else if (!c.getClass().equals(Object.class)) {
-//            System.out.println("MethodParser");
-//            return new MethodParser().getMethodName(c, getter);
-//        }
 
-        Class<Class<Object>> rawClass = new TypeLiteral<Class<Object>>() {
-        }.getRawType();
+        //  官方方法引用
+        String mName = MethodParser.getMethodRefName(getter);
 
-        final Method[] method = new Method[1];
-        Object t = Mockito.mock(rawClass.cast(c), Mockito.withSettings().invocationListeners(methodInvocationReport -> {
-            method[0] = ((InvocationOnMock) methodInvocationReport.getInvocation()).getMethod();
-        }));
-        // T t = (T) Mockito.mock(c, ...);
-
-        try {
-            raw.cast(getter).apply(t);
-            //System.err.println("apply(t)");
-            return method[0].getName();
-        } catch (ClassCastException ex) {
-            // 字符串表名则通过异常ClassCastException来获取。
-            String msg = ex.getMessage();
-            //System.err.println(msg);
-
-            if (msg.contains("cannot be cast to class")) {
-                msg = msg.split(" ")[7];
-                //msg = msg.substring(msg.lastIndexOf("cast to") + 8);
-            }
-
-            System.out.println("x::getter存在类型信息，但未指定x.class - " + msg);
-
-            Class clazz = null;
-            try {
-                clazz = Class.forName(msg);
-            } catch (ClassNotFoundException ex1) {
-                throw new RuntimeException(ex1);
-            }
-
-            //System.out.println("Again getSelectName - " + clazz);
-            return getSelectName(clazz, getter);
-        }
+        return mName;
     }
+
+//    protected String getSelectNameOld(Class c, final Function getter) {
+//        Objects.requireNonNull(c);
+//
+//        if (getter == null) {
+//            throw new NullPointerException("getter is null!!!");
+//        }
+//
+//        Class<Function<Object, ?>> raw = new TypeLiteral<Function<Object, ?>>() {
+//        }.getRawType();
+//
+//        //  字符串方法名，若getter不支持序列化则可通过NoSuchMethodError来获取。
+//        //  后续考虑自建getter时基类使用可序列化的SecretKeySpec
+//        if (getter instanceof Serializable) {
+//            return LambdaFactory.getMethodReferencesName(raw.cast(getter));
+//        }
+////        else if (!c.getClass().equals(Object.class)) {
+////            System.out.println("MethodParser");
+////            return new MethodParser().getMethodName(c, getter);
+////        }
+//
+//        Class<Class<Object>> rawClass = new TypeLiteral<Class<Object>>() {
+//        }.getRawType();
+//
+//        final Method[] method = new Method[1];
+//        Object t = Mockito.mock(rawClass.cast(c), Mockito.withSettings().invocationListeners(methodInvocationReport -> {
+//            method[0] = ((InvocationOnMock) methodInvocationReport.getInvocation()).getMethod();
+//        }));
+//        // T t = (T) Mockito.mock(c, ...);
+//
+//        try {
+//            raw.cast(getter).apply(t);
+//            //System.err.println("apply(t)");
+//            return method[0].getName();
+//        } catch (ClassCastException ex) {
+//            // 字符串表名则通过异常ClassCastException来获取。
+//            String msg = ex.getMessage();
+//            //System.err.println(msg);
+//
+//            if (msg.contains("cannot be cast to class")) {
+//                msg = msg.split(" ")[7];
+//                //msg = msg.substring(msg.lastIndexOf("cast to") + 8);
+//            }
+//
+//            System.out.println("x::getter存在类型信息，但未指定x.class - " + msg);
+//
+//            Class clazz = null;
+//            try {
+//                clazz = Class.forName(msg);
+//            } catch (ClassNotFoundException ex1) {
+//                throw new RuntimeException(ex1);
+//            }
+//
+//            //System.out.println("Again getSelectName - " + clazz);
+//            return getSelectName(clazz, getter);
+//        }
+//    }
 }

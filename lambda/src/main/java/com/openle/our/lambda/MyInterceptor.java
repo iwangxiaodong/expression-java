@@ -1,7 +1,7 @@
 package com.openle.our.lambda;
 
-import org.jinq.jooq.transform.*;
 import ch.epfl.labos.iu.orm.queryll2.path.TransformationClassAnalyzer;
+import org.jinq.jooq.transform.*;
 import ch.epfl.labos.iu.orm.queryll2.symbolic.MethodCallValue;
 import ch.epfl.labos.iu.orm.queryll2.symbolic.MethodSignature;
 import java.lang.invoke.MethodHandles;
@@ -112,30 +112,30 @@ public class MyInterceptor {
             MethodSignature sig = val.getSignature();
             System.out.println("sig - " + sig.toString() + " | " + "val - " + val.base.toString());
 
-            String rName = null;
-            if (sig.name.startsWith("get")) {
-                rName = sig.name;
-            }
+            String rName = sig.name;
 
-            //Integer和Double类型允许多级链式调用
-            if (!sig.equals(TransformationClassAnalyzer.integerIntValue)
-                    && !sig.equals(TransformationClassAnalyzer.doubleDoubleValue)) {
-                if ("java/lang/Object:toString()Ljava/lang/String;".equals(sig.toString()) || "java/lang/Object:hashCode()I".equals(sig.toString())) {
-                    System.out.println(sig.name + "方法不适合作为字段名！");
-                    rName = sig.name;
-                } else if (val.base.toString().endsWith("()")) {
-                    String[] rNames = val.base.toString().split("\\.");
-                    if (rNames.length > 1) {
-                        //  t.entityId().id()
-                        //  rName = rNames[1].replace("()", "");
-                        rName = rNames[rNames.length - 1].replace("()", "");
-                        System.out.println("链式调用只取最后一级方法名！" + rName);
-                    }
-                } else {
-                    //其他非数值型字段名
-                    rName = sig.name;
+            //  如果getter返回值是Integer包装类则sig.name永远写死为intValue
+            if (sig.equals(TransformationClassAnalyzer.integerIntValue) || !sig.equals(TransformationClassAnalyzer.doubleDoubleValue)) {
+                String[] rNames = val.base.toString().split("\\.");
+                if (rNames.length > 1) {
+                    rName = rNames[rNames.length - 1].replace("()", "");
                 }
             }
+//            if ("java/lang/Object:toString()Ljava/lang/String;".equals(sig.toString()) || "java/lang/Object:hashCode()I".equals(sig.toString())) {
+//                System.out.println(sig.name + "方法不适合作为字段名！");
+//                rName = sig.name;
+//            } else if (val.base.toString().endsWith("()")) {
+//                String[] rNames = val.base.toString().split("\\.");
+//                if (rNames.length > 1) {
+//                    //  t.entityId().id()
+//                    //  rName = rNames[1].replace("()", "");
+//                    rName = rNames[rNames.length - 1].replace("()", "");
+//                    System.out.println("链式调用只取最后一级方法名！" + rName);
+//                }
+//            } else {
+//                //其他类型字段名
+//                rName = sig.name;
+//            }
 
             if (rName != null) {
                 rName = rName.replaceFirst("get", "");

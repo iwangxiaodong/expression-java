@@ -7,7 +7,7 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_11
 
-version '1.0.13-b6'
+version '1.0.13-b9'
 group 'com.openle.module.lambda'
 //archivesBaseName="lambda"
 

@@ -25,6 +25,7 @@ public class LambdaParser {
 
     public static boolean isCamelToUnderline = false;
 
+    //  注意 - getter返回值必须是基本类型
     public static Condition parseWhere(SerializedPredicate<?> lambda) {
         MetamodelUtil mu = new MyInterceptor().getMetamodelUtil();
         LambdaInfo where = LambdaInfo.analyze(mu, lambda);

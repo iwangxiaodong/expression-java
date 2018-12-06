@@ -145,7 +145,7 @@ public class LambdaTest {
         System.out.println("testOther");
         int i = 18; // where条件支持外部变量值
         s = "select Name,Age,FullName from User where (\n"
-                + "  userId > 18\n"
+                + "  id > 18\n"
                 + "  and 100 > Age\n"
                 + ")";
         select(User::getName, User::getAge, User::getFullName)

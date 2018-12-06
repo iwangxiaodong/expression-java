@@ -50,12 +50,32 @@ public class LambdaTest {
     @Test
     //@Disabled
     public void testLambdaWhereMore() {
-        SerializedPredicate<?> lambda = (LambdaTest u) -> u.getExample().getBytes().equals("abc");
+        SerializedPredicate<?> lambda = (LambdaTest u) -> u.getInstaceExample().getExample().equals("abc");
+        System.out.println(LambdaParser.parseWhere(lambda));
+        //Assertions.assertEquals(s, "fieldName");
+    }
+
+    @Test
+    //@Disabled
+    public void testLambdaWhereMore1() {
+        SerializedPredicate<?> lambda = (LambdaTest u) -> u.getExample().intern().equals("abc");
+        System.out.println(LambdaParser.parseWhere(lambda));
+        //Assertions.assertEquals(s, "fieldName");
+    }
+
+    @Test
+    //@Disabled
+    public void testLambdaWhereMore2() {
+        SerializedPredicate<?> lambda = (LambdaTest u) -> u.getExample().equals("abc");
         System.out.println(LambdaParser.parseWhere(lambda));
         //Assertions.assertEquals(s, "fieldName");
     }
 
     public String getExample() {
         return "example";
+    }
+
+    public LambdaTest getInstaceExample() {
+        return new LambdaTest();
     }
 }

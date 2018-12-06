@@ -72,6 +72,7 @@ public class WhereTransform {
                 if (returnExpr != null) {
                     System.out.println(returnExpr.getClass().getName());
                     if (returnExpr.getClass().getName().equals("org.jooq.impl.SQLField")) {
+                        //  getter返回值如果不是基本类型则为SQLField。
                         return null;
                     }
                 }

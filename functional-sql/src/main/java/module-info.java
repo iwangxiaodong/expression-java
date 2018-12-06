@@ -6,7 +6,7 @@ module com.openle.our.expression {
     requires jinq.asm.rebased;
     requires com.openle.our.lambda;
     //requires com.openle.module.core;
-    requires org.mockito;
+    //requires org.mockito;
 
     //requires javax.persistence;
     //requires jinq.jooq;

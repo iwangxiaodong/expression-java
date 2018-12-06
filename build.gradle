@@ -1,5 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-allprojects {
+subprojects {
     repositories {
         jcenter()
     }    
@@ -11,28 +11,10 @@ allprojects {
     dependencies {
         deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '3.2.0'
     }
-        
-    project.ext.pwd = project.hasProperty('WEBDAV_PASSWORD') ? project.property('WEBDAV_PASSWORD') : System.getenv('WEBDAV_PASSWORD')
-    apply plugin: 'maven'
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                pom.artifactId = project.archivesBaseName.toLowerCase().equals("functional-sql")?"lambda-parser":project.archivesBaseName.toLowerCase()
-                configuration = configurations.deployerJars
+    
 
-                repository(url: project.repositories.mavenLocal().url)
-                snapshotRepository(url: project.repositories.mavenLocal().url.resolve("../snapshots"))
-            
-                repository(url: "dav:https://maven.openle.com/releases/") {
-                    authentication(userName: "webdav", password: project.ext.pwd)
-                }
-            
-                snapshotRepository(url: "dav:https://maven.openle.com/snapshots/") {
-                    authentication(userName: "webdav", password: project.ext.pwd)
-                }
-            }
-        }
-    }
+        
+
 }
 
 //task clean(type: Delete) {

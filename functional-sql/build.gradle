@@ -7,7 +7,7 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_11
 
-version "1.1.17-b3"
+version "1.1.17-b6"
 group 'com.openle.source.expression'
 archivesBaseName="lambda-parser"
 
@@ -44,13 +44,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     
     //implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.13'
-    implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.13-b3'
-    //  临时用,下次移除！！！
-    implementation group: 'org.jooq', name: 'jooq', version: '3.11.7'  //  '3.10.5'
-    implementation group: 'org.jinq', name: 'analysis', version: '1.8.25'  //  '1.8.22'
-    implementation "org.mockito:mockito-core:+"
-    implementation('com.openle.module:core:1.0.9')
-    implementation 'net.jodah:typetools:0.5.0'
+    implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.13-b6'
 
     implementation group: 'javax.enterprise', name: 'cdi-api', version: '2.0.SP1'
 
@@ -61,6 +55,29 @@ dependencies {
 
     testCompile("org.junit.jupiter:junit-jupiter-api:5.3.1")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.1")
+}
+
+//project.ext.pwd = project.hasProperty('WEBDAV_PASSWORD') ? project.property('WEBDAV_PASSWORD') : System.getenv('WEBDAV_PASSWORD')
+apply plugin: 'maven'
+//  expression-java项目若将uploadArchives移到根build.gradle，将丢失POM依赖信息？？？
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.artifactId = project.archivesBaseName.toLowerCase().equals("functional-sql")?"lambda-parser":project.archivesBaseName.toLowerCase()
+            configuration = configurations.deployerJars
+
+            repository(url: project.repositories.mavenLocal().url)
+            snapshotRepository(url: project.repositories.mavenLocal().url.resolve("../snapshots"))
+            
+            repository(url: "dav:https://maven.openle.com/releases/") {
+                authentication(userName: "webdav", password: project.ext.pwd)
+            }
+            
+            snapshotRepository(url: "dav:https://maven.openle.com/snapshots/") {
+                authentication(userName: "webdav", password: project.ext.pwd)
+            }
+        }
+    }
 }
 
 task snapshot(dependsOn:assemble) << {

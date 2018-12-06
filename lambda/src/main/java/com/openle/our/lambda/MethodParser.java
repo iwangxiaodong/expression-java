@@ -8,8 +8,6 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.jodah.typetools.TypeResolver;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 
 /**
  *
@@ -37,13 +35,13 @@ public class MethodParser {
         return name;
     }
 
-    //  需要传入方法引用的Class类型; 不要求实现Serializable
-    //  MethodParser.getMethodName(GetSet.class, GetSet::getName);
-    public static <T> String getMethodName(final Class<?> clazz, final Function<T, ?> getter) {
-        final Method[] method = new Method[1];
-        getter.apply((T) Mockito.mock(clazz, Mockito.withSettings().invocationListeners(methodInvocationReport -> {
-            method[0] = ((InvocationOnMock) methodInvocationReport.getInvocation()).getMethod();
-        })));
-        return method[0].getName();
-    }
+//    //  需要传入方法引用的Class类型; 不要求实现Serializable
+//    //  MethodParser.getMethodName(GetSet.class, GetSet::getName);
+//    public static <T> String getMethodName(final Class<?> clazz, final Function<T, ?> getter) {
+//        final Method[] method = new Method[1];
+//        getter.apply((T) Mockito.mock(clazz, Mockito.withSettings().invocationListeners(methodInvocationReport -> {
+//            method[0] = ((InvocationOnMock) methodInvocationReport.getInvocation()).getMethod();
+//        })));
+//        return method[0].getName();
+//    }
 }

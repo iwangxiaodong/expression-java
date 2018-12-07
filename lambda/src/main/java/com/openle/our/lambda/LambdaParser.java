@@ -1,14 +1,12 @@
 package com.openle.our.lambda;
 
 import com.openle.our.core.lambda.SerializedPredicate;
-import com.user00.thunk.SerializedLambda;
 import org.jinq.jooq.transform.LambdaInfo;
 import org.jooq.Condition;
 import org.jooq.Table;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.jinq.jooq.transform.MetamodelUtil;
 import org.jinq.jooq.transform.WhereTransform;
@@ -25,7 +23,7 @@ public class LambdaParser {
 
     public static boolean isCamelToUnderline = false;
 
-    //  注意 - getter返回值必须是基本类型
+    //  String类型字段getter需要.trim()下才能获取其字段名
     public static Condition parseWhere(SerializedPredicate<?> lambda) {
         MetamodelUtil mu = new MyInterceptor().getMetamodelUtil();
         LambdaInfo where = LambdaInfo.analyze(mu, lambda);
@@ -41,20 +39,19 @@ public class LambdaParser {
         return cond;
     }
 
-    // 优先使用com.openle.module.core.lambda的原生实现。
-    // extractLambda(ConsumerSerializable<?> lambda);
-    @Deprecated
-    static SerializedLambda extractLambda(Object lambda) {
-        SerializedLambda s;
-        try {
-            s = SerializedLambda.extractLambda(lambda);
-        } catch (Exception e) {
-            Logger.getGlobal().severe(e.toString());
-            return null;
-        }
-        return s;
-    }
-
+//    // 优先使用com.openle.module.core.lambda的原生实现。
+//    // extractLambda(ConsumerSerializable<?> lambda);
+//    @Deprecated
+//    static SerializedLambda extractLambda(Object lambda) {
+//        SerializedLambda s;
+//        try {
+//            s = SerializedLambda.extractLambda(lambda);
+//        } catch (Exception e) {
+//            Logger.getGlobal().severe(e.toString());
+//            return null;
+//        }
+//        return s;
+//    }
 //    public static String toSelectAllSQL(String fromTable, SerializedPredicate<?> lambda) {
 //        String sql = DSL.select().from(fromTable).where(parseWhere(lambda)).getSQL(ParamType.INLINED);
 //        //System.out.println(sql);

@@ -29,9 +29,9 @@ public class TempTest {
                 //
                 .assertEquals(Assertions::fail, s);
 
-        s = "update MyTable set Name = 'abc'";
+        s = "update MyTable set Name = 'abc' where stringId = 'aaa'";
         update("MyTable").set(eq(User::getName, "abc"))
-                //.where((User t) -> t.getAge() != 18)
+                .where((User t) -> t.userId().stringId().trim().equals("aaa"))
                 //
                 .assertEquals(Assertions::fail, s);
     }

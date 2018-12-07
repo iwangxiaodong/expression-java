@@ -6,9 +6,14 @@ package com.openle.our.expression.test;
  */
 public class UserId {
 
+    private String stringId;
     private Integer id;
 
     public Integer id() {
         return id;
+    }
+
+    public String stringId() {
+        return stringId;
     }
 }

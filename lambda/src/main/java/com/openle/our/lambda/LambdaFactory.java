@@ -138,7 +138,7 @@ public class LambdaFactory {
 
         //  jdk11起改为了4个参数
         Class directMethodHandleClass = Class.forName("java.lang.invoke.DirectMethodHandle");
-        MethodHandle target = null;
+        MethodHandle target;
         //  为兼容jdk9，暂用过时方法major()取代jdk10的feature()
         if (Runtime.version().major() < 11) {
             m = directMethodHandleClass.getDeclaredMethod("make", byte.class, Class.class, memberNameClass);

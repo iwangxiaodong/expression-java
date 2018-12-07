@@ -112,7 +112,17 @@ public class MyInterceptor {
             MethodSignature sig = val.getSignature();
             System.out.println("sig - " + sig.toString() + " | " + "val - " + val.base.toString());
 
-            String rName = sig.name;
+            String rName = sig.name;    //  不带括号的方法名，如getExample
+
+            //  getter返回String类型则不受sig.name改写的影响。
+            if (sig.getReturnType().getClassName().equals(String.class.getTypeName())) {
+//                Method[] ms = String.class.getDeclaredMethods();
+//                for (Method m : ms) {
+//                    if (m.getName().contains(sig.name)) {
+//                        rName = "aaaa";
+//                    }
+//                }
+            }
 
             //  如果getter返回值是Integer包装类则sig.name永远写死为intValue
             if (sig.equals(TransformationClassAnalyzer.integerIntValue) || !sig.equals(TransformationClassAnalyzer.doubleDoubleValue)) {

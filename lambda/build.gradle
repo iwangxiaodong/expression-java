@@ -7,7 +7,7 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_11
 
-version '1.0.13-b9'
+version '1.0.14'
 group 'com.openle.module.lambda'
 //archivesBaseName="lambda"
 
@@ -29,9 +29,9 @@ dependencies {
     //implementation "org.mockito:mockito-core:+"
 
     //  for MyInterceptor
-    implementation group: 'net.bytebuddy', name: 'byte-buddy', version: '1.9.5'
+    implementation group: 'net.bytebuddy', name: 'byte-buddy', version: '1.9.6'
 
-        
+    //  for MethodParser.getMethodRefName(...)
     implementation 'net.jodah:typetools:0.5.0'
         
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.3.1")

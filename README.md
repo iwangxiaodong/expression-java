@@ -1,6 +1,6 @@
 # [expression-java](https://github.com/iwangxiaodong/expression-java) [![Build Status](https://travis-ci.org/iwangxiaodong/expression-java.svg?branch=master)](https://travis-ci.org/iwangxiaodong/expression-java) [![Download](https://api.bintray.com/packages/wangxiaodong/maven/lambda-parser/images/download.svg)](https://bintray.com/wangxiaodong/maven/lambda-parser/_latestVersion)
 
-***lambda-parser*** is a expression parser of lambda to sql.
+***functional-sql*** is a expression parser of functional lambda to sql.
 <br />
 Gradle:
 <br />
@@ -28,6 +28,7 @@ Gradle:
 
     @Test
     public void testSelect() {
+
         select().from(User.class)
                 //
                 .assertEquals(Assertions::fail, s);
@@ -78,26 +79,28 @@ Gradle:
                 .assertEquals(Assertions::fail, s);
     }
 
+    //@Disabled
     @Test
     public void testUpdate() {
         s = "update User set Name = 'abc'";
-        update(User.class).set(eq(User::getName, "abc"))
+        update(User.class).set(pair(User::getName, "abc"))
                 //
                 .assertEquals(Assertions::fail, s);
 
         s = "update User set Age = 22 , Name = 'a' where Age >= 18";
-        update(User.class).set(eq(User::getAge, 22), eq(User::getName, "a"))
+        update(User.class).set(pair(User::getAge, 22), pair(User::getName, "a"))
                 .where((User t) -> t.getAge() >= 18)
                 //
                 .assertEquals(Assertions::fail, s);
 
         s = "update MyTable set Name = 'abc' where Age <> 18";
-        update("MyTable").set(eq(User::getName, "abc"))
+        update("MyTable").set(pair(User::getName, "abc"))
                 .where((User t) -> t.getAge() != 18)
                 //
                 .assertEquals(Assertions::fail, s);
     }
 
+    //@Disabled
     @Test
     public void testInsert() {
         s = "insert User values ('abc',now())";

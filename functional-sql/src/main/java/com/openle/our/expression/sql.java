@@ -179,7 +179,7 @@ public class sql {
      * @param obj `
      * @return `
      */
-    public static <T> Map<Function, Object> eq(final Function<T, ?> getter, Object obj) {
+    public static <T> Map<Function, Object> pair(final Function<T, ?> getter, Object obj) {
         //注意of方法构造的对象是只读的！
         return Map.<Function, Object>of(getter, obj);
     }

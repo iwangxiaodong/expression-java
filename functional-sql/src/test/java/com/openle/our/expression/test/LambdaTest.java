@@ -87,18 +87,18 @@ public class LambdaTest {
     @Test
     public void testUpdate() {
         s = "update User set Name = 'abc'";
-        update(User.class).set(eq(User::getName, "abc"))
+        update(User.class).set(pair(User::getName, "abc"))
                 //
                 .assertEquals(Assertions::fail, s);
 
         s = "update User set Age = 22 , Name = 'a' where Age >= 18";
-        update(User.class).set(eq(User::getAge, 22), eq(User::getName, "a"))
+        update(User.class).set(pair(User::getAge, 22), pair(User::getName, "a"))
                 .where((User t) -> t.getAge() >= 18)
                 //
                 .assertEquals(Assertions::fail, s);
 
         s = "update MyTable set Name = 'abc' where Age <> 18";
-        update("MyTable").set(eq(User::getName, "abc"))
+        update("MyTable").set(pair(User::getName, "abc"))
                 .where((User t) -> t.getAge() != 18)
                 //
                 .assertEquals(Assertions::fail, s);

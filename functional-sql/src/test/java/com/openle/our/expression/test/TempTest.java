@@ -30,7 +30,7 @@ public class TempTest {
                 .assertEquals(Assertions::fail, s);
 
         s = "update MyTable set Name = 'abc' where stringId = 'aaa'";
-        update("MyTable").set(eq(User::getName, "abc"))
+        update("MyTable").set(pair(User::getName, "abc"))
                 .where((User t) -> t.userId().stringId().trim().equals("aaa"))
                 //
                 .assertEquals(Assertions::fail, s);

@@ -7,7 +7,7 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_11
 
-version "1.1.17-b9"
+version "1.1.17"
 group 'com.openle.source.expression'
 archivesBaseName="lambda-parser"
 
@@ -44,7 +44,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     
     //implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.13'
-    implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.13-b9'
+    implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.14'
 
     implementation group: 'javax.enterprise', name: 'cdi-api', version: '2.0.SP1'
 

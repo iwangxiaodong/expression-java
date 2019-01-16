@@ -2,8 +2,8 @@ module com.openle.our.expression {
     requires java.sql;
     requires java.naming;
     requires cdi.api;
-    requires org.jooq;
-    requires jinq.asm.rebased;
+    //requires org.jooq;
+    //requires jinq.asm.rebased;
     requires com.openle.our.lambda;
     //requires com.openle.module.core;
     //requires org.mockito;

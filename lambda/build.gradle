@@ -7,7 +7,7 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_11
 
-version '1.0.14'
+version '1.0.15'
 group 'com.openle.module.lambda'
 //archivesBaseName="lambda"
 
@@ -18,7 +18,7 @@ test {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation('com.openle.module:core:1.0.9')
+    implementation('com.openle.module:core:1.0.10')
 
     //for lambda to sql
     //implementation group: 'org.jinq', name: 'jinq-jooq', version: '1.8.22'
@@ -32,10 +32,10 @@ dependencies {
     implementation group: 'net.bytebuddy', name: 'byte-buddy', version: '1.9.6'
 
     //  for MethodParser.getMethodRefName(...)
-    implementation 'net.jodah:typetools:0.5.0'
+    implementation 'net.jodah:typetools:0.6.0'
         
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.3.1")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.3.2")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
 }
 
 project.ext.pwd = project.hasProperty('WEBDAV_PASSWORD') ? project.property('WEBDAV_PASSWORD') : System.getenv('WEBDAV_PASSWORD')
@@ -61,15 +61,15 @@ uploadArchives {
     }
 }
 
-task snapshot(dependsOn:assemble) << {
-    uploadArchives.execute()
-}
-gradle.taskGraph.whenReady {taskGraph ->
-    if (taskGraph.hasTask(snapshot)) {
-        version = version+'-SNAPSHOT'
-        println version
-    }
-}
+//task snapshot(dependsOn:assemble) << {
+//    uploadArchives.execute()
+//}
+//gradle.taskGraph.whenReady {taskGraph ->
+//    if (taskGraph.hasTask(snapshot)) {
+//        version = version+'-SNAPSHOT'
+//        println version
+//    }
+//}
 
 // 兼容中文注释和排除module-info.java
 tasks.withType(Javadoc) {

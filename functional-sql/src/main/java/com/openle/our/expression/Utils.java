@@ -1,18 +1,15 @@
 package com.openle.our.expression;
 
-import com.openle.our.core.DataCommon;
+import com.openle.our.core.CoreData;
 import com.openle.our.lambda.LambdaFactory;
 import com.openle.our.lambda.MethodParser;
 
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -90,27 +87,27 @@ public class Utils implements Serializable {
         return Optional.ofNullable(list);
     }
 
-    public static String getTableName(Class c) {
-
-        String tableName = c.getSimpleName();
-
-        for (Annotation a : c.getAnnotations()) {
-            //System.out.println(a.annotationType().getName());
-            if (a.annotationType().getName().equals("javax.persistence.Table")) {
-                try {
-                    Method m = a.annotationType().getMethod("name", new Class[]{});
-                    Object obj = m.invoke(a, new Object[]{});
-                    System.out.println("getTableName Entity " + c.getName() + "|TableName - " + obj);
-                    //System.out.println("Table Name = " + obj);
-                    tableName = obj.toString();
-                } catch (java.lang.ReflectiveOperationException ex) {
-                    Logger.getGlobal().severe(ex.toString());
-                }
-            }
-        }
-
-        return tableName;
-    }
+//    public static String getTableName(Class c) {
+//
+//        String tableName = c.getSimpleName();
+//
+//        for (Annotation a : c.getAnnotations()) {
+//            //System.out.println(a.annotationType().getName());
+//            if (a.annotationType().getName().equals("javax.persistence.Table")) {
+//                try {
+//                    Method m = a.annotationType().getMethod("name", new Class[]{});
+//                    Object obj = m.invoke(a, new Object[]{});
+//                    System.out.println("getTableName Entity " + c.getName() + "|TableName - " + obj);
+//                    //System.out.println("Table Name = " + obj);
+//                    tableName = obj.toString();
+//                } catch (java.lang.ReflectiveOperationException ex) {
+//                    Logger.getGlobal().severe(ex.toString());
+//                }
+//            }
+//        }
+//
+//        return tableName;
+//    }
 
     protected static String getValueString(Class c, Object value) {
         if (Objects.isNull(value)) {
@@ -120,13 +117,13 @@ public class Utils implements Serializable {
         String s = String.valueOf(value);
         if (value.getClass().equals(String.class)) {
             //System.out.println("String value - " + value.toString());
-            s = "'" + DataCommon.escapeSql(value.toString()) + "'";
+            s = "'" + CoreData.escapeSql(value.toString()) + "'";
         }
         if (value instanceof Function) {
             //Logger.getGlobal().info("function===================");
             System.out.println("Function value");
             String v = new Utils().getSelectName(c != null ? c : Object.class, (Function) value);
-            s = DataCommon.escapeSql(v);
+            s = CoreData.escapeSql(v);
         }
         return s;
     }

@@ -1,5 +1,6 @@
 package com.openle.our.expression;
 
+import com.openle.our.core.CoreData;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,7 @@ public class Values {
     protected Values(Class c, Function[] fs, boolean isIgnore) {
         this.c = c;
         this.fs = fs;
-        sName = "insert " + (isIgnore ? "ignore " : "") + Utils.getTableName(c) + " ";
+        sName = "insert " + (isIgnore ? "ignore " : "") + CoreData.getTableName(c) + " ";
 
         Optional<List<String>> oList = Utils.functionsToList(fs, null);
         if (oList.isPresent()) {
@@ -23,7 +24,7 @@ public class Values {
     }
 
     protected Values(Class c, boolean isIgnore) {
-        sName = "insert " + (isIgnore ? "ignore " : "") + Utils.getTableName(c) + " ";
+        sName = "insert " + (isIgnore ? "ignore " : "") + CoreData.getTableName(c) + " ";
     }
 
     public Execute values(Object... objArray) {

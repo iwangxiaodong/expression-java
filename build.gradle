@@ -1,9 +1,33 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 subprojects {
+    // Win10重启后环境变量方有效 echo %WEBDAV_PASSWORD%
+    project.ext.pwd = project.hasProperty('WEBDAV_PASSWORD') ? project.property('WEBDAV_PASSWORD') : System.getenv('WEBDAV_PASSWORD')
     repositories {
-        mavenCentral()
+        mavenLocal()
+        maven {
+            name "snapshots"
+            url project.repositories.mavenLocal().url.resolve("../snapshots")
+        }
         jcenter()
-    }    
+        maven {
+            credentials {
+                username 'webdav'
+                password project.ext.pwd
+            }
+            url "https://maven.openle.com/releases/"
+        }
+        maven {
+            credentials {
+                username 'webdav'
+                password project.ext.pwd
+            }
+            url "https://maven.openle.com/snapshots/"
+        }
+        mavenCentral()
+        maven {
+            url "http://maven.aliyun.com/nexus/content/groups/public/"
+        }
+    }
     
     configurations {
         deployerJars
@@ -22,8 +46,9 @@ subprojects {
 //    delete rootProject.buildDir
 //}
 
-// wxd - wrapper放至common.gradle无效
-task wrapper(type:Wrapper){
-    gradleVersion='4.10.2'
+//  wxd - wrapper放至common.gradle无效
+//  注意 - functional-sql项目5.1.1不能传递依赖
+wrapper {
+    gradleVersion='4.10.3'
     //distributionUrl='file:///E:/gradle/gradle-4.4-all.zip'
 }

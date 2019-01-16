@@ -1,5 +1,6 @@
 package com.openle.our.expression;
 
+import com.openle.our.core.CoreData;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class Where extends Execute {
 
     //for Update
     protected Where(DML dml, Class c, String tableName, List<Map<Function, ?>> setMap) {
-        tableName = c != null ? Utils.getTableName(c) : tableName;
+        tableName = c != null ? CoreData.getTableName(c) : tableName;
         List<String> list = new ArrayList<>();
         for (Map<Function, ?> m : setMap) {
             for (Map.Entry<Function, ?> entry : m.entrySet()) {
@@ -40,7 +41,7 @@ public class Where extends Execute {
     //for select delete
     protected Where(DML dml, Class c, String tableName, Function[] fs) {
         //this.c = c;
-        final String tName = c != null ? Utils.getTableName(c) : tableName;
+        final String tName = c != null ? CoreData.getTableName(c) : tableName;
         if (dml.equals(DML.DELETE)) {
             beforeWhere = "delete from " + tName;
         }

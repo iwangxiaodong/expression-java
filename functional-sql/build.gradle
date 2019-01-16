@@ -7,7 +7,7 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_11
 
-version "1.1.17"
+version "1.1.18"
 group 'com.openle.source.expression'
 archivesBaseName="lambda-parser"
 
@@ -43,8 +43,7 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     
-    //implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.13'
-    implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.14'
+    implementation group: 'com.openle.module.lambda', name: 'lambda', version: '1.0.15'
 
     implementation group: 'javax.enterprise', name: 'cdi-api', version: '2.0.SP1'
 
@@ -53,8 +52,8 @@ dependencies {
     // javaee-web-api跟java.sql冲突，so暂用javax.persistence-api
     implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
 
-    testCompile("org.junit.jupiter:junit-jupiter-api:5.3.1")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.1")
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
 }
 
 //project.ext.pwd = project.hasProperty('WEBDAV_PASSWORD') ? project.property('WEBDAV_PASSWORD') : System.getenv('WEBDAV_PASSWORD')
@@ -80,15 +79,15 @@ uploadArchives {
     }
 }
 
-task snapshot(dependsOn:assemble) << {
-    uploadArchives.execute()
-}
-gradle.taskGraph.whenReady {taskGraph ->
-    if (taskGraph.hasTask(snapshot)) {
-        version = version+'-SNAPSHOT'
-        println version
-    }
-}
+//task snapshot(dependsOn:assemble) << {
+//    uploadArchives.execute()
+//}
+//gradle.taskGraph.whenReady {taskGraph ->
+//    if (taskGraph.hasTask(snapshot)) {
+//        version = version+'-SNAPSHOT'
+//        println version
+//    }
+//}
 
 // 兼容中文注释和排除module-info.java
 tasks.withType(Javadoc) {
